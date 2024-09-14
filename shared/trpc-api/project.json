@@ -1,0 +1,19 @@
+{
+  "name": "trpc-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/trpc-api/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/shared/trpc-api",
+        "main": "shared/trpc-api/src/index.ts",
+        "tsConfig": "shared/trpc-api/tsconfig.lib.json",
+        "assets": ["shared/trpc-api/*.md"]
+      }
+    }
+  }
+}
