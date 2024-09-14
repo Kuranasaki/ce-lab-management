@@ -1,0 +1,58 @@
+{
+  "name": "services-wage-svc",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/services/wage-svc/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/services/wage-svc",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/services/wage-svc/src/main.ts",
+        "tsConfig": "apps/services/wage-svc/tsconfig.app.json",
+        "assets": ["apps/services/wage-svc/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "services-wage-svc:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "services-wage-svc:build:development"
+        },
+        "production": {
+          "buildTarget": "services-wage-svc:build:production"
+        }
+      }
+    }
+  }
+}

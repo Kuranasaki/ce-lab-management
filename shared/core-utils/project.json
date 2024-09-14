@@ -1,0 +1,19 @@
+{
+  "name": "core-utils",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/core-utils/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/shared/core-utils",
+        "main": "shared/core-utils/src/index.ts",
+        "tsConfig": "shared/core-utils/tsconfig.lib.json",
+        "assets": ["shared/core-utils/*.md"]
+      }
+    }
+  }
+}
