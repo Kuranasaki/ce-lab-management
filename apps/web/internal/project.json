@@ -1,0 +1,9 @@
+{
+  "name": "internal-web",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/web/internal/src",
+  "projectType": "application",
+  "tags": ["scope:internal", "scope:public", "type:svc"],
+  "// targets": "to see all targets run: nx show project internal-web --web",
+  "targets": {}
+}

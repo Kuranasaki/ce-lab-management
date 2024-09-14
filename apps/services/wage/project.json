@@ -1,9 +1,9 @@
 {
-  "name": "services-pricing-svc",
+  "name": "wage-svc",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/services/pricing-svc/src",
+  "sourceRoot": "apps/services/wage/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["scope:internal", "type:svc"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
@@ -11,12 +11,12 @@
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",
-        "outputPath": "dist/apps/services/pricing-svc",
+        "outputPath": "dist/apps/services/wage",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/services/pricing-svc/src/main.ts",
-        "tsConfig": "apps/services/pricing-svc/tsconfig.app.json",
-        "assets": ["apps/services/pricing-svc/src/assets"],
+        "main": "apps/services/wage/src/main.ts",
+        "tsConfig": "apps/services/wage/tsconfig.app.json",
+        "assets": ["apps/services/wage/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -42,15 +42,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "services-pricing-svc:build",
+        "buildTarget": "wage-svc:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "services-pricing-svc:build:development"
+          "buildTarget": "wage-svc:build:development"
         },
         "production": {
-          "buildTarget": "services-pricing-svc:build:production"
+          "buildTarget": "wage-svc:build:production"
         }
       }
     }
