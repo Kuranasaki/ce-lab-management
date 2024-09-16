@@ -1,57 +1,57 @@
 {
   "name": "wage-svc",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/services/wage/src",
   "projectType": "application",
-  "tags": ["scope:internal", "type:svc"],
+  "sourceRoot": "apps/services/wage/src",
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@nx-bun/nx:build",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
-        "platform": "node",
-        "outputPath": "dist/apps/services/wage",
-        "format": ["cjs"],
-        "bundle": false,
-        "main": "apps/services/wage/src/main.ts",
-        "tsConfig": "apps/services/wage/tsconfig.app.json",
-        "assets": ["apps/services/wage/src/assets"],
-        "generatePackageJson": true,
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
-      },
-      "configurations": {
-        "development": {},
-        "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
-        }
+        "entrypoints": ["apps/services/wage/src/index.ts"],
+        "outputPath": "dist/wage-svc",
+        "tsConfig": "apps/services/wage/src/tsconfig.app.json",
+        "smol": false,
+        "bun": true
       }
     },
     "serve": {
-      "executor": "@nx/js:node",
+      "executor": "@nx-bun/nx:run",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
       "options": {
         "buildTarget": "wage-svc:build",
-        "runBuildTargetDependencies": false
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "wage-svc:build:development"
-        },
-        "production": {
-          "buildTarget": "wage-svc:build:production"
-        }
+        "tsConfig": "apps/services/wage/tsconfig.app.json",
+        "watch": true,
+        "hot": true,
+        "bun": true,
+        "smol": false
+      }
+    },
+    "test": {
+      "executor": "@nx-bun/nx:test",
+      "options": {
+        "smol": false,
+        "bail": true,
+        "tsConfig": "apps/services/wage/tsconfig.json",
+        "bun": true
+      }
+    },
+    "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "apps/services/wage"
+      }
+    },
+    "migrate": {
+      "command": "prisma migrate deploy",
+      "options": {
+        "cwd": "apps/services/wage"
+      }
+    },
+    "generate-types": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "apps/services/wage"
       }
     }
   }
