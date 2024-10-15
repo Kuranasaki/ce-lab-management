@@ -18,6 +18,7 @@
       "@ce-lab-mgmt/api-interfaces": ["shared/api-interfaces/src/index.ts"],
       "@ce-lab-mgmt/core-utils": ["shared/core-utils/src/index.ts"],
       "@ce-lab-mgmt/shared-ui": ["shared/shared-ui/src/index.ts"],
+      "@ce-lab-mgmt/global-style": ["shared/shared-ui/src/styles/global.scss"],
       "@ce-lab-mgmt/trpc-api": ["shared/trpc-api/src/index.ts"]
     }
   },
