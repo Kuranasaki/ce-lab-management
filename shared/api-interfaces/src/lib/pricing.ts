@@ -83,8 +83,8 @@ const pricingItemSchema = new Schema<PricingItem>({
 });
 
 // Mongoose model
-interface PricingItemDocument extends PricingItem, Document {}
-const PricingItemModel = model<PricingItemDocument>('PricingItem', pricingItemSchema);
+export interface PricingItemDocument extends PricingItem, Document {}
+const MongoPricingItemModel = model<PricingItemDocument>('PricingItem', pricingItemSchema);
 
 export {
   PricingUnit,
@@ -97,5 +97,5 @@ export {
   TagsSchema,
   PricingItemSchema,
   PricingDataSchema,
-  PricingItemModel
+  MongoPricingItemModel
 };
