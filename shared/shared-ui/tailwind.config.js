@@ -1,5 +1,6 @@
 const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
 const { join } = require('path');
+const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -12,6 +13,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Sarabun', 'sans-serif'], // Define your Google font here
+      },
       colors: {
         primary: {
           100: '#F7FCFE',
@@ -40,5 +44,34 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addBase, theme }) {
+      addBase({
+        h1: {
+          fontSize: theme('fontSize.5xl'),
+          fontWeight: theme('fontWeight.extrabold'),
+        },
+        h2: {
+          fontSize: theme('fontSize.3xl'),
+          fontWeight: theme('fontWeight.semibold'),
+        },
+        h3: {
+          fontSize: theme('fontSize.2xl'),
+          fontWeight: theme('fontWeight.semibold'),
+        },
+        h4: {
+          fontSize: theme('fontSize.xl'),
+          fontWeight: theme('fontWeight.semibold'),
+        },
+        h5: {
+          fontSize: theme('fontSize.xl'),
+          fontWeight: theme('fontWeight.normal'),
+        },
+        p: {
+          fontSize: theme('fontSize.base'),
+          fontWeight: theme('fontWeight.normal'),
+        },
+      });
+    }),
+  ],
 };
