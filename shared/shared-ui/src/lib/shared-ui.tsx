@@ -12,4 +12,12 @@ export class ToastEntity {
     this.description = description;
     this.type = type;
   }
+
+  static unknownError(): ToastEntity {
+    return new ToastEntity(
+      'Unknown Error',
+      'An unknown error occurred.',
+      'error'
+    );
+  }
 }

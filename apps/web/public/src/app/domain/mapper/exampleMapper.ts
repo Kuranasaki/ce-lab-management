@@ -7,12 +7,12 @@ import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
 export default async function mapper(
   rawData: Response<RawData[]>
 ): Promise<ToBeRenderedData | ToastEntity> {
-  if (!rawData.success || !rawData.data) {
-    return {
-      title: 'Error',
-      description: 'Error while fetching data',
-      type: 'error',
-    };
+  if (rawData.error) {
+    return new ToastEntity(rawData.error.title, rawData.error.message, `error`);
+  }
+
+  if (!rawData.data) {
+    return ToastEntity.unknownError();
   }
 
   return new ToBeRenderedData(
