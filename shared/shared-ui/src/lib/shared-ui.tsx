@@ -1,15 +1,15 @@
-import styled from 'tailwind';
+export class ToastEntity {
+  title: string;
+  description: string;
+  type: 'error' | 'success' | 'info' | 'warning';
 
-const StyledSharedUi = styled.div`
-  color: pink;
-`;
-
-export function SharedUi() {
-  return (
-    <StyledSharedUi>
-      <h1>Welcome to SharedUi!</h1>
-    </StyledSharedUi>
-  );
+  constructor(
+    title: string,
+    description: string,
+    type: 'error' | 'success' | 'info' | 'warning'
+  ) {
+    this.title = title;
+    this.description = description;
+    this.type = type;
+  }
 }
-
-export default SharedUi;

@@ -1,5 +1,8 @@
+import { RouterProvider } from 'react-router-dom';
+import router from './routes/index';
+import './languages/index';
 export function App() {
-  return <div className="bg-primary-700 w-screen h-screen"></div>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
