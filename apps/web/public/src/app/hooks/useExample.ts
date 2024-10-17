@@ -17,6 +17,7 @@ export function useExample() {
 
     if (data instanceof ToastEntity) {
       // Show toast using redux?
+      console.log((data as ToastEntity).description);
     }
 
     setLoading(false);

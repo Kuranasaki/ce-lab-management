@@ -1,26 +1,32 @@
-import { Response } from '@ce-lab-mgmt/api-interfaces';
+import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
 import { RawData } from '../models/rawData';
+import { api } from '../axios/api';
+import { AxiosError } from 'axios';
 
-export default async function getAllRawData(): Promise<Response<RawData[]>> {
-  // Actual thing would be fetching data from API
+export default async function getAllRawData(): Promise<
+  BaseResponse<RawData[]>
+> {
+  try {
+    const response = await api.get<BaseResponse<RawData[]>>('/raw-data');
+    /* 
+      the entire response will be an AxiosResponse like this:
+      {
+        data : {
+          // The actual data type is Response<RawData[]> 
+        }
+        status: 200;
+        statusText: 'OK';
+        headers: { ... },
+        config: { ... }
+      }
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+    */
 
-  return new Response<RawData[]>(true, [
-    {
-      id: '1233212342',
-      name: 'John Doe',
-      price: 100,
-    },
-    {
-      id: '1233212343',
-      name: 'John Dee',
-      price: 120,
-    },
-    {
-      id: '1233212354',
-      name: 'John Die',
-      price: 150,
-    },
-  ]);
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response) {
+      return new BaseResponse({ error: { code: error.response.data.status } });
+    }
+    return new BaseResponse({ error: { code: 500 } });
+  }
 }

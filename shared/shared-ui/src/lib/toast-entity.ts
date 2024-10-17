@@ -13,6 +13,11 @@ export class ToastEntity {
     this.type = type;
   }
 
+  static fromCode(code: number): ToastEntity {
+    // To be implemented
+    return this.unknownError();
+  }
+
   static unknownError(): ToastEntity {
     return new ToastEntity(
       'Unknown Error',
