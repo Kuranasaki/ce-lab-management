@@ -11,5 +11,5 @@ export default function LocalComponent() {
     return <p>Price: {price}</p>;
   }
 
-  return <p>Failed to load price</p>;
+  return null;
 }

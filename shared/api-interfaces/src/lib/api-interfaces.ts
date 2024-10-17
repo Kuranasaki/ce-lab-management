@@ -3,22 +3,18 @@ export function apiInterfaces(): string {
 }
 
 export class Error {
-  title: string;
-  message: string;
+  code: number;
 
-  constructor(title: string, message: string) {
-    this.title = title;
-    this.message = message;
+  constructor(code: number) {
+    this.code = code;
   }
 }
 
-export class Response<T> {
-  success: boolean;
+export class BaseResponse<T> {
   data?: T;
   error?: Error;
 
-  constructor(success: boolean, data?: T, error?: Error) {
-    this.success = success;
+  constructor({ data, error }: { data?: T; error?: Error }) {
     this.data = data;
     this.error = error;
   }
