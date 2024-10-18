@@ -19,7 +19,7 @@ const BreadcrumbList = React.forwardRef<
   <ol
     ref={ref}
     className={cn(
-      'flex flex-wrap items-center gap-1.5 break-words text-sm text-slate-500 sm:gap-2.5',
+      'flex flex-wrap items-center gap-1.5 break-words text-sm text-slate-900 sm:gap-2.5',
       className
     )}
     {...props}
@@ -50,10 +50,7 @@ const BreadcrumbLink = React.forwardRef<
   return (
     <Comp
       ref={ref}
-      className={cn(
-        'transition-colors hover:text-slate-950 dark:hover:text-slate-50',
-        className
-      )}
+      className={cn('transition-colors  hover:text-slate-500', className)}
       {...props}
     />
   );
@@ -107,6 +104,39 @@ const BreadcrumbEllipsis = ({
 );
 BreadcrumbEllipsis.displayName = 'BreadcrumbElipssis';
 
+const BreadcrumbGenerator = ({
+  paths,
+}: {
+  paths: Array<{ title: string; path: string }>;
+}): React.ReactNode => {
+  const items = [];
+
+  for (let i = 0; i < paths.length; i++) {
+    if (i < paths.length - 1) {
+      items.push(
+        <BreadcrumbItem key={i}>
+          <BreadcrumbLink href={paths[i].path}>{paths[i].title}</BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+      items.push(
+        <BreadcrumbSeparator key={`separator-${i}`}></BreadcrumbSeparator>
+      );
+    } else if (i === paths.length - 1) {
+      items.push(
+        <BreadcrumbItem key={i}>
+          <p className="font-bold">{paths[i].title}</p>
+        </BreadcrumbItem>
+      );
+    }
+  }
+
+  return (
+    <BreadcrumbList className="flex flex-row gap-4 items-center">
+      {items}
+    </BreadcrumbList>
+  );
+};
+
 export {
   Breadcrumb,
   BreadcrumbList,
@@ -115,4 +145,5 @@ export {
   BreadcrumbPage,
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
+  BreadcrumbGenerator,
 };
