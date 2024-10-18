@@ -100,6 +100,7 @@ module.exports = {
   plugins: [
     plugin(function ({ addBase, theme }) {
       addBase({
+        html: { fontSize: '16px' },
         h1: {
           fontSize: theme('fontSize.5xl'),
           fontWeight: theme('fontWeight.extrabold'),
