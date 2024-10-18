@@ -4,7 +4,7 @@ import NavBar from '../components/NavBar';
 export default function MainLayout() {
   return (
     <div>
-      <NavBar />
+      <NavBar variant='transparent' />
       <Outlet />
     </div>
   );

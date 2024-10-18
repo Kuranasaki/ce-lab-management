@@ -3,11 +3,12 @@ import ExamplePage from '../views/example_feature/ExamplePage';
 import ExampleLayout from '../layouts/ExampleLayout';
 import ReservationLayout from '../layouts/ReservationLayout';
 import RequestReservationPage from '../views/request_reservation/RequestReservationPage';
+import MainLayout from '../layouts/MainLayout';
 
 export default createBrowserRouter([
   {
     path: '/',
-    element: <ExampleLayout />, // Replace with actual layout (Transperant Navbar)
+    element: <MainLayout />, // Replace with actual layout (Transperant Navbar)
     children: [
       {
         path: '',
