@@ -51,7 +51,7 @@ export default function NavBar({ variant }: { variant?: string }) {
                             <DropdownMenuLabel>บัญชีของฉัน</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>ข้อมูลส่วนตัว</DropdownMenuItem>
-                            <DropdownMenuItem>คำขอรับบริการของฉัน</DropdownMenuItem>
+                            <Link to="/reservation"><DropdownMenuItem>คำขอรับบริการของฉัน</DropdownMenuItem></Link>
                             <DropdownMenuItem>ตั้งค่า</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => setIsSignin(false)}>ออกจากระบบ</DropdownMenuItem>
                         </DropdownMenuContent>
