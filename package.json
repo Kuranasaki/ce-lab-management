@@ -5,6 +5,7 @@
   "scripts": {},
   "private": true,
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "axios": "^1.6.0",
     "elysia": "^1.1.12",
     "i18next": "^23.16.0",
