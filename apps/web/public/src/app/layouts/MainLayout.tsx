@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 
-export default function ReservationLayout() {
+export default function MainLayout() {
   return (
-    <div className="flex flex-col w-full">
+    <div>
       <NavBar />
       <Outlet />
     </div>
