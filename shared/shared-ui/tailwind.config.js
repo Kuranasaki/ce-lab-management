@@ -20,28 +20,30 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Sarabun', 'sans-serif'],
+      },
       colors: {
-        // Replacing variables with actual hsl values
         border: 'hsl(214.3, 31.8%, 91.4%)',
         input: 'hsl(214.3, 31.8%, 91.4%)',
         ring: 'hsl(215, 20.2%, 65.1%)',
         background: 'hsl(0, 0%, 100%)',
         foreground: 'hsl(222.2, 47.4%, 11.2%)',
         primary: {
-          DEFAULT: '#253B80',
-          100: '#F7FCFE',
+          DEFAULT: (theme) => theme('colors.primary.500'),
+          100: '#DBEAFE',
           300: '#179BD7',
           500: '#253B80',
           700: '#031358',
-          foreground: 'hsl(210, 40%, 98%)',
+          foreground: (theme) => theme('colors.slate.50'),
         },
         secondary: {
-          DEFAULT: 'hsl(210, 40%, 96.1%)',
+          DEFAULT: (theme) => theme('colors.secondary.500'),
           100: '#FFDFCC',
           300: '#FF904D',
           500: '#FF6000',
           700: '#993A00',
-          foreground: 'hsl(222.2, 47.4%, 11.2%)',
+          foreground: (theme) => theme('colors.slate.50'),
         },
         destructive: {
           DEFAULT: 'hsl(0, 100%, 50%)',
@@ -64,14 +66,19 @@ module.exports = {
           foreground: 'hsl(222.2, 47.4%, 11.2%)',
         },
         error: {
+          100: '#FEE2E2',
           300: '#F15B5B',
           500: '#DC2626',
+          700: '#B91C1C',
         },
         warning: {
+          100: '#FEF9C3',
           300: '#FCD34D',
           500: '#EAB308',
+          700: '#CA8A04',
         },
         success: {
+          100: '#DCFCE7',
           300: '#22C55E',
           500: '#15803D',
         },

@@ -6,11 +6,12 @@ import { Button, Input } from '@ce-lab-mgmt/shared-ui';
 export default function ExamplePage() {
   return (
     <div>
-      <p className="text-red-500">Example Page</p>
+      <p className="text-error-500">Example Page</p>
       <Button variant="destructive">test</Button>
       <Input title="test" inputMode="tel"></Input>
       <LocalComponent />
       <TranslationExample />
+      <h2>Test h2 สวัสดีจ้า</h2>
     </div>
   );
 }
