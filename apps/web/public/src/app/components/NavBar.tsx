@@ -32,10 +32,10 @@ export default function NavBar({ variant }: { variant?: string }) {
                 {!isSignin ? (
                     <>
                         <Link to={'/signin'}>
-                            <Button variant="outline" size="sm" className='border-slate-50 text-slate-50 bg-transparent hover:text-slate-50 hover:bg-slate-50 hover:bg-opacity-5'>ลงทะเบียน</Button>
+                            <Button variant="outlinelight" size="sm" >ลงทะเบียน</Button>
                         </Link>
                         <Link to={'/signup'}>
-                            <Button variant="default" size="sm" className='text-primary-500 bg-slate-50 hover:text-primary-50 hover:bg-slate-100'>ลงชื่อเข้าใช้</Button>
+                            <Button variant="defaultlight" size="sm">ลงชื่อเข้าใช้</Button>
                         </Link>
                     </>
                 ) : (
