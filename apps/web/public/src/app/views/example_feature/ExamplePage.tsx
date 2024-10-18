@@ -7,7 +7,7 @@ export default function ExamplePage() {
   return (
     <div>
       <p className="text-red-500">Example Page</p>
-      <Button variant={'default'}>test</Button>
+      <Button variant="destructive">test</Button>
       <Input title="test" inputMode="tel"></Input>
       <LocalComponent />
       <TranslationExample />

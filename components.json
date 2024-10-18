@@ -5,8 +5,8 @@
   "tailwind": {
     "config": "apps/**/tailwind.config.js",
     "css": "apps/**/styles.scss",
-    "baseColor": "stone",
-    "cssVariables": true
+    "baseColor": "slate",
+    "cssVariables": false
   },
   "aliases": {
     "components": "@ce-lab-mgmt/shared/components",
