@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChevronDownIcon } from "@radix-ui/react-icons"
 
-export default function NavBar() {
+export default function NavBar({ variant }: { variant?: string }) {
 
     const [isSignin, setIsSignin] = useState(true);
 
@@ -17,7 +17,7 @@ export default function NavBar() {
 
 
     return (
-        <div className="w-full h-16 bg-primary-500 px-12 flex justify-between">
+        <div className={`fixed top-0 z-50 ${variant === "transparent" ? 'bg-transparent' : 'bg-primary-500'} w-full h-16 px-12 flex justify-between`}>
             <div className='h-full flex items-center gap-16'>
                 <img src={logo} alt="Civil Engineering Logo" className="h-10" />
                 <div className='h-full flex gap-6 items-center'>
@@ -35,7 +35,7 @@ export default function NavBar() {
                             <Button variant="outline" size="sm" className='border-slate-50 text-slate-50 bg-transparent hover:text-slate-50 hover:bg-slate-50 hover:bg-opacity-5'>ลงทะเบียน</Button>
                         </Link>
                         <Link to={'/signup'}>
-                            <Button variant="default" size="sm" className='text-primary-50 bg-slate-50 hover:text-primary-50 hover:bg-slate-100'>ลงชื่อเข้าใช้</Button>
+                            <Button variant="default" size="sm" className='text-primary-500 bg-slate-50 hover:text-primary-50 hover:bg-slate-100'>ลงชื่อเข้าใช้</Button>
                         </Link>
                     </>
                 ) : (

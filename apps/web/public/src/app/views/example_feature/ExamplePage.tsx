@@ -6,6 +6,7 @@ import { Button, Input } from '@ce-lab-mgmt/shared-ui';
 export default function ExamplePage() {
   return (
     <div>
+      <div className='h-96 bg-slate-800'></div>
       <p className="text-error-500">Example Page</p>
       <Button variant="destructive">test</Button>
       <Input title="test" inputMode="tel"></Input>
