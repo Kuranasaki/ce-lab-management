@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import RequestReservationPage from '../views/request_reservation/RequestReservationPage';
 import MainLayout from '../layouts/MainLayout';
 import HomePage from '../views/homepage/Homepage';
+import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
 
 export default createBrowserRouter([
   {
@@ -12,42 +13,37 @@ export default createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: '', // Main layout routes
+        path: 'reservation/',
         children: [
           {
-            path: 'reservation/',
+            path: '',
+            element: <MainLayout title='คำขอรับบริการทดสอบ' />,
             children: [
               {
                 path: '',
-                element: <MainLayout title='คำขอรับบริการทดสอบ' />,
-                children: [
-                  {
-                    path: '',
-                    element: <div>RESERVATION PAGE</div>,
-                  },
-                ],
-              },
-              {
-                path: 'request',
-                element: <MainLayout title='สร้างคำขอรับบริการทดสอบ' />,
-                children: [
-                  {
-                    path: '',
-                    element: <RequestReservationPage />,
-                  },
-                ],
+                element: <ViewReservationPage />,
               },
             ],
           },
           {
-            path: 'pricing/',
-            element: <MainLayout title='ราคาทดสอบ' />,
+            path: 'request',
+            element: <MainLayout title='สร้างคำขอรับบริการทดสอบ' />,
             children: [
               {
                 path: '',
-                element: <div>PRICING PAGE</div>,
+                element: <RequestReservationPage />,
               },
             ],
+          },
+        ],
+      },
+      {
+        path: 'pricing/',
+        element: <MainLayout title='ราคาทดสอบ' />,
+        children: [
+          {
+            path: '',
+            element: <div>PRICING PAGE</div>,
           },
         ],
       },
