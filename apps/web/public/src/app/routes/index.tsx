@@ -50,7 +50,7 @@ export default createBrowserRouter([
           },
           {
             path: 'test2',
-            element: <MainLayout title='EditableTableExample' />,
+            element: <MainLayout title='ConfirmTableExample' />,
             children: [
               {
                 path: '',
