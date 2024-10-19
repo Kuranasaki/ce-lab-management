@@ -8,3 +8,4 @@ export * from './form';
 export * from './table';
 export * from './textarea';
 export * from './select';
+export * from './dialog';
