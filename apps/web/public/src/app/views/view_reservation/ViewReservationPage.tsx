@@ -1,5 +1,5 @@
-import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
-import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
+import { Button, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
+import { CaretLeftIcon, CaretRightIcon, CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Column, ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -13,6 +13,83 @@ export type Reservation = {
 }
 
 const data: Reservation[] = [
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
+    {
+        id: "m5gr84i8",
+        date: new Date(),
+        type: "one",
+        status: "pending",
+        amount: 3000,
+    },
     {
         id: "m5gr84i8",
         date: new Date(),
@@ -85,9 +162,6 @@ const ReservationTable = ({ status }: { status: string }) => {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
 
     const table = useReactTable({
         data,
@@ -98,23 +172,23 @@ const ReservationTable = ({ status }: { status: string }) => {
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
         state: {
             sorting,
             columnFilters,
-            columnVisibility,
-            rowSelection,
         },
     })
+
+    const rowStart = table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1;
+    const rowEnd = Math.min(rowStart + table.getState().pagination.pageSize - 1, table.getFilteredRowModel().rows.length);
+    const totalRows = table.getFilteredRowModel().rows.length;
 
     useEffect(() => {
         table.getColumn("status")?.setFilterValue(status)
     }, [status]);
 
-    return (
+    return (<>
         <Table>
-            <TableHeader>
+            <TableHeader className="bg-slate-50">
                 {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
@@ -132,7 +206,7 @@ const ReservationTable = ({ status }: { status: string }) => {
                     </TableRow>
                 ))}
             </TableHeader>
-            <TableBody>
+            <TableBody className="text-slate-700">
                 {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => (
                         <TableRow
@@ -141,10 +215,12 @@ const ReservationTable = ({ status }: { status: string }) => {
                         >
                             {row.getVisibleCells().map((cell) => (
                                 <TableCell key={cell.id}>
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
+                                    <Link to={`/reservation/${cell.row.original.id}`}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </Link>
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -153,14 +229,39 @@ const ReservationTable = ({ status }: { status: string }) => {
                     <TableRow>
                         <TableCell
                             colSpan={columns.length}
-                            className="h-24 text-center"
+                            className="h-32 text-center text-slate-500"
                         >
-                            No results.
+                            <p>No results.</p>
                         </TableCell>
                     </TableRow>
                 )}
             </TableBody>
         </Table>
+        <div className="w-full flex justify-between py-3 px-5 border-t text-slate-500 bg-slate-50">
+            <p>{rowStart}-{rowEnd} <span>of</span> {totalRows}</p>
+            <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        className="px-1 py-1 w-fit h-fit border-slate-500"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        <CaretLeftIcon className="size-4 stroke-slate-500" />
+                    </Button>
+                    <p>{table.getState().pagination.pageIndex + 1} / {table.getPageCount()}</p>
+                    <Button
+                        variant="outline"
+                        className="px-1 py-1 w-fit h-fit border-slate-500"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        <CaretRightIcon className="size-4 stroke-slate-500" />
+                    </Button>
+                </div>
+            </div>
+        </div>
+    </>
     )
 }
 
@@ -253,7 +354,7 @@ const StatusBar = ({ status }: { status: string }) => {
 
     const statusMap: { [key: string]: { text: string; bgColor: string; textColor: string; } } = {
         pending: { text: "รออนุมัติ", bgColor: "bg-warning-100", textColor: "text-warning-700" },
-        processing: { text: "กำลังดำเนินการ", bgColor: "bg-primary-100", textColor: "text-primary-700" },
+        processing: { text: "กำลังทดสอบ", bgColor: "bg-primary-100", textColor: "text-primary-700" },
         success: { text: "สำเร็จ", bgColor: "bg-success-100", textColor: "text-success-500" },
         canceled: { text: "ยกเลิก", bgColor: "bg-error-100", textColor: "text-error-700" },
     };
