@@ -3,6 +3,7 @@ import RequestReservationPage from '../views/request_reservation/RequestReservat
 import MainLayout from '../layouts/MainLayout';
 import HomePage from '../views/homepage/Homepage';
 import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
+import PricingPage from '../views/pricing/PricingPage';
 
 export default createBrowserRouter([
   {
@@ -17,7 +18,7 @@ export default createBrowserRouter([
         children: [
           {
             path: '',
-            element: <MainLayout title='คำขอรับบริการทดสอบ' />,
+            element: <MainLayout title="คำขอรับบริการทดสอบ" />,
             children: [
               {
                 path: '',
@@ -27,7 +28,7 @@ export default createBrowserRouter([
           },
           {
             path: 'request',
-            element: <MainLayout title='สร้างคำขอรับบริการทดสอบ' />,
+            element: <MainLayout title="สร้างคำขอรับบริการทดสอบ" />,
             children: [
               {
                 path: '',
@@ -39,11 +40,11 @@ export default createBrowserRouter([
       },
       {
         path: 'pricing/',
-        element: <MainLayout title='ราคาทดสอบ' />,
+        element: <MainLayout title="ราคาทดสอบ" />,
         children: [
           {
             path: '',
-            element: <div>PRICING PAGE</div>,
+            element: <PricingPage />,
           },
         ],
       },
