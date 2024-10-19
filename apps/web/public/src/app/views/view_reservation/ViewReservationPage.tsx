@@ -1,8 +1,7 @@
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
-import { CaretSortIcon, DotsHorizontalIcon, PlusIcon } from "@radix-ui/react-icons";
+import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tabs, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
+import { CaretSortIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Column, ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table";
-import { table } from "console";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export type Reservation = {
@@ -18,15 +17,29 @@ const data: Reservation[] = [
         id: "m5gr84i8",
         date: new Date(),
         type: "one",
-        status: "success",
+        status: "pending",
         amount: 3000,
     },
     {
         id: "m5gr84i9",
         date: new Date(),
         type: "one",
-        status: "success",
+        status: "processing",
         amount: 5000,
+    },
+    {
+        id: "m5gr84i7",
+        date: new Date(),
+        type: "one",
+        status: "success",
+        amount: 45000,
+    },
+    {
+        id: "m5gr84i7",
+        date: new Date(),
+        type: "one",
+        status: "canceled",
+        amount: 45000,
     },
     {
         id: "m5gr84i7",
@@ -38,31 +51,35 @@ const data: Reservation[] = [
 ]
 
 export default function ViewReservationPage() {
+    const [activeTab, setActiveTab] = useState<string>('');
 
     return (
         <div className="flex flex-col gap-6">
-            <Tabs defaultValue="all" className="w-full flex flex-col gap-6">
-                <div className="flex justify-between items-center">
+            <Tabs
+                defaultValue=""
+                onValueChange={(value) => setActiveTab(value)}
+                className="w-full flex flex-col gap-6"
+            >                <div className="flex justify-between items-center">
                     <TabsList>
-                        <TabsTrigger value="all">ทั้งหมด</TabsTrigger>
+                        <TabsTrigger value="">ทั้งหมด</TabsTrigger>
                         <TabsTrigger value="pending">รออนุมัติ</TabsTrigger>
-                        <TabsTrigger value="testing">กำลังทดสอบ</TabsTrigger>
-                        <TabsTrigger value="done">สำเร็จ</TabsTrigger>
-                        <TabsTrigger value="cancel">ยกเลิก</TabsTrigger>
+                        <TabsTrigger value="processing">กำลังทดสอบ</TabsTrigger>
+                        <TabsTrigger value="success">สำเร็จ</TabsTrigger>
+                        <TabsTrigger value="canceled">ยกเลิก</TabsTrigger>
                     </TabsList>
                     <Link to="/reservation/request">
                         <Button variant="default" size="sm"><PlusIcon />สร้างคำขอ</Button>
                     </Link>
                 </div>
-                <div className="rounded-md border">
-                    <ReservationTable />
+                <div className="rounded-lg border border-slate-300">
+                    <ReservationTable status={activeTab} />
                 </div>
             </Tabs>
         </div>
     )
 }
 
-const ReservationTable = () => {
+const ReservationTable = ({ status }: { status: string }) => {
 
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -91,6 +108,10 @@ const ReservationTable = () => {
         },
     })
 
+    useEffect(() => {
+        table.getColumn("status")?.setFilterValue(status)
+    }, [status]);
+
     return (
         <Table>
             <TableHeader>
@@ -98,7 +119,7 @@ const ReservationTable = () => {
                     <TableRow key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
                             return (
-                                <TableHead key={header.id}>
+                                <TableHead className="py-2" key={header.id}>
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
@@ -155,12 +176,12 @@ const Header = ({ title, column }: { title: string, column: Column<Reservation> 
     )
 }
 
-const Cell = <T,>({ value }: { value: T }) => {
-    return <div className="pl-4">{String(value)}</div>;
+const Cell = ({ children }: { children: React.ReactNode }) => {
+    return <div className="pl-4 py-1 text-base">{children}</div>;
 };
 
 
-export const columns: ColumnDef<Reservation>[] = [
+const columns: ColumnDef<Reservation>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => {
@@ -168,7 +189,7 @@ export const columns: ColumnDef<Reservation>[] = [
                 <Header title="หมายเลขการจอง" column={column} />
             )
         }, cell: ({ row }) => (
-            <Cell value={row.getValue("id")} />
+            <Cell>{row.getValue("id")}</Cell>
         ),
     },
     {
@@ -186,7 +207,7 @@ export const columns: ColumnDef<Reservation>[] = [
                 day: 'numeric',
             }).format(date);
 
-            return <Cell value={formatted} />;
+            return <Cell>{formatted}</Cell>
         },
     },
     {
@@ -196,7 +217,7 @@ export const columns: ColumnDef<Reservation>[] = [
                 <Header title="ประเภทการทดสอบ" column={column} />
             )
         },
-        cell: ({ row }) => <Cell value={row.getValue("type")} />,
+        cell: ({ row }) => <Cell>{row.getValue("type")}</Cell>,
     },
     {
         accessorKey: "status",
@@ -205,7 +226,7 @@ export const columns: ColumnDef<Reservation>[] = [
                 <Header title="สถานะ" column={column} />
             )
         }, cell: ({ row }) => (
-            <Cell value={row.getValue("status")} />
+            <Cell><StatusBar status={row.getValue("status")} /></Cell>
         ),
     },
     {
@@ -223,7 +244,25 @@ export const columns: ColumnDef<Reservation>[] = [
                 currency: "THB",
             }).format(amount)
 
-            return <Cell value={formatted} />
+            return <Cell>{formatted}</Cell>
         },
     },
 ]
+
+const StatusBar = ({ status }: { status: string }) => {
+
+    const statusMap: { [key: string]: { text: string; bgColor: string; textColor: string; } } = {
+        pending: { text: "รออนุมัติ", bgColor: "bg-warning-100", textColor: "text-warning-700" },
+        processing: { text: "กำลังดำเนินการ", bgColor: "bg-primary-100", textColor: "text-primary-700" },
+        success: { text: "สำเร็จ", bgColor: "bg-success-100", textColor: "text-success-500" },
+        canceled: { text: "ยกเลิก", bgColor: "bg-error-100", textColor: "text-error-700" },
+    };
+
+    const { text, bgColor, textColor } = statusMap[status] || { text: "Unknown", bgColor: "bg-gray-500", textColor: "text-slate-700" };
+
+    return (
+        <div className={`w-fit px-2 py-1 rounded-3xl text-sm pointer-events-none ${bgColor} ${textColor}`}>
+            {text}
+        </div>
+    );
+};
