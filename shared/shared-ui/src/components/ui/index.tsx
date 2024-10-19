@@ -4,3 +4,4 @@ export * from './breadcrumb';
 export * from './navigation-menu';
 export * from './dropdown-menu';
 export * from './form';
+export * from './textarea';
