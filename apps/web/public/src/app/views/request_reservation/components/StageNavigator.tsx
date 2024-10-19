@@ -8,7 +8,7 @@ export default function StageNavigator({
   return (
     <div className="flex flex-row items-center">
       {/* Render all stages on larger screens */}
-      <div className="hidden sm:flex flex-row items-center lg:gap-10 md:gap-6 gap-2">
+      <div className="hidden sm:flex flex-row items-center lg:gap-12 gap-4">
         <StageNavItem
           state={
             currentStage > 1
@@ -20,7 +20,6 @@ export default function StageNavigator({
           number={1}
           title="ข้อมูลผู้ขอทดสอบ"
         />
-        <div className="lg:w-32 h-[2px] bg-slate-500"></div>
         <StageNavItem
           state={
             currentStage > 2
@@ -32,7 +31,6 @@ export default function StageNavigator({
           number={2}
           title="ข้อมูลการทดสอบ"
         />
-        <div className="lg:w-32 h-[2px] bg-slate-500"></div>
         <StageNavItem
           state={
             currentStage > 3

@@ -15,14 +15,15 @@ const formSchema = z.object({
   orgEmail: z.string().min(1, 'โปรดระบุอีเมล').email('โปรดระบุอีเมลที่ถูกต้อง'),
   orgPhone: z
     .string()
-    .min(1, 'โปรดระบุเบอร์โทรศัพท์')
-    .min(9, 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง')
-    .max(10, 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง')
-    .regex(/^\d+$/, 'โปรดระบุเบอร์โทรศัพท์ที่ถูกต้อง'),
-  orgFax: z.string(),
+    .min(1, 'โปรดระบุหมายเลขโทรศัพท์')
+    .regex(/^0\d{8,9}$/, 'โปรดระบุหมายเลขโทรศัพท์ที่ถูกต้อง'),
+  orgFax: z
+    .string()
+    .regex(/^0\d{8}$/, 'โปรดระบุหมายเลขโทรสารที่ถูกต้อง')
+    .or(z.literal('')),
 });
 
-export default function useOrgInfoForm() {
+export function useOrgInfoForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,3 +38,5 @@ export default function useOrgInfoForm() {
 
   return { orgForm: form };
 }
+
+export type OrgInfoForm = ReturnType<typeof useOrgInfoForm>['orgForm'];

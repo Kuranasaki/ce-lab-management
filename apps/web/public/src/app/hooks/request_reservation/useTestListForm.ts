@@ -5,10 +5,12 @@ import { testItemFormSchema } from './useTestItemForm';
 
 const formSchema = z.object({
   testType: z.string().min(1),
-  testList: z.array(testItemFormSchema).min(1),
+  testList: z
+    .array(testItemFormSchema)
+    .min(1, 'กรุณาเพิ่มรายการทดสอบอย่างน้อย 1 รายการ'),
 });
 
-export default function useTestListForm() {
+export function useTestListForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -19,3 +21,5 @@ export default function useTestListForm() {
 
   return { testListForm: form };
 }
+
+export type TestListForm = ReturnType<typeof useTestListForm>['testListForm'];

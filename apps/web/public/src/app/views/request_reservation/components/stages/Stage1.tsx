@@ -5,19 +5,19 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
   Input,
   Textarea,
 } from '@ce-lab-mgmt/shared-ui';
 import { Link } from 'react-router-dom';
+import { OrgInfoForm } from '../../../../hooks/request_reservation/useOrgInfoForm';
 
 export default function Stage1({
   orgForm,
   setStage,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  orgForm: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setStage: (value: any) => void;
+  orgForm: OrgInfoForm;
+  setStage: (value: number) => void;
 }) {
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -45,11 +45,7 @@ export default function Stage1({
                       {...field}
                     />
                   </FormControl>
-                  {orgForm.getFieldState('orgName').error && (
-                    <p className="text-error-500">
-                      {orgForm.getFieldState('orgName').error.message}
-                    </p>
-                  )}
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -62,18 +58,14 @@ export default function Stage1({
                   <FormControl>
                     <Input
                       className={
-                        orgForm.getFieldState('orgProjectName').error &&
+                        orgForm.getFieldState('orgProjectName')?.error &&
                         'ring-1 ring-error-500'
                       }
                       placeholder="ระบุชื่อโครงการ (ถ้ามี)"
                       {...field}
                     />
                   </FormControl>
-                  {orgForm.getFieldState('orgProjectName').error && (
-                    <p className="text-error-500">
-                      {orgForm.getFieldState('orgProjectName').error.message}
-                    </p>
-                  )}
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -93,11 +85,7 @@ export default function Stage1({
                       {...field}
                     />
                   </FormControl>
-                  {orgForm.getFieldState('orgAddress').error && (
-                    <p className="text-error-500">
-                      {orgForm.getFieldState('orgAddress').error.message}
-                    </p>
-                  )}
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -117,11 +105,7 @@ export default function Stage1({
                       {...field}
                     />
                   </FormControl>
-                  {orgForm.getFieldState('orgEmail').error && (
-                    <p className="text-error-500">
-                      {orgForm.getFieldState('orgEmail').error.message}
-                    </p>
-                  )}
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -139,14 +123,14 @@ export default function Stage1({
                           'ring-1 ring-error-500'
                         }
                         placeholder="ระบุหมายเลขโทรศัพท์ (บังคับ)"
-                        {...field}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.replace(/\D/g, '');
+                          field.onChange(e);
+                        }}
+                        value={field.value}
                       />
                     </FormControl>
-                    {orgForm.getFieldState('orgPhone').error && (
-                      <p className="text-error-500">
-                        {orgForm.getFieldState('orgPhone').error.message}
-                      </p>
-                    )}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -155,7 +139,7 @@ export default function Stage1({
                 name="orgFax"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>FAX</FormLabel>
+                    <FormLabel>หมายเลขโทรสาร (FAX)</FormLabel>
                     <FormControl>
                       <Input
                         className={
@@ -163,14 +147,14 @@ export default function Stage1({
                           'ring-1 ring-error-500'
                         }
                         placeholder="ระบุหมายเลขโทรสาร (ถ้ามี)"
-                        {...field}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.replace(/\D/g, '');
+                          field.onChange(e);
+                        }}
+                        value={field.value}
                       />
                     </FormControl>
-                    {orgForm.getFieldState('orgFax').error && (
-                      <p className="text-error-500">
-                        {orgForm.getFieldState('orgFax').error.message}
-                      </p>
-                    )}
+                    <FormMessage />
                   </FormItem>
                 )}
               />

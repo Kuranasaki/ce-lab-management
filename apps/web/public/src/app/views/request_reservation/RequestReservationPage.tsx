@@ -3,11 +3,12 @@ import Stage1 from './components/stages/Stage1';
 import Stage2 from './components/stages/Stage2';
 import Stage3 from './components/stages/Stage3';
 import StageNavigator from './components/StageNavigator';
-import useOrgInfoForm from '../../hooks/request_reservation/useOrgInfoForm';
-import useTestListForm from '../../hooks/request_reservation/useTestListForm';
+import { useTestListForm } from '../../hooks/request_reservation/useTestListForm';
+import { useOrgInfoForm } from '../../hooks/request_reservation/useOrgInfoForm';
 
 export default function RequestReservationPage() {
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(2);
+
   const { orgForm } = useOrgInfoForm();
   const { testListForm } = useTestListForm();
   return (
