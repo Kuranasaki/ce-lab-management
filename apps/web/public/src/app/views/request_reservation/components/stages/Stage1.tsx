@@ -12,22 +12,23 @@ import { Link } from 'react-router-dom';
 
 export default function Stage1({
   orgForm,
-  onSubmit,
+  setStage,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   orgForm: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSubmit: (value: any) => void;
+  setStage: (value: any) => void;
 }) {
   return (
     <div className="flex flex-col gap-8 w-full">
       <Form {...orgForm}>
-        <div className="flex flex-col gap-5">
-          <h4>ข้อมูลบริษัท/หน่วยงานขอทดสอบ</h4>
-          <form
-            onSubmit={orgForm.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
+        <form
+          onSubmit={orgForm.handleSubmit(() => setStage(2))}
+          className="flex flex-col gap-4"
+        >
+          <div className="flex flex-col gap-5">
+            <h4>ข้อมูลบริษัท/หน่วยงานขอทดสอบ</h4>
+
             <FormField
               control={orgForm.control}
               name="orgName"
@@ -174,16 +175,14 @@ export default function Stage1({
                 )}
               />
             </div>
-          </form>
-        </div>
-        <div className="flex flex-row justify-end w-full gap-2">
-          <Link to="/reservation">
-            <Button variant="outline">ยกเลิก</Button>
-          </Link>
-          <Button type="submit" onClick={orgForm.handleSubmit(onSubmit)}>
-            ต่อไป
-          </Button>
-        </div>
+          </div>
+          <div className="flex flex-row justify-end w-full gap-2">
+            <Link to="/reservation">
+              <Button variant="outline">ยกเลิก</Button>
+            </Link>
+            <Button type="submit">ต่อไป</Button>
+          </div>
+        </form>
       </Form>
     </div>
   );

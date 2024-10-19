@@ -22,7 +22,7 @@ const formSchema = z.object({
   orgFax: z.string(),
 });
 
-export default function useOrgInfoForm(setStage: (stage: number) => void) {
+export default function useOrgInfoForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,9 +35,5 @@ export default function useOrgInfoForm(setStage: (stage: number) => void) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setStage(2);
-  }
-
-  return { orgForm: form, onOrgSubmit: onSubmit };
+  return { orgForm: form };
 }

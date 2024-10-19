@@ -8,21 +8,15 @@ import useTestListForm from '../../hooks/request_reservation/useTestListForm';
 
 export default function RequestReservationPage() {
   const [stage, setStage] = useState(1);
-  const { orgForm, onOrgSubmit } = useOrgInfoForm(setStage);
-  const { testListForm, onTestListSubmit } = useTestListForm(setStage);
+  const { orgForm } = useOrgInfoForm();
+  const { testListForm } = useTestListForm();
   return (
     <div className="flex flex-col items-center gap-8">
       <StageNavigator currentStage={stage} />
       {
         {
-          1: <Stage1 orgForm={orgForm} onSubmit={onOrgSubmit} />,
-          2: (
-            <Stage2
-              testListForm={testListForm}
-              onSubmit={onTestListSubmit}
-              setStage={setStage}
-            />
-          ),
+          1: <Stage1 orgForm={orgForm} setStage={setStage} />,
+          2: <Stage2 testListForm={testListForm} setStage={setStage} />,
           3: <Stage3 />,
         }[stage]
       }

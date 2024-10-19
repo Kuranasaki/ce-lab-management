@@ -1,13 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { testItemFormSchema } from './useTestItemForm';
 
 const formSchema = z.object({
   testType: z.string().min(1),
-  testList: z.array(z.any()).min(1),
+  testList: z.array(testItemFormSchema).min(1),
 });
 
-export default function useTestListForm(setStage: (stage: number) => void) {
+export default function useTestListForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -16,9 +17,5 @@ export default function useTestListForm(setStage: (stage: number) => void) {
     },
   });
 
-  function onSubmit() {
-    setStage(3);
-  }
-
-  return { testListForm: form, onTestListSubmit: onSubmit };
+  return { testListForm: form };
 }
