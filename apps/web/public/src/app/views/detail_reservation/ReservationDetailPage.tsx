@@ -17,11 +17,6 @@ export default function ReservationDetailPage() {
         return <p>Loading...</p>;
     }
 
-    const handleAddTest = () => {
-        const newItem = new TestListTableItem("3", "Test 3", "Detail 3", "Note 3", 400, 1, 10, 40);
-        setTestListdata(testListdata.addItem(newItem))
-    };
-
     return (
         <div>
             <div className="flex flex-col gap-4">

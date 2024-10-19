@@ -11,7 +11,7 @@ export default class TestListTable {
 
     addItem(newItem: TestListTableItem): TestListTable {
         const updatedItems = [...this.items, newItem];
-        const updatedTotalPrice = this.totalPrice + newItem.price; 
+        const updatedTotalPrice = this.totalPrice + newItem.price * newItem.amount; 
         
         return new TestListTable(updatedItems, updatedTotalPrice);
     }
@@ -19,7 +19,7 @@ export default class TestListTable {
     removeItem(itemId: string): TestListTable {
         const updatedItems = this.items.filter(item => item.id !== itemId);
         const removedItem = this.items.find(item => item.id === itemId);
-        const updatedTotalPrice = removedItem ? this.totalPrice - removedItem.price : this.totalPrice; 
+        const updatedTotalPrice = removedItem ? this.totalPrice - removedItem.price * removedItem.amount : this.totalPrice; 
 
         return new TestListTable(updatedItems, updatedTotalPrice);
     }
@@ -33,19 +33,19 @@ export default class TestListTable {
                 return new TestListTableItem(
                     item.id, // Keep the original ID
                     updatedItem.name ?? item.name, // Use updated name or keep original
-                    updatedItem.detail ?? item.detail, // Use updated detail or keep original
-                    updatedItem.note ?? item.note, // Use updated note or keep original
                     updatedItem.price ?? item.price, // Use updated price or keep original
                     updatedItem.amount ?? item.amount, // Use updated amount or keep original
                     updatedItem.unit ?? item.unit, // Use updated amount or keep original
-                    updatedItem.priceperunit ?? item.priceperunit // Use updated price per unit or keep original
+                    updatedItem.priceperunit ?? item.priceperunit, // Use updated price per unit or keep original
+                    updatedItem.detail ?? item.detail, // Use updated detail or keep original
+                    updatedItem.note ?? item.note, // Use updated note or keep original
                 );
             }
             return item; // Return original item if no update
         });
     
         // Update the totalPrice if the price has changed
-        const updatedTotalPrice = updatedItems.reduce((total, item) => total + item.price, 0);
+        const updatedTotalPrice = updatedItems.reduce((total, item) => total + item.price, 0); // I think it need fixing
     
         // Create a new TestListTable with updated items and total price
         return new TestListTable(updatedItems, updatedTotalPrice);

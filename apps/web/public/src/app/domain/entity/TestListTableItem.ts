@@ -1,31 +1,31 @@
 export default class TestListTableItem {
     id: string;
     name: string;
-    detail: string;
-    note: string;
     price: number;
     amount: number;
-    unit: number;
+    unit: string;
     priceperunit: number;
+    detail: string;
+    note: string;
 
     constructor(
         id: string,
         name: string,
-        detail: string,
-        note: string,
         price: number,
         amount: number,
-        unit: number,
-        priceperunit: number
+        unit: string,
+        priceperunit: number,
+        detail: string | null,
+        note: string | null,
     ) {
         this.id = id;
         this.name = name;
-        this.detail = detail;
-        this.note = note;
         this.price = price;
         this.amount = amount;
         this.unit = unit;
         this.priceperunit = priceperunit;
+        this.detail = detail ? detail : "";
+        this.note = note ? note : "";
     }
 
     formatPrice(): string {

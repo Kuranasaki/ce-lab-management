@@ -1,8 +1,9 @@
-import { Button, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@ce-lab-mgmt/shared-ui";
-import { Column, ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@ce-lab-mgmt/shared-ui";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import React, { Dispatch, SetStateAction } from "react";
 import TestListTable from "../../../domain/entity/TestListTable";
 import TestListTableItem from "../../../domain/entity/TestListTableItem";
+import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 
 export default function TestList({ data, editable, setData }: { data: TestListTable, editable: boolean, setData: Dispatch<SetStateAction<TestListTable>> }) {
 
@@ -25,21 +26,20 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
     return (
 
         <Table>
-            <TableHeader className="bg-slate-50">
+            <TableHeader className="bg-slate-50 ">
                 {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
+                    <TableRow className="px-5" key={headerGroup.id}>
                         {headerGroup.headers.map((header) => {
                             return (
-                                <TableHead className="py-2" key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
+                                <TableHead className="py-3 px-5" key={header.id}>
+                                    {flexRender(
+                                        header.column.columnDef.header,
+                                        header.getContext()
+                                    )}
                                 </TableHead>
                             )
                         })}
+                        {editable ? <TableHead /> : ""}
                     </TableRow>
                 ))}
             </TableHeader>
@@ -48,7 +48,7 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
                     table.getRowModel().rows.map((row) => (
                         <TableRow key={row.id}>
                             {row.getVisibleCells().map((cell) => (
-                                <TableCell key={cell.id}>
+                                <TableCell className="py-3 px-5" key={cell.id}>
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()
@@ -57,8 +57,10 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
                             ))}
                             {editable ?
                                 <TableCell >
-                                    <Button onClick={() => handleEditTest(row.original.id, { price: 450 })}>Edit</Button>
-                                    <Button onClick={() => handleDeleteTest(row.original.id)}>Delete</Button>
+                                    <div className="flex gap-4 justify-center">
+                                        <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleEditTest(row.original.id, { price: 450 })}><Pencil1Icon className="size-5" /></div>
+                                        <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleDeleteTest(row.original.id)}><TrashIcon className="size-5" /></div>
+                                    </div>
                                 </TableCell>
                                 : ""
                             }
@@ -70,7 +72,7 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
                             colSpan={columns.length}
                             className="h-32 text-center text-slate-500"
                         >
-                            <p>No results.</p>
+                            <p>ไม่มีรายการทดสอบในขณะนี้</p>
                         </TableCell>
                     </TableRow>
                 )}
@@ -78,10 +80,15 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
             <TableFooter>
                 <TableRow>
                     <TableCell
-                        colSpan={columns.length}
+                        colSpan={editable ? columns.length + 1 : columns.length}
                         className="bg-slate-50 text-slate-500 py-3 px-5"
                     >
-                        ราคารวม {data.totalPrice} บาท
+                        <div className="flex gap-4 justify-end">
+                            <p className="font-bold">ราคารวม</p>
+                            <p>
+                                {data.totalPrice.toFixed(2)} บาท
+                            </p>
+                        </div>
                     </TableCell>
                 </TableRow>
             </TableFooter>
@@ -90,57 +97,66 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
     );
 }
 
-const Header = ({ title, column }: { title: string, column: Column<TestListTableItem> }) => {
+const Header = ({ title, className }: { title: string, className?: string }) => {
     return (
-        <div className="text-base">{title}</div>
+        <div className={`text-base text-slate-900 w-full ${className}`}>{title}</div>
     )
 }
 
 const Cell = ({ children }: { children: React.ReactNode }) => {
-    return <div className="pl-4 py-1 text-base">{children}</div>;
+    return <div className="flex text-base items-center justify-center">{children}</div>;
 };
 
 const columns: ColumnDef<TestListTableItem>[] = [
     {
         accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Header title="รายการ" column={column} />
-            )
+        header: () => {
+            return <Header title="รายการ" />
         }, cell: ({ row }) => (
             <Cell>
-                <div>{row.original.name}</div>
-                <div>รายละเอียด: {row.original.detail}</div>
-                <div>หมายเหตุ: {row.original.note}</div>
-            </Cell>
+                <div className="flex flex-1 flex-col">
+                    <p className="font-medium text-slate-700">{row.original.name}</p>
+                    <div className="flex flex-col text-slate-500">
+                        <div className="grid grid-cols-[auto,1fr] gap-x-2">
+                            {row.original.detail != "" ?
+                                <>
+                                    <p>รายละเอียด:</p>
+                                    <p>{row.original.detail}</p>
+                                </> : ""
+                            }
+                            {row.original.note != "" ?
+                                <>
+                                    <p>หมายเหตุ:</p>
+
+                                    <p>{row.original.note}</p>
+                                </> : ""
+                            }
+                        </div>
+                    </div>
+                </div>
+            </Cell >
         ),
     },
     {
         accessorKey: "amount",
-        header: ({ column }) => {
-            return (
-                <Header title="จำนวน" column={column} />
-            )
+        header: () => {
+            return <Header className="text-center" title="จำนวน" />
         }, cell: ({ row }) => (
             <Cell>{row.original.amount}</Cell>
         ),
     },
     {
         accessorKey: "unit",
-        header: ({ column }) => {
-            return (
-                <Header title="หน่วย" column={column} />
-            )
+        header: () => {
+            return <Header className="text-center" title="หน่วย" />
         }, cell: ({ row }) => (
             <Cell>{row.original.unit}</Cell>
         ),
     },
     {
         accessorKey: "priceperunit",
-        header: ({ column }) => {
-            return (
-                <Header title="ราคาต่อหน่วย" column={column} />
-            )
+        header: () => {
+            return <Header className="text-center" title="ราคาต่อหน่วย" />
         }, cell: ({ row }) => (
             <Cell>{row.original.formatPrice()}</Cell>
         ),
