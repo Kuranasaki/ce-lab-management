@@ -1,4 +1,4 @@
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button } from "@ce-lab-mgmt/shared-ui";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell, Button, TableFooter } from "@ce-lab-mgmt/shared-ui";
 import { CaretLeftIcon, CaretRightIcon, CaretSortIcon } from "@radix-ui/react-icons";
 import { SortingState, ColumnFiltersState, useReactTable, getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel, flexRender, Column, ColumnDef } from "@tanstack/react-table";
 import React, { useEffect } from "react";
@@ -30,7 +30,7 @@ export default function ReservationTable({ status }: { status: string }) {
         },
     })
 
-    const rowStart = table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1;
+    const rowStart = table.getRowModel().rows?.length ? table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1 : 0;
     const rowEnd = Math.min(rowStart + table.getState().pagination.pageSize - 1, table.getFilteredRowModel().rows.length);
     const totalRows = table.getFilteredRowModel().rows.length;
 
@@ -93,31 +93,41 @@ export default function ReservationTable({ status }: { status: string }) {
                         </TableRow>
                     )}
                 </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableCell
+                            colSpan={columns.length}
+                            className="bg-slate-50 text-slate-500 py-3 px-5"
+                        >
+                            <div className="flex justify-between ">
+                                <p>{rowStart}-{rowEnd} <span>of</span> {totalRows}</p>
+                                <div className="flex justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            variant="outline"
+                                            className="px-1 py-1 w-fit h-fit border-slate-500"
+                                            onClick={() => table.previousPage()}
+                                            disabled={!table.getCanPreviousPage()}
+                                        >
+                                            <CaretLeftIcon className="size-4 stroke-slate-500" />
+                                        </Button>
+                                        <p>{table.getRowModel().rows?.length ? table.getState().pagination.pageIndex + 1 : 0} / {table.getPageCount()}</p>
+                                        <Button
+                                            variant="outline"
+                                            className="px-1 py-1 w-fit h-fit border-slate-500"
+                                            onClick={() => table.nextPage()}
+                                            disabled={!table.getCanNextPage()}
+                                        >
+                                            <CaretRightIcon className="size-4 stroke-slate-500" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
             </Table>
-            <div className="w-full flex justify-between py-3 px-5 border-t text-slate-500 bg-slate-50">
-                <p>{rowStart}-{rowEnd} <span>of</span> {totalRows}</p>
-                <div className="flex justify-between">
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            className="px-1 py-1 w-fit h-fit border-slate-500"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                        >
-                            <CaretLeftIcon className="size-4 stroke-slate-500" />
-                        </Button>
-                        <p>{table.getState().pagination.pageIndex + 1} / {table.getPageCount()}</p>
-                        <Button
-                            variant="outline"
-                            className="px-1 py-1 w-fit h-fit border-slate-500"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            <CaretRightIcon className="size-4 stroke-slate-500" />
-                        </Button>
-                    </div>
-                </div>
-            </div>
+
         </>
         )
     }
