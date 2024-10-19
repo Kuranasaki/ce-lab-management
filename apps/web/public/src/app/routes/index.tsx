@@ -3,6 +3,9 @@ import RequestReservationPage from '../views/request_reservation/RequestReservat
 import MainLayout from '../layouts/MainLayout';
 import HomePage from '../views/homepage/Homepage';
 import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
+import ReservationDetailPage from '../views/detail_reservation/ReservationDetailPage';
+import EditableTableExample from '../views/detail_reservation/EditableTableExample';
+import ConfirmTableExample from '../views/detail_reservation/ConfirmTableExample';
 
 export default createBrowserRouter([
   {
@@ -22,6 +25,36 @@ export default createBrowserRouter([
               {
                 path: '',
                 element: <ViewReservationPage />,
+              },
+            ],
+          },
+          {
+            path: ':id',
+            element: <MainLayout title='รายละเอียดคำขอรับบริการทดสอบ' />,
+            children: [
+              {
+                path: '',
+                element: <ReservationDetailPage />,
+              },
+            ],
+          },
+          {
+            path: 'test1',
+            element: <MainLayout title='EditableTableExample' />,
+            children: [
+              {
+                path: '',
+                element: <EditableTableExample />,
+              },
+            ],
+          },
+          {
+            path: 'test2',
+            element: <MainLayout title='ConfirmTableExample' />,
+            children: [
+              {
+                path: '',
+                element: <ConfirmTableExample />,
               },
             ],
           },
