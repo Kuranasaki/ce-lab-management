@@ -6,4 +6,4 @@ export * from './dropdown-menu';
 export * from './tabs';
 export * from './form';
 export * from './table';
-
+export * from './textarea';
