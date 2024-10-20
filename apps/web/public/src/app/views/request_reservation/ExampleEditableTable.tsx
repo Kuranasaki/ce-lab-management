@@ -32,9 +32,7 @@ export default function ExampleEditableTable() {
                     <h4>รายการทดสอบ</h4>
                     <Button onClick={handleAddTest}><PlusIcon />เพิ่ม</Button>
                 </div>
-                <div className="rounded-lg border border-slate-300">
-                    <TestList data={testListdata} editable={true} setData={setTestListdata} />
-                </div>
+                <TestList data={testListdata} editable={true} setData={setTestListdata} />
             </div>
         </div >
     );

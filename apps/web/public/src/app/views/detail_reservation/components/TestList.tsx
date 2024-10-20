@@ -24,75 +24,76 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
     };
 
     return (
-
-        <Table>
-            <TableHeader className="bg-slate-50 ">
-                {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow className="px-5" key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => {
-                            return (
-                                <TableHead className="py-3 px-5" key={header.id}>
-                                    {flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                    )}
-                                </TableHead>
-                            )
-                        })}
-                        {editable ? <TableHead /> : ""}
-                    </TableRow>
-                ))}
-            </TableHeader>
-            <TableBody className="text-slate-700">
-                {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row) => (
-                        <TableRow key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                                <TableCell className="py-3 px-5" key={cell.id}>
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </TableCell>
-                            ))}
-                            {editable ?
-                                <TableCell >
-                                    <div className="flex gap-4 justify-center">
-                                        <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleEditTest(row.original.id, { price: 450 })}><Pencil1Icon className="size-5" /></div>
-                                        <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleDeleteTest(row.original.id)}><TrashIcon className="size-5" /></div>
-                                    </div>
-                                </TableCell>
-                                : ""
-                            }
+        <div className="rounded-lg border border-slate-300 overflow-clip">
+            <Table>
+                <TableHeader className="bg-slate-50 ">
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow className="px-5" key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => {
+                                return (
+                                    <TableHead className="py-3 px-5" key={header.id}>
+                                        {flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                    </TableHead>
+                                )
+                            })}
+                            {editable ? <TableHead /> : ""}
                         </TableRow>
-                    ))
-                ) : (
+                    ))}
+                </TableHeader>
+                <TableBody className="text-slate-700">
+                    {table.getRowModel().rows?.length ? (
+                        table.getRowModel().rows.map((row) => (
+                            <TableRow key={row.id}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <TableCell className="py-3 px-5" key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </TableCell>
+                                ))}
+                                {editable ?
+                                    <TableCell >
+                                        <div className="flex gap-4 justify-center">
+                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleEditTest(row.original.id, { price: 450 })}><Pencil1Icon className="size-5" /></div>
+                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleDeleteTest(row.original.id)}><TrashIcon className="size-5" /></div>
+                                        </div>
+                                    </TableCell>
+                                    : ""
+                                }
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell
+                                colSpan={columns.length}
+                                className="h-32 text-center text-slate-500"
+                            >
+                                <p>ไม่มีรายการทดสอบในขณะนี้</p>
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+                <TableFooter>
                     <TableRow>
                         <TableCell
-                            colSpan={columns.length}
-                            className="h-32 text-center text-slate-500"
+                            colSpan={editable ? columns.length + 1 : columns.length}
+                            className="bg-slate-50 text-slate-500 py-3 px-5"
                         >
-                            <p>ไม่มีรายการทดสอบในขณะนี้</p>
+                            <div className="flex gap-4 justify-end">
+                                <p className="font-bold">ราคารวม</p>
+                                <p>
+                                    {data.totalPrice.toFixed(2)} บาท
+                                </p>
+                            </div>
                         </TableCell>
                     </TableRow>
-                )}
-            </TableBody>
-            <TableFooter>
-                <TableRow>
-                    <TableCell
-                        colSpan={editable ? columns.length + 1 : columns.length}
-                        className="bg-slate-50 text-slate-500 py-3 px-5"
-                    >
-                        <div className="flex gap-4 justify-end">
-                            <p className="font-bold">ราคารวม</p>
-                            <p>
-                                {data.totalPrice.toFixed(2)} บาท
-                            </p>
-                        </div>
-                    </TableCell>
-                </TableRow>
-            </TableFooter>
-        </Table>
+                </TableFooter>
+            </Table>
+        </div>
 
     );
 }

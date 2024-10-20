@@ -23,24 +23,16 @@ export default function ReservationDetailPage() {
     return (
         <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                    <h4>ข้อมูลผู้ขอรับบริการทดสอบ</h4>
-                </div>
+                <h4>ข้อมูลผู้ขอรับบริการทดสอบ</h4>
                 <CustomerDetail data={customerDetail} />
             </div>
             <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                    <h4>ข้อมูลคำขอรับบริการทดสอบ</h4>
-                </div>
+                <h4>ข้อมูลคำขอรับบริการทดสอบ</h4>
                 <ReservationDetail data={reservationDetail} />
             </div>
             <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                    <h4>รายการทดสอบ</h4>
-                </div>
-                <div className="rounded-lg border border-slate-300">
-                    <TestList data={testListData} editable={false} setData={setTestListdata} />
-                </div>
+                <h4>รายการทดสอบ</h4>
+                <TestList data={testListData} editable={false} setData={setTestListdata} />
             </div>
         </div >
     );

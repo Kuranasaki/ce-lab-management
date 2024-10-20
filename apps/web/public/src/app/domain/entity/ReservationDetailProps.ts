@@ -7,10 +7,10 @@ export default class ReservationDetailProps {
     status: ReservationStatus | null;
 
     constructor(
-        id: string | null,
+        id: string | null = null,
         date: Date = new Date(),
         type: ReservationType = ReservationType.One,
-        status: ReservationStatus | null,
+        status: ReservationStatus | null = null,
     ) {
         this.id = id;
         this.date = date;

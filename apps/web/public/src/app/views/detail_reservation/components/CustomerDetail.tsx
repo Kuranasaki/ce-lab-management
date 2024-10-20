@@ -13,7 +13,7 @@ export default function CustomerDetail({ data }: { data: CustomerDetailProps }) 
                         <Item title='บริษัท/หน่วยงาน:' value={data.orgName} />
                     </div>
                     <div className="col-span-2">
-                        <Item title='โครงการ::' value={data.orgProjectName} />
+                        <Item title='โครงการ:' value={data.orgProjectName} />
                     </div>
                     <div className="col-span-2">
                         <Item title='ที่อยู่:' value={data.orgAddress} />

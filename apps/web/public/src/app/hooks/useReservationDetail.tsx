@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import ReservationTableItem from '../domain/entity/reservationTableItem';
-import getReservationTable from '../domain/usecase/getReservationTable';
 import ReservationDetail from '../domain/entity/ReservationDetailProps';
 import { ReservationType, ReservationStatus } from '../data/models/Reservation';
 import ReservationDetailProps from '../domain/entity/ReservationDetailProps';
