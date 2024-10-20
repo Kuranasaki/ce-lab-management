@@ -9,6 +9,12 @@ import { TestListForm } from '../../../../hooks/request_reservation/useTestListF
 import CustomerDetail from '../../../view_reservation_detail/components/CustomerDetail';
 import ReservationDetail from '../../../view_reservation_detail/components/ReservationDetail';
 import TestList from '../../../view_reservation_detail/components/TestList';
+import usePostRequestReservation from '../../../../hooks/request_reservation/usePostRequestReservation';
+import {
+  OrgDataEntity,
+  RequestReservationEntity,
+  TestListEntity,
+} from '../../../../domain/entity/request_reservation/reqReservRequestEntity';
 
 export default function Stage3({
   orgForm,
@@ -19,6 +25,20 @@ export default function Stage3({
   testListForm: TestListForm;
   setStage: (stage: number) => void;
 }) {
+  const { post } = usePostRequestReservation();
+
+  function handleSubmit() {
+    post(
+      new RequestReservationEntity({
+        orgData: new OrgDataEntity({ ...orgForm.getValues() }),
+        testList: new TestListEntity({
+          testType: testListForm.getValues('testType'),
+          testItems: [...testListForm.getValues('testList')],
+        }),
+      })
+    );
+  }
+
   return (
     <div className="flex flex-col gap-8 w-full">
       <div className="flex flex-col gap-4">
@@ -76,14 +96,7 @@ export default function Stage3({
           <Button variant="outline" onClick={() => setStage(2)}>
             ย้อนกลับ
           </Button>
-          <Button
-            variant="accept"
-            onClick={() => {
-              alert('ส่งคำขอรับบริการ');
-              console.log(orgForm.getValues());
-              console.log(testListForm.getValues());
-            }}
-          >
+          <Button variant="accept" onClick={handleSubmit}>
             ส่งคำขอรับบริการ
           </Button>
         </div>
