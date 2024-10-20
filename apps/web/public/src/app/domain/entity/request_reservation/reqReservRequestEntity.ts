@@ -63,27 +63,23 @@ export class TestListEntity {
 }
 
 export class TestItemEntity {
-  testName: string;
-  testSubName: string;
+  testID: string;
   testAmount: number;
   testDetails: string;
   testNote: string;
 
   constructor({
-    testName,
-    testSubName,
+    testID,
     testAmount,
     testDetails,
     testNote,
   }: {
-    testName: string;
-    testSubName: string;
+    testID: string;
     testAmount: number;
     testDetails: string;
     testNote: string;
   }) {
-    this.testName = testName;
-    this.testSubName = testSubName;
+    this.testID = testID;
     this.testAmount = testAmount;
     this.testDetails = testDetails;
     this.testNote = testNote;

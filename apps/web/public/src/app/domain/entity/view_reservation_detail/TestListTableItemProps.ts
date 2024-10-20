@@ -1,26 +1,23 @@
 export default class TestListTableItemProps {
   id: string;
   name: string;
-  price: number;
+  priceperunit: number;
   amount: number;
   unit: string;
-  priceperunit: number;
   detail: string;
   note: string;
 
   constructor(
     id: string,
     name: string,
-    price: number,
+    priceperunit: number,
     amount: number,
     unit: string,
-    priceperunit: number,
     detail: string | null,
     note: string | null
   ) {
     this.id = id;
     this.name = name;
-    this.price = price;
     this.amount = amount;
     this.unit = unit;
     this.priceperunit = priceperunit;
@@ -32,6 +29,6 @@ export default class TestListTableItemProps {
     return new Intl.NumberFormat('th-TH', {
       style: 'currency',
       currency: 'THB',
-    }).format(this.price);
+    }).format(this.priceperunit);
   }
 }
