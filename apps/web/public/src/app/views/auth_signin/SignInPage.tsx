@@ -46,33 +46,35 @@ const SignInPage: React.FC = () => {
         <div className='flex flex-col gap-4 w-full'>
           <p className='text-slate-500'>ลงชื่อเข้าใช้เพื่อจองการทดสอบของคุณ</p>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="flex flex-col items-start gap-1">
-                    <FormLabel className="font-medium">อีเมล</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    {error && <p className="text-error-500 text-sm">{error.message}</p>}
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="flex flex-col items-start gap-1">
-                    <FormLabel className="font-medium">รหัสผ่าน</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    {error && <p className="text-error-500 text-sm">{error.message}</p>}
-                  </FormItem>
-                )}
-              />
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="flex flex-col items-start gap-1">
+                      <FormLabel className="font-medium">อีเมล</FormLabel>
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      {error && <p className="text-error-500 text-sm">{error.message}</p>}
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="flex flex-col items-start gap-1">
+                      <FormLabel className="font-medium">รหัสผ่าน</FormLabel>
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      {error && <p className="text-error-500 text-sm">{error.message}</p>}
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <Button type="submit" className="w-full">
                 ลงชื่อเข้าใช้
