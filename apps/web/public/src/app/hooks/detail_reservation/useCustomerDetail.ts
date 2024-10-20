@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import CustomerDetailProps from '../domain/entity/CustomerDetailProps';
+import CustomerDetailProps from '../../domain/entity/detail_reservation/CustomerDetailProps';
 
 export function useCustomerDetail(initData?: CustomerDetailProps) {
     const [data, setData] = useState<CustomerDetailProps>(new CustomerDetailProps());

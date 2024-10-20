@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import ReservationDetail from '../domain/entity/ReservationDetailProps';
-import { ReservationType, ReservationStatus } from '../data/models/Reservation';
-import ReservationDetailProps from '../domain/entity/ReservationDetailProps';
+import { ReservationType, ReservationStatus } from '../../data/models/Reservation';
+import ReservationDetailProps from '../../domain/entity/detail_reservation/ReservationDetailProps';
+import ReservationDetail from '../../views/detail_reservation/components/ReservationDetail';
 
 export function useReservationDetail(initData?: ReservationDetailProps) {
     const [data, setData] = useState<ReservationDetailProps>(new ReservationDetailProps());

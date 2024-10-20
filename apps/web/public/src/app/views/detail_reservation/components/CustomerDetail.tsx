@@ -1,6 +1,4 @@
-import { ReservationStatus } from '../../../data/models/Reservation';
-import CustomerDetailProps from '../../../domain/entity/CustomerDetailProps';
-import ReservationDetailProps from '../../../domain/entity/ReservationDetailProps';
+import CustomerDetailProps from '../../../domain/entity/detail_reservation/CustomerDetailProps';
 import DetailBox from './DetailBox';
 
 export default function CustomerDetail({ data }: { data: CustomerDetailProps }) {

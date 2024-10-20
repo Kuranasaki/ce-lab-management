@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import TestList from "./components/TestList";
-import { useTestList } from "../../hooks/useTestList";
+import { useTestList } from "../../hooks/detail_reservation/useTestList";
 import ReservationDetail from "./components/ReservationDetail";
-import { useReservationDetail } from "../../hooks/useReservationDetail";
-import { useCustomerDetail } from "../../hooks/useCustomerDetail";
+import { useReservationDetail } from "../../hooks/detail_reservation/useReservationDetail";
+import { useCustomerDetail } from "../../hooks/detail_reservation/useCustomerDetail";
 import CustomerDetail from "./components/CustomerDetail";
 import { ReservationStatus } from "../../data/models/Reservation";
 

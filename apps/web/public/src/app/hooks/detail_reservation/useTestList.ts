@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import TestListTable from '../domain/entity/TestListTable';
-import TestListTableItem from '../domain/entity/TestListTableItem';
+import TestListTable from '../../domain/entity/detail_reservation/TestListTable';
+import TestListTableItem from '../../domain/entity/detail_reservation/TestListTableItem';
 
 export function useTestList({ initData, id }: { initData?: TestListTable, id?: string }) {
     const [data, setData] = useState<TestListTable>(new TestListTable());

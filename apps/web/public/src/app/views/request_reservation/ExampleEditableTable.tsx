@@ -1,8 +1,8 @@
-import { useTestList } from "../../hooks/useTestList";
+import { useTestList } from "../../hooks/detail_reservation/useTestList";
 import { Button } from "@ce-lab-mgmt/shared-ui";
 import { PlusIcon } from "@radix-ui/react-icons";
-import TestListTableItem from "../../domain/entity/TestListTableItem";
-import TestListTable from "../../domain/entity/TestListTable";
+import TestListTableItem from "../../domain/entity/detail_reservation/TestListTableItem";
+import TestListTable from "../../domain/entity/detail_reservation/TestListTable";
 import { useEffect } from "react";
 import TestList from "../detail_reservation/components/TestList";
 

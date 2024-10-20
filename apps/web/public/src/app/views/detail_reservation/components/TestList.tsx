@@ -1,8 +1,8 @@
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@ce-lab-mgmt/shared-ui";
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import React, { Dispatch, SetStateAction } from "react";
-import TestListTable from "../../../domain/entity/TestListTable";
-import TestListTableItem from "../../../domain/entity/TestListTableItem";
+import TestListTable from "../../../domain/entity/detail_reservation/TestListTable";
+import TestListTableItem from "../../../domain/entity/detail_reservation/TestListTableItem";
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 
 export default function TestList({ data, editable, setData }: { data: TestListTable, editable: boolean, setData: Dispatch<SetStateAction<TestListTable>> }) {

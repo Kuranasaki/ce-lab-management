@@ -1,4 +1,4 @@
-import { ReservationType, ReservationStatus } from "../../data/models/Reservation";
+import { ReservationStatus, ReservationType } from "../../../data/models/Reservation";
 
 export default class ReservationDetailProps {
     id: string | null;

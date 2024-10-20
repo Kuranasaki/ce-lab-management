@@ -1,5 +1,5 @@
 import { ReservationStatus } from '../../../data/models/Reservation';
-import ReservationDetailProps from '../../../domain/entity/ReservationDetailProps';
+import ReservationDetailProps from '../../../domain/entity/detail_reservation/ReservationDetailProps';
 import DetailBox from './DetailBox';
 
 export default function ReservationDetail({ data }: { data: ReservationDetailProps }) {

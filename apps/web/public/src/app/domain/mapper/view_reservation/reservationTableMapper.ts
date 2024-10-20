@@ -1,7 +1,7 @@
 import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import ReservationTableItem from '../entity/reservationTableItem';
-import { Reservation } from '../../data/models/Reservation';
+import { Reservation } from '../../../data/models/Reservation';
+import ReservationTableItem from '../../entity/view_reservation/reservationTableItem';
 
 export default async function mapper(
     rawData: BaseResponse<Reservation[]>
