@@ -1,15 +1,17 @@
+import { ReservationType, ReservationStatus } from "../../data/models/Reservation";
+
 export default class ReservationTableItem {
     id: string;
     date: Date;
-    type: "one" | "two" | "three";
-    status: "pending" | "processing" | "success" | "canceled";
+    type: ReservationType;
+    status: ReservationStatus;
     amount: number;
 
-    constructor(id: string, date: Date, type: "one" | "two" | "three", status: string, amount: number) {
+    constructor(id: string, date: Date, type: ReservationType, status: ReservationStatus, amount: number) {
         this.id = id;
         this.date = date;
         this.type = type;
-        this.status = status as "pending" | "processing" | "success" | "canceled";
+        this.status = status;
         this.amount = amount;
     }
 
