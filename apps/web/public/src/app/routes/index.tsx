@@ -1,15 +1,51 @@
 import { createBrowserRouter } from 'react-router-dom';
-import ExamplePage from '../views/example_feature/ExamplePage';
-import ExampleLayout from '../layouts/ExampleLayout';
+import RequestReservationPage from '../views/request_reservation/RequestReservationPage';
+import MainLayout from '../layouts/MainLayout';
+import HomePage from '../views/homepage/Homepage';
+import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
 
 export default createBrowserRouter([
   {
     path: '/',
-    element: <ExampleLayout />,
     children: [
       {
         path: '',
-        element: <ExamplePage />,
+        element: <HomePage />,
+      },
+      {
+        path: 'reservation/',
+        children: [
+          {
+            path: '',
+            element: <MainLayout title='คำขอรับบริการทดสอบ' />,
+            children: [
+              {
+                path: '',
+                element: <ViewReservationPage />,
+              },
+            ],
+          },
+          {
+            path: 'request',
+            element: <MainLayout title='สร้างคำขอรับบริการทดสอบ' />,
+            children: [
+              {
+                path: '',
+                element: <RequestReservationPage />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'pricing/',
+        element: <MainLayout title='ราคาทดสอบ' />,
+        children: [
+          {
+            path: '',
+            element: <div>PRICING PAGE</div>,
+          },
+        ],
       },
     ],
   },
