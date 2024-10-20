@@ -16,46 +16,42 @@ export function useTestList({ id }: { id?: string; }) {
       new TestListTableItemProps(
         '1',
         'Test 1',
-        300,
         1,
         'อัน',
-        30,
+        300,
         'Detail 1',
         'Note 1'
       ),
       new TestListTableItemProps(
         '2',
         'Test 2',
-        500,
         2,
         'แท่ง',
-        25,
+        2500,
         'Detail',
         null
       ),
       new TestListTableItemProps(
         '2',
         'Test 2',
-        500,
         2,
         'แท่ง',
-        25,
+        250,
         null,
         'Note 2'
       ),
       new TestListTableItemProps(
         '3',
         'Test 3',
-        1200,
         2,
         'ชิ้น',
-        25,
+        1200,
         null,
         null
       ),
     ];
 
-    const totalPrice = mockItems.reduce((total, item) => total + item.price, 0); // Calculate total price based on items
+    const totalPrice = mockItems.reduce((total, item) => total + item.priceperunit * item.amount, 0); // Calculate total price based on items
     const data: TestListTableProps = new TestListTableProps(
       mockItems,
       totalPrice
