@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Auth, signInWithPopup, signOut, GoogleAuthProvider } from 'firebase/auth';
+import { User, Auth, signInWithPopup, signOut, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -29,12 +30,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth }) =>
     return unsubscribe;
   }, [auth]);
 
-  const signIn = async () => {
+  const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error('Error signing in with Google', error);
+    }
+  };
+
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error('Error signing in with email and password', error);
+      throw error
     }
   };
 
@@ -49,7 +59,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth }) =>
   const value = {
     user,
     loading,
-    signIn,
+    signInWithGoogle,
+    signInWithEmail,
     signOut: signOutUser,
   };
 
