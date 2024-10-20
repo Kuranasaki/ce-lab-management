@@ -5,6 +5,7 @@ import ReservationDetail from "./components/ReservationDetail";
 import { useReservationDetail } from "../../hooks/useReservationDetail";
 import { useCustomerDetail } from "../../hooks/useCustomerDetail";
 import CustomerDetail from "./components/CustomerDetail";
+import { ReservationStatus } from "../../data/models/Reservation";
 
 export default function ReservationDetailPage() {
     const { id } = useParams();
@@ -29,6 +30,11 @@ export default function ReservationDetailPage() {
             <div className="flex flex-col gap-4">
                 <h4>ข้อมูลคำขอรับบริการทดสอบ</h4>
                 <ReservationDetail data={reservationDetail} />
+                {
+                    reservationDetail.status == ReservationStatus.Pending
+                        ? <p className="text-error-500">*กรุณาติดต่อหน่วยทดสอบวัสดุ เพื่อจ่ายเงินและส่งมอบของ</p>
+                        : ""
+                }
             </div>
             <div className="flex flex-col gap-4">
                 <h4>รายการทดสอบ</h4>
