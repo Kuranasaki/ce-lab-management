@@ -1,7 +1,7 @@
 export enum ReservationType {
-    One = "one",
-    Two = "two",
-    Three = "three"
+    One = "การทดสอบวัสดุ",
+    Two = "การทดสอบเทียบ",
+    Three = "การทดสอบทนไฟ"
 }
 
 export enum ReservationStatus {

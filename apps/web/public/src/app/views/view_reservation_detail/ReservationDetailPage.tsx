@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import TestList from "./components/TestList";
-import { useTestList } from "../../hooks/detail_reservation/useTestList";
+import { useTestList } from "../../hooks/view_reservation_detail/useTestList";
 import ReservationDetail from "./components/ReservationDetail";
-import { useReservationDetail } from "../../hooks/detail_reservation/useReservationDetail";
-import { useCustomerDetail } from "../../hooks/detail_reservation/useCustomerDetail";
+import { useReservationDetail } from "../../hooks/view_reservation_detail/useReservationDetail";
+import { useCustomerDetail } from "../../hooks/view_reservation_detail/useCustomerDetail";
 import CustomerDetail from "./components/CustomerDetail";
 import { ReservationStatus } from "../../data/models/Reservation";
 
@@ -31,7 +31,7 @@ export default function ReservationDetailPage() {
                 <h4>ข้อมูลคำขอรับบริการทดสอบ</h4>
                 <ReservationDetail data={reservationDetail} />
                 {
-                    reservationDetail.status == ReservationStatus.Pending
+                    reservationDetail.status === ReservationStatus.Pending
                         ? <p className="text-error-500">*กรุณาติดต่อหน่วยทดสอบวัสดุ เพื่อจ่ายเงินและส่งมอบของ</p>
                         : ""
                 }
