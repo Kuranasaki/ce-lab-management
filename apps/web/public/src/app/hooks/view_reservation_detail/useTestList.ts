@@ -3,13 +3,7 @@ import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
 import TestListTableProps from '../../domain/entity/view_reservation_detail/TestListTableProps';
 import TestListTableItemProps from '../../domain/entity/view_reservation_detail/TestListTableItemProps';
 
-export function useTestList({
-  initData,
-  id,
-}: {
-  initData?: TestListTableProps;
-  id?: string;
-}) {
+export function useTestList({ id }: { id?: string }) {
   const [data, setData] = useState<TestListTableProps>(
     new TestListTableProps()
   );
@@ -25,43 +19,35 @@ export function useTestList({
         300,
         1,
         'อัน',
-        30,
         'Detail 1',
         'Note 1'
       ),
       new TestListTableItemProps(
         '2',
         'Test 2',
-        500,
+        2500,
         2,
         'แท่ง',
-        25,
         'Detail',
         null
       ),
-      new TestListTableItemProps(
-        '2',
-        'Test 2',
-        500,
-        2,
-        'แท่ง',
-        25,
-        null,
-        'Note 2'
-      ),
+      new TestListTableItemProps('2', 'Test 2', 2, 250, 'แท่ง', null, 'Note 2'),
       new TestListTableItemProps(
         '3',
         'Test 3',
         1200,
+
         2,
         'ชิ้น',
-        25,
         null,
         null
       ),
     ];
 
-    const totalPrice = mockItems.reduce((total, item) => total + item.price, 0); // Calculate total price based on items
+    const totalPrice = mockItems.reduce(
+      (total, item) => total + item.priceperunit * item.amount,
+      0
+    ); // Calculate total price based on items
     const data: TestListTableProps = new TestListTableProps(
       mockItems,
       totalPrice
@@ -83,11 +69,7 @@ export function useTestList({
   };
 
   useEffect(() => {
-    if (initData) {
-      setData(initData);
-    } else {
-      fetchData();
-    }
+    fetchData();
   }, []);
 
   return { data, setData, loading };

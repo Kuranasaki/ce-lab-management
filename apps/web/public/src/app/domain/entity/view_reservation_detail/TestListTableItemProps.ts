@@ -25,7 +25,7 @@ export default class TestListTableItemProps {
     this.note = note ? note : '';
   }
 
-  formatPrice(): string {
+  formatPricePerUnit(): string {
     return new Intl.NumberFormat('th-TH', {
       style: 'currency',
       currency: 'THB',

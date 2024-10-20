@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ReservationStatus } from "../../../data/models/Reservation";
 import { useReservationTable } from "../../../hooks/view_reservation/useReservationTable";
+import ReservationTableItemProps from "../../../domain/entity/view_reservation/reservationTableItemProps";
 
 export default function ReservationTable({ status }: { status: string }) {
 
@@ -135,7 +136,7 @@ export default function ReservationTable({ status }: { status: string }) {
     return null;
 }
 
-const Header = ({ title, column }: { title: string, column: Column<ReservationTableItem> }) => {
+const Header = ({ title, column }: { title: string, column: Column<ReservationTableItemProps> }) => {
     return (
         <Button
             variant="ghost" size="default"
@@ -152,7 +153,7 @@ const Cell = ({ children }: { children: React.ReactNode }) => {
 };
 
 
-const columns: ColumnDef<ReservationTableItem>[] = [
+const columns: ColumnDef<ReservationTableItemProps>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => {

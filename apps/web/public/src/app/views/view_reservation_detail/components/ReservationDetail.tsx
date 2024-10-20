@@ -1,3 +1,4 @@
+import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
 import {
   ReservationStatus,
   ReservationType,
@@ -30,8 +31,8 @@ export default function ReservationDetail({
             <Item
               title="สถานะ:"
               value={statusMap[data.status].text}
-              className={statusMap[data.status].textColor}
-            />
+              valueClassName={statusMap[data.status].textColor}
+            ><QuestionMarkCircledIcon className='text-slate-500 cursor-pointer' /></Item>
           ) : (
             ''
           )}
@@ -46,18 +47,19 @@ export default function ReservationDetail({
 const Item = ({
   title,
   value,
-  className,
+  valueClassName,
+  children,
 }: {
   title: string;
   value: string;
-  className?: string;
+  valueClassName?: string;
+  children?: React.ReactNode;
 }) => {
   return (
-    <div className="grid grid-cols-1 gap-2">
-      <div className="flex gap-4">
-        <p className="font-bold">{title}</p>
-        <p className={`${className}`}>{value}</p>
-      </div>
+    <div className="flex gap-4 items-center">
+      <p className="font-bold">{title}</p>
+      <p className={`${valueClassName}`}>{value}</p>
+      {children}
     </div>
   );
 };
