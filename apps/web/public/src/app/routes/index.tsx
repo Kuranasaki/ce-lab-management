@@ -4,8 +4,8 @@ import MainLayout from '../layouts/MainLayout';
 import HomePage from '../views/homepage/Homepage';
 import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
 import ReservationDetailPage from '../views/detail_reservation/ReservationDetailPage';
-import EditableTableExample from '../views/detail_reservation/EditableTableExample';
-import ConfirmTableExample from '../views/detail_reservation/ConfirmTableExample';
+import ExampleConfirmPage from '../views/request_reservation/ExampleConfirmPage';
+import ExampleEditableTable from '../views/request_reservation/ExampleEditableTable';
 
 export default createBrowserRouter([
   {
@@ -40,21 +40,21 @@ export default createBrowserRouter([
           },
           {
             path: 'test1',
-            element: <MainLayout title='EditableTableExample' />,
+            element: <MainLayout title='ExampleEditableTable' />,
             children: [
               {
                 path: '',
-                element: <EditableTableExample />,
+                element: <ExampleEditableTable />,
               },
             ],
           },
           {
             path: 'test2',
-            element: <MainLayout title='ConfirmTableExample' />,
+            element: <MainLayout title='ExampleConfirmPage' />,
             children: [
               {
                 path: '',
-                element: <ConfirmTableExample />,
+                element: <ExampleConfirmPage />,
               },
             ],
           },

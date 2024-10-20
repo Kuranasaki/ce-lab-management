@@ -4,7 +4,7 @@ export default class TestListTable {
     items: TestListTableItem[];
     totalPrice: number;
 
-    constructor(items: TestListTableItem[], totalPrice: number) {
+    constructor(items: TestListTableItem[] = [], totalPrice: number = 0) {
         this.items = items;
         this.totalPrice = totalPrice;
     }
