@@ -1,10 +1,17 @@
-import { Button, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@ce-lab-mgmt/shared-ui";
-import { Column, ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@ce-lab-mgmt/shared-ui";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import React, { Dispatch, SetStateAction } from "react";
-import TestListTable from "../../../domain/entity/TestListTable";
-import TestListTableItem from "../../../domain/entity/TestListTableItem";
+import TestListTable from "../../../domain/entity/detail_reservation/TestListTable";
+import TestListTableItem from "../../../domain/entity/detail_reservation/TestListTableItem";
+import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 
-export default function TestList({ data, editable, setData }: { data: TestListTable, editable: boolean, setData: Dispatch<SetStateAction<TestListTable>> }) {
+export default function TestList({ data, editable = false, handleDeleteTest, handleEditTest }:
+    {
+        data: TestListTable,
+        editable?: boolean,
+        handleDeleteTest?: () => void,
+        handleEditTest?: () => void
+    }) {
 
     const table = useReactTable({
         data: data.items,
@@ -12,135 +19,141 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
         getCoreRowModel: getCoreRowModel(),
     })
 
-    const handleDeleteTest = (itemId: string) => {
-        // Call removeItem with the specific itemId you want to delete
-        setData(data.removeItem(itemId));
-    };
-
-    const handleEditTest = (itemId: string, updatedItem: Partial<TestListTableItem>) => {
-        // Call editItem with the specific itemId and the updated item data
-        setData(data.editItem(itemId, updatedItem));
-    };
-
     return (
-
-        <Table>
-            <TableHeader className="bg-slate-50">
-                {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => {
-                            return (
-                                <TableHead className="py-2" key={header.id}>
-                                    {header.isPlaceholder
-                                        ? null
-                                        : flexRender(
+        <div className="rounded-lg border border-slate-300 overflow-clip">
+            <Table>
+                <TableHeader className="bg-slate-50 ">
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow className="px-5" key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => {
+                                return (
+                                    <TableHead className="py-3 px-5" key={header.id}>
+                                        {flexRender(
                                             header.column.columnDef.header,
                                             header.getContext()
                                         )}
-                                </TableHead>
-                            )
-                        })}
-                    </TableRow>
-                ))}
-            </TableHeader>
-            <TableBody className="text-slate-700">
-                {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row) => (
-                        <TableRow key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                                <TableCell key={cell.id}>
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </TableCell>
-                            ))}
-                            {editable ?
-                                <TableCell >
-                                    <Button onClick={() => handleEditTest(row.original.id, { price: 450 })}>Edit</Button>
-                                    <Button onClick={() => handleDeleteTest(row.original.id)}>Delete</Button>
-                                </TableCell>
-                                : ""
-                            }
+                                    </TableHead>
+                                )
+                            })}
+                            {editable ? <TableHead /> : ""}
                         </TableRow>
-                    ))
-                ) : (
+                    ))}
+                </TableHeader>
+                <TableBody className="text-slate-700">
+                    {table.getRowModel().rows?.length ? (
+                        table.getRowModel().rows.map((row) => (
+                            <TableRow key={row.id}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <TableCell className="py-3 px-5" key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </TableCell>
+                                ))}
+                                {editable ?
+                                    <TableCell >
+                                        <div className="flex gap-4 justify-center">
+                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleEditTest ? handleEditTest() : null}><Pencil1Icon className="size-5" /></div>
+                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleDeleteTest ? handleDeleteTest() : null}><TrashIcon className="size-5" /></div>
+                                        </div>
+                                    </TableCell>
+                                    : ""
+                                }
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell
+                                colSpan={columns.length}
+                                className="h-32 text-center text-slate-500"
+                            >
+                                <p>ไม่มีรายการทดสอบในขณะนี้</p>
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+                <TableFooter>
                     <TableRow>
                         <TableCell
-                            colSpan={columns.length}
-                            className="h-32 text-center text-slate-500"
+                            colSpan={editable ? columns.length + 1 : columns.length}
+                            className="bg-slate-50 text-slate-500 py-3 px-5"
                         >
-                            <p>No results.</p>
+                            <div className="flex gap-4 justify-end">
+                                <p className="font-bold">ราคารวม</p>
+                                <p>
+                                    {data.totalPrice.toFixed(2)} บาท
+                                </p>
+                            </div>
                         </TableCell>
                     </TableRow>
-                )}
-            </TableBody>
-            <TableFooter>
-                <TableRow>
-                    <TableCell
-                        colSpan={columns.length}
-                        className="bg-slate-50 text-slate-500 py-3 px-5"
-                    >
-                        ราคารวม {data.totalPrice} บาท
-                    </TableCell>
-                </TableRow>
-            </TableFooter>
-        </Table>
+                </TableFooter>
+            </Table>
+        </div>
 
     );
 }
 
-const Header = ({ title, column }: { title: string, column: Column<TestListTableItem> }) => {
+const Header = ({ title, className }: { title: string, className?: string }) => {
     return (
-        <div className="text-base">{title}</div>
+        <div className={`text-base text-slate-900 w-full ${className}`}>{title}</div>
     )
 }
 
 const Cell = ({ children }: { children: React.ReactNode }) => {
-    return <div className="pl-4 py-1 text-base">{children}</div>;
+    return <div className="flex text-base items-center justify-center">{children}</div>;
 };
 
 const columns: ColumnDef<TestListTableItem>[] = [
     {
         accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Header title="รายการ" column={column} />
-            )
+        header: () => {
+            return <Header title="รายการ" />
         }, cell: ({ row }) => (
             <Cell>
-                <div>{row.original.name}</div>
-                <div>รายละเอียด: {row.original.detail}</div>
-                <div>หมายเหตุ: {row.original.note}</div>
-            </Cell>
+                <div className="flex flex-1 flex-col">
+                    <p className="font-medium text-slate-700">{row.original.name}</p>
+                    <div className="flex flex-col text-slate-500">
+                        <div className="grid grid-cols-[auto,1fr] gap-x-2">
+                            {row.original.detail != "" ?
+                                <>
+                                    <p>รายละเอียด:</p>
+                                    <p>{row.original.detail}</p>
+                                </> : ""
+                            }
+                            {row.original.note != "" ?
+                                <>
+                                    <p>หมายเหตุ:</p>
+
+                                    <p>{row.original.note}</p>
+                                </> : ""
+                            }
+                        </div>
+                    </div>
+                </div>
+            </Cell >
         ),
     },
     {
         accessorKey: "amount",
-        header: ({ column }) => {
-            return (
-                <Header title="จำนวน" column={column} />
-            )
+        header: () => {
+            return <Header className="text-center" title="จำนวน" />
         }, cell: ({ row }) => (
             <Cell>{row.original.amount}</Cell>
         ),
     },
     {
         accessorKey: "unit",
-        header: ({ column }) => {
-            return (
-                <Header title="หน่วย" column={column} />
-            )
+        header: () => {
+            return <Header className="text-center" title="หน่วย" />
         }, cell: ({ row }) => (
             <Cell>{row.original.unit}</Cell>
         ),
     },
     {
         accessorKey: "priceperunit",
-        header: ({ column }) => {
-            return (
-                <Header title="ราคาต่อหน่วย" column={column} />
-            )
+        header: () => {
+            return <Header className="text-center" title="ราคาต่อหน่วย" />
         }, cell: ({ row }) => (
             <Cell>{row.original.formatPrice()}</Cell>
         ),

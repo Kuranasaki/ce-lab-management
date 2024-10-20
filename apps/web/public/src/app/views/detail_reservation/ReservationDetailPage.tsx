@@ -1,36 +1,44 @@
 import { useParams } from "react-router-dom";
 import TestList from "./components/TestList";
-import { useTestList } from "../../hooks/useTestList";
-import { Button } from "@ce-lab-mgmt/shared-ui";
-import { PlusIcon } from "@radix-ui/react-icons";
-import TestListTableItem from "../../domain/entity/TestListTableItem";
+import { useTestList } from "../../hooks/detail_reservation/useTestList";
+import ReservationDetail from "./components/ReservationDetail";
+import { useReservationDetail } from "../../hooks/detail_reservation/useReservationDetail";
+import { useCustomerDetail } from "../../hooks/detail_reservation/useCustomerDetail";
+import CustomerDetail from "./components/CustomerDetail";
+import { ReservationStatus } from "../../data/models/Reservation";
 
 export default function ReservationDetailPage() {
     const { id } = useParams();
-    const { data: testListdata, setData: setTestListdata, loading: loadingTestListdata } = useTestList({ isFetch: true, id });
+    const { data: testListData, loading: loadingTestListdata } = useTestList({ id });
+    const { data: reservationDetail, loading: loadingReservationDetail } = useReservationDetail();
+    const { data: customerDetail, loading: loadingCustomerDetail } = useCustomerDetail();
 
     if (!id) {
         return
     }
 
-    if (loadingTestListdata) {
+    if (loadingTestListdata || loadingReservationDetail || loadingCustomerDetail) {
         return <p>Loading...</p>;
     }
 
-    const handleAddTest = () => {
-        const newItem = new TestListTableItem("3", "Test 3", "Detail 3", "Note 3", 400, 1, 10, 40);
-        setTestListdata(testListdata.addItem(newItem))
-    };
-
     return (
-        <div>
+        <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                    <h4>รายการทดสอบ</h4>
-                </div>
-                <div className="rounded-lg border border-slate-300">
-                    <TestList data={testListdata} editable={false} setData={setTestListdata} />
-                </div>
+                <h4>ข้อมูลผู้ขอรับบริการทดสอบ</h4>
+                <CustomerDetail data={customerDetail} />
+            </div>
+            <div className="flex flex-col gap-4">
+                <h4>ข้อมูลคำขอรับบริการทดสอบ</h4>
+                <ReservationDetail data={reservationDetail} />
+                {
+                    reservationDetail.status == ReservationStatus.Pending
+                        ? <p className="text-error-500">*กรุณาติดต่อหน่วยทดสอบวัสดุ เพื่อจ่ายเงินและส่งมอบของ</p>
+                        : ""
+                }
+            </div>
+            <div className="flex flex-col gap-4">
+                <h4>รายการทดสอบ</h4>
+                <TestList data={testListData} />
             </div>
         </div >
     );
