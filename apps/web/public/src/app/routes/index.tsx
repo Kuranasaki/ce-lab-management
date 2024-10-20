@@ -5,6 +5,7 @@ import HomePage from '../views/homepage/Homepage';
 import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
 import ReservationDetailPage from '../views/view_reservation_detail/ReservationDetailPage';
 import SignInPage from '../views/auth_signin/SignInPage';
+import AuthLayout from '../layouts/AuthLayout';
 
 export default createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export default createBrowserRouter([
         children: [
           {
             path: 'signin',
-            element: <MainLayout title="Sign In" />,
+            element: <AuthLayout />,
             children: [
               {
                 path: '',
