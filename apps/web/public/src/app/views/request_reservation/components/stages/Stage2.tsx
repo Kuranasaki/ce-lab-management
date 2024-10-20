@@ -16,7 +16,10 @@ import { TestListForm } from '../../../../hooks/request_reservation/useTestListF
 import AddEditItemDialog from './AddEditItemDialog';
 import { useState } from 'react';
 import { useTestItemForm } from '../../../../hooks/request_reservation/useTestItemForm';
-import test from 'node:test';
+import TestListTableProps from '../../../../domain/entity/view_reservation_detail/TestListTableProps';
+import TestListTableItemProps from '../../../../domain/entity/view_reservation_detail/TestListTableItemProps';
+import TestList from '../../../view_reservation_detail/components/TestList';
+import { ReservationType } from '../../../../data/models/Reservation';
 
 export default function Stage2({
   testListForm,
@@ -43,9 +46,11 @@ export default function Stage2({
     }
     testItemForm.reset();
     setOpen(false);
+    console.log(testListForm.getValues('testList'));
   }
 
   function handleOpenEditDialog(index: number) {
+    setEditIndex(index);
     const testItem = testListForm.getValues('testList')[index];
     testItemForm.setValue('testName', testItem.testName);
     testItemForm.setValue('testSubName', testItem.testSubName);
@@ -53,6 +58,18 @@ export default function Stage2({
     testItemForm.setValue('testDetails', testItem.testDetails);
     testItemForm.setValue('testNote', testItem.testNote);
     setOpen(true);
+  }
+
+  function handleDeleteTestItem(index: number) {
+    const updatedTestList = testListForm
+      .getValues('testList')
+      .filter((_, i) => i !== index);
+    testListForm.setValue('testList', updatedTestList, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    testListForm.trigger('testList');
+    console.log(testListForm.getValues('testList'));
   }
 
   return (
@@ -82,9 +99,15 @@ export default function Stage2({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="วัสดุ">การทดสอบวัสดุ</SelectItem>
-                      <SelectItem value="เทียบ">การทดสอบเทียบ</SelectItem>
-                      <SelectItem value="ทนไฟ">การทดสอบทนไฟ</SelectItem>
+                      <SelectItem value={ReservationType.One}>
+                        {ReservationType.One}
+                      </SelectItem>
+                      <SelectItem value={ReservationType.Two}>
+                        {ReservationType.Two}
+                      </SelectItem>
+                      <SelectItem value={ReservationType.Three}>
+                        {ReservationType.Three}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -108,46 +131,31 @@ export default function Stage2({
                 </Button>
               </div>
 
-              <div>
-                {testListForm.getValues('testList').map((testItem, index) => (
-                  <div
-                    className="flex flex-row justify-between gap-2"
-                    key={index}
-                  >
-                    <div>{testItem.testName}</div>
-                    <div>{testItem.testSubName}</div>
-                    <div>{testItem.testAmount}</div>
-                    <div>{testItem.testDetails}</div>
-                    <div>{testItem.testNote}</div>
-                    <div>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setEditIndex(index);
-                          handleOpenEditDialog(index);
-                        }}
-                      >
-                        แก้ไข
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          const updatedTestList = testListForm
-                            .getValues('testList')
-                            .filter((_, i) => i !== index);
-                          testListForm.setValue('testList', updatedTestList, {
-                            shouldValidate: true,
-                            shouldDirty: true,
-                          });
-                          testListForm.trigger('testList');
-                        }}
-                      >
-                        ลบ
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <TestList
+                data={
+                  new TestListTableProps(
+                    testListForm
+                      .getValues('testList')
+                      .map(
+                        (item, index) =>
+                          new TestListTableItemProps(
+                            index.toString(),
+                            item.testName + ': ' + item.testSubName,
+                            0,
+                            item.testAmount,
+                            'ชิ้น',
+                            200,
+                            item.testDetails,
+                            item.testNote
+                          )
+                      ),
+                    0
+                  )
+                }
+                handleEditTest={handleOpenEditDialog}
+                handleDeleteTest={handleDeleteTestItem}
+                editable
+              />
             </div>
           )}
         </div>
@@ -169,7 +177,7 @@ export default function Stage2({
             </Button>
             <Button
               type="submit"
-              onClick={testListForm.handleSubmit(() => setStage(2))}
+              onClick={testListForm.handleSubmit(() => setStage(3))}
             >
               ต่อไป
             </Button>

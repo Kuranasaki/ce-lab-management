@@ -3,9 +3,7 @@ import RequestReservationPage from '../views/request_reservation/RequestReservat
 import MainLayout from '../layouts/MainLayout';
 import HomePage from '../views/homepage/Homepage';
 import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
-import ReservationDetailPage from '../views/detail_reservation/ReservationDetailPage';
-import ExampleConfirmPage from '../views/request_reservation/ExampleConfirmPage';
-import ExampleEditableTable from '../views/request_reservation/ExampleEditableTable';
+import ReservationDetailPage from '../views/view_reservation_detail/ReservationDetailPage';
 
 export default createBrowserRouter([
   {
@@ -20,7 +18,7 @@ export default createBrowserRouter([
         children: [
           {
             path: '',
-            element: <MainLayout title='คำขอรับบริการทดสอบ' />,
+            element: <MainLayout title="คำขอรับบริการทดสอบ" />,
             children: [
               {
                 path: '',
@@ -30,7 +28,7 @@ export default createBrowserRouter([
           },
           {
             path: ':id',
-            element: <MainLayout title='รายละเอียดคำขอรับบริการทดสอบ' />,
+            element: <MainLayout title="รายละเอียดคำขอรับบริการทดสอบ" />,
             children: [
               {
                 path: '',
@@ -39,28 +37,8 @@ export default createBrowserRouter([
             ],
           },
           {
-            path: 'test1',
-            element: <MainLayout title='ExampleEditableTable' />,
-            children: [
-              {
-                path: '',
-                element: <ExampleEditableTable />,
-              },
-            ],
-          },
-          {
-            path: 'test2',
-            element: <MainLayout title='ExampleConfirmPage' />,
-            children: [
-              {
-                path: '',
-                element: <ExampleConfirmPage />,
-              },
-            ],
-          },
-          {
             path: 'request',
-            element: <MainLayout title='สร้างคำขอรับบริการทดสอบ' />,
+            element: <MainLayout title="สร้างคำขอรับบริการทดสอบ" />,
             children: [
               {
                 path: '',
@@ -72,7 +50,7 @@ export default createBrowserRouter([
       },
       {
         path: 'pricing/',
-        element: <MainLayout title='ราคาทดสอบ' />,
+        element: <MainLayout title="ราคาทดสอบ" />,
         children: [
           {
             path: '',
