@@ -1,18 +1,18 @@
 export default class TestListTableItemProps {
   id: string;
   name: string;
+  priceperunit: number;
   amount: number;
   unit: string;
-  priceperunit: number;
   detail: string;
   note: string;
 
   constructor(
     id: string,
     name: string,
+    priceperunit: number,
     amount: number,
     unit: string,
-    priceperunit: number,
     detail: string | null,
     note: string | null
   ) {

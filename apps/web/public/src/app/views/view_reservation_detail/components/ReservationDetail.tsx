@@ -1,5 +1,8 @@
 import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
-import { ReservationStatus } from '../../../data/models/Reservation';
+import {
+  ReservationStatus,
+  ReservationType,
+} from '../../../data/models/Reservation';
 import ReservationDetailProps from '../../../domain/entity/view_reservation_detail/ReservationDetailProps';
 import DetailBox from './DetailBox';
 
@@ -8,13 +11,22 @@ export default function ReservationDetail({
 }: {
   data: ReservationDetailProps;
 }) {
+  const testTypeDisplayName = {
+    [ReservationType.One]: 'การทดสอบวัสดุ',
+    [ReservationType.Two]: 'การทดสอบเทียบ',
+    [ReservationType.Three]: 'การทดสอบการทนไฟ',
+  };
+
   if (data != null) {
     return (
       <DetailBox>
         <div className="grid grid-cols-1 gap-2">
           {data.id ? <Item title="หมายเลขคำขอ:" value={data.id} /> : ''}
           <Item title="วันที่ส่งคำขอ:" value={data.formatDate()} />
-          <Item title="ประเภทการทดสอบ:" value={data.type} />
+          <Item
+            title="ประเภทการทดสอบ:"
+            value={testTypeDisplayName[data.type]}
+          />
           {data.status ? (
             <Item
               title="สถานะ:"

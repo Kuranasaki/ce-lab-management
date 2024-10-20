@@ -14,23 +14,38 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { Dialog } from '@radix-ui/react-dialog';
 import { TestListForm } from '../../../../hooks/request_reservation/useTestListForm';
 import AddEditItemDialog from './AddEditItemDialog';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTestItemForm } from '../../../../hooks/request_reservation/useTestItemForm';
 import TestListTableProps from '../../../../domain/entity/view_reservation_detail/TestListTableProps';
 import TestListTableItemProps from '../../../../domain/entity/view_reservation_detail/TestListTableItemProps';
 import TestList from '../../../view_reservation_detail/components/TestList';
 import { ReservationType } from '../../../../data/models/Reservation';
+import { PricingListProps } from '../../../../domain/entity/request_reservation/pricingListProps';
+import test from 'node:test';
 
 export default function Stage2({
   testListForm,
+  pricingList,
   setStage,
 }: {
   testListForm: TestListForm;
+  pricingList: PricingListProps | null;
   setStage: (stage: number) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [editIndex, setEditIndex] = useState(-1);
   const { testItemForm } = useTestItemForm();
+
+  const testTypeDisplayName = {
+    [ReservationType.One]: 'การทดสอบวัสดุ',
+    [ReservationType.Two]: 'การทดสอบเทียบ',
+    [ReservationType.Three]: 'การทดสอบการทนไฟ',
+  };
+
+  useEffect(() => {
+    testListForm.watch('testList');
+    testListForm.watch('testType');
+  }, [testListForm]);
 
   function handleDialogSubmit() {
     if (editIndex === -1) {
@@ -46,12 +61,13 @@ export default function Stage2({
     }
     testItemForm.reset();
     setOpen(false);
-    console.log(testListForm.getValues('testList'));
   }
 
   function handleOpenEditDialog(index: number) {
     setEditIndex(index);
+    testItemForm.reset();
     const testItem = testListForm.getValues('testList')[index];
+    testItemForm.setValue('testID', testItem.testID);
     testItemForm.setValue('testName', testItem.testName);
     testItemForm.setValue('testSubName', testItem.testSubName);
     testItemForm.setValue('testAmount', testItem.testAmount);
@@ -69,7 +85,6 @@ export default function Stage2({
       shouldDirty: true,
     });
     testListForm.trigger('testList');
-    console.log(testListForm.getValues('testList'));
   }
 
   return (
@@ -85,7 +100,10 @@ export default function Stage2({
               render={({ field }) => (
                 <FormItem>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(e) => {
+                      field.onChange(e);
+                      testListForm.setValue('testList', []);
+                    }}
                     defaultValue={field.value}
                   >
                     <FormControl>
@@ -100,19 +118,22 @@ export default function Stage2({
                     </FormControl>
                     <SelectContent>
                       <SelectItem value={ReservationType.One}>
-                        {ReservationType.One}
+                        {testTypeDisplayName[ReservationType.One]}
                       </SelectItem>
                       <SelectItem value={ReservationType.Two}>
-                        {ReservationType.Two}
+                        {testTypeDisplayName[ReservationType.Two]}
                       </SelectItem>
                       <SelectItem value={ReservationType.Three}>
-                        {ReservationType.Three}
+                        {testTypeDisplayName[ReservationType.Three]}
                       </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
               )}
             />
+            <p className="text-error-500">
+              *หากท่านแก้ไขประเภทการทดสอบ ข้อมูลรายการทดสอบในตาราจะถูกรีเซ็ต
+            </p>
           </div>
 
           {/* Test List */}
@@ -134,22 +155,42 @@ export default function Stage2({
               <TestList
                 data={
                   new TestListTableProps(
-                    testListForm
-                      .getValues('testList')
-                      .map(
-                        (item, index) =>
-                          new TestListTableItemProps(
-                            index.toString(),
-                            item.testName + ': ' + item.testSubName,
-                            0,
-                            item.testAmount,
-                            'ชิ้น',
-                            200,
-                            item.testDetails,
-                            item.testNote
-                          )
-                      ),
-                    0
+                    testListForm.getValues('testList').map(
+                      (item, index) =>
+                        new TestListTableItemProps(
+                          index.toString(),
+                          item.testName + ': ' + item.testSubName,
+                          pricingList?.categoryTestList
+                            .get(testListForm.getValues('testType'))
+                            ?.testItems.get(item.testName)
+                            ?.find(
+                              (testItem) =>
+                                testItem.subName === item.testSubName
+                            )?.pricePerUnit || 0,
+
+                          item.testAmount,
+                          pricingList?.categoryTestList
+                            .get(testListForm.getValues('testType'))
+                            ?.testItems.get(item.testName)
+                            ?.find(
+                              (testItem) =>
+                                testItem.subName === item.testSubName
+                            )?.unit || '',
+                          item.testDetails,
+                          item.testNote
+                        )
+                    ),
+                    testListForm.getValues('testList').reduce(
+                      (acc, item) =>
+                        acc +
+                        (pricingList?.categoryTestList
+                          .get(testListForm.getValues('testType'))
+                          ?.testItems.get(item.testName)
+                          ?.find((testItem) => testItem.id === item.testID)
+                          ?.pricePerUnit || 0) *
+                          item.testAmount,
+                      0
+                    )
                   )
                 }
                 handleEditTest={handleOpenEditDialog}
@@ -164,8 +205,14 @@ export default function Stage2({
         <Dialog open={open} onOpenChange={setOpen}>
           <AddEditItemDialog
             isAdd={editIndex === -1}
+            testType={testListForm.getValues('testType')}
+            pricingList={
+              pricingList ||
+              new PricingListProps({ categoryTestList: new Map() })
+            }
             testItemForm={testItemForm}
             onSubmit={handleDialogSubmit}
+            setOpen={setOpen}
           />
         </Dialog>
 
