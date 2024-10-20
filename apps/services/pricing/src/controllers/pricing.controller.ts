@@ -1,5 +1,6 @@
-import { Elysia, t, Handler } from 'elysia';
-import Pricing, { IPricing, PricingModel } from '../model/pricing';
+import { Elysia, t } from 'elysia';
+import { PricingDataSchema } from '@ce-lab-mgmt/api-interfaces';
+import MongoPricingItemModel, { PricingModel } from '../model/pricing';
 
 export const PricingController = new Elysia({ prefix: '/pricing' })
   .use(PricingModel)
@@ -7,27 +8,16 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
     '/',
     async ({ body, set }) => {
       try {
-        const newPrice = new Pricing();
-        newPrice.id = newPrice._id;
-        newPrice.label = body.label;
-        newPrice.price = body.price;
-
+        const newPrice = new MongoPricingItemModel(body);
         const savedPrice = await newPrice.save();
-
         set.status = 200;
-
-        return {
-          success: true,
-          price: savedPrice,
-        };
-      } catch (err: any) {
-        console.log(err);
-
+        return { success: true, price: savedPrice };
+      } catch (error: any) {
         set.status = 500;
         return {
           success: false,
-          message: 'Failed to create price',
-          error: err.message,
+          message: 'Failed to create pricing item',
+          error: error.message,
         };
       }
     },
@@ -47,20 +37,15 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
     '/',
     async ({ set }) => {
       try {
-        const allPrices = await Pricing.find({});
+        const prices = await MongoPricingItemModel.find({});
         set.status = 200;
-        return {
-          success: true,
-          prices: allPrices,
-        };
-      } catch (err: any) {
-        console.log(err);
-
+        return { success: true, prices };
+      } catch (error: any) {
         set.status = 500;
         return {
           success: false,
-          message: 'Failed to fetch prices',
-          error: err.message,
+          message: 'Failed to fetch pricing items',
+          error: error.message,
         };
       }
     },
@@ -75,33 +60,24 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
       },
     }
   )
+
   .get(
     '/:id',
     async ({ params: { id }, set }) => {
       try {
-        const foundPrice = await Pricing.findById(id);
-
-        if (!foundPrice) {
+        const price = await MongoPricingItemModel.findById({ _id: id });
+        console.log('price', price);
+        if (!price) {
           set.status = 404;
-          return {
-            success: false,
-            message: 'Price not found',
-          };
+          return { success: false, message: 'Pricing item not found' };
         }
-
-        set.status = 200;
-        return {
-          success: true,
-          price: foundPrice,
-        };
-      } catch (err: any) {
-        console.log(err);
-
+        return { success: true, price };
+      } catch (error: any) {
         set.status = 500;
         return {
           success: false,
-          message: 'Failed to fetch price',
-          error: err.message,
+          message: 'Failed to fetch pricing item',
+          error: error.message,
         };
       }
     },
@@ -110,6 +86,9 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         tags: ['Pricing'],
         description: 'Get pricing by id',
       },
+      params: t.Object({
+        id: t.String(),
+      }),
       response: {
         200: 'price.success',
         404: 'price.notFound',
@@ -117,35 +96,23 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
       },
     }
   )
+
   .delete(
     '/:id',
     async ({ params: { id }, set }) => {
       try {
-        const deletedPrice = await Pricing.findByIdAndDelete(id);
-
-        console.log(deletedPrice);
-
+        const deletedPrice = await MongoPricingItemModel.findByIdAndDelete(id);
         if (!deletedPrice) {
           set.status = 404;
-          return {
-            success: false,
-            message: 'Price not found',
-          };
+          return { success: false, message: 'Pricing item not found' };
         }
-
-        set.status = 200;
-        return {
-          success: true,
-          price: deletedPrice,
-        };
-      } catch (err: any) {
-        console.log(err);
-
+        return { success: true, price: deletedPrice };
+      } catch (error: any) {
         set.status = 500;
         return {
           success: false,
-          message: 'Failed to delete price',
-          error: err.message,
+          message: 'Failed to delete pricing item',
+          error: error.message,
         };
       }
     },
@@ -154,6 +121,10 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         tags: ['Pricing'],
         description: 'Delete pricing by id',
       },
+
+      params: t.Object({
+        id: t.String(),
+      }),
       response: {
         200: 'price.success',
         404: 'price.notFound',

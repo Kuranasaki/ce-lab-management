@@ -9,7 +9,7 @@ import {
   PricingItemDocument,
 } from '@ce-lab-mgmt/api-interfaces';
 
-export { PricingItemDocument as IPricing };
+// export { PricingItemDocument as IPricing };
 
 export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
   'prices.success': t.Object({
