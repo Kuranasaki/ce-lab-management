@@ -3,6 +3,7 @@ import RequestReservationPage from '../views/request_reservation/RequestReservat
 import MainLayout from '../layouts/MainLayout';
 import HomePage from '../views/homepage/Homepage';
 import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
+import PricingPage from '../views/pricing/PricingPage';
 import ReservationDetailPage from '../views/view_reservation_detail/ReservationDetailPage';
 import SignInPage from '../views/auth_signin/SignInPage';
 import AuthLayout from '../layouts/AuthLayout';
@@ -73,7 +74,7 @@ export default createBrowserRouter([
         children: [
           {
             path: '',
-            element: <div>PRICING PAGE</div>,
+            element: <PricingPage />,
           },
         ],
       },
