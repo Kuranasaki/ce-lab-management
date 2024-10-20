@@ -44,7 +44,7 @@ export default function NavBar({ variant }: { variant?: string }) {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild className='flex gap-1 bg-transparent text-slate-50'>
                             <Button variant="ghost" size="sm" className='group text-slate-50 hover:bg-slate-100 hover:bg-opacity-25 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0'>
-                                {user.displayName}
+                                {user.displayName || user.email}
                                 <ChevronDownIcon className="h-6 w-6 transition duration-300 data-[state=open]:bg-black group-data-[state=open]:rotate-180" />
                             </Button>
                         </DropdownMenuTrigger>

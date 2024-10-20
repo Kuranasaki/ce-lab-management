@@ -8,6 +8,7 @@ import SignInPage from '../views/auth_signin/SignInPage';
 import AuthLayout from '../layouts/AuthLayout';
 import GlobalLayout from '../layouts/GlobalLayout';
 import ProtectedLayout from '../layouts/ProtectedLayout';
+import SignUpPage from '../views/auth_signin/SignUpPage';
 
 export default createBrowserRouter([
   {
@@ -20,16 +21,15 @@ export default createBrowserRouter([
       },
       {
         path: 'auth/',
+        element: <AuthLayout />,
         children: [
           {
-            path: 'signin',
-            element: <AuthLayout />,
-            children: [
-              {
-                path: '',
-                element: <SignInPage />,
-              },
-            ],
+            path: 'signin/',
+            element: <SignInPage />,
+          },
+          {
+            path: 'signup/',
+            element: <SignUpPage />,
           },
         ],
       },
@@ -87,3 +87,4 @@ export default createBrowserRouter([
     ],
   },
 ]);
+
