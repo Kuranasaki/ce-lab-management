@@ -1,5 +1,5 @@
-import getAllReservations from '../../data/repositories/getAllReservation';
-import mapper from '../mapper/reservationTableMapper';
+import getAllReservations from "../../../data/repositories/getAllReservation";
+import mapper from "../../mapper/view_reservation/reservationTableMapper";
 
 export default async function getReservationTable() {
     const rawData = await getAllReservations();

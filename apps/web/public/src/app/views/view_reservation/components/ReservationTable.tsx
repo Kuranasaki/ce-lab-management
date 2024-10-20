@@ -3,8 +3,8 @@ import { CaretLeftIcon, CaretRightIcon, CaretSortIcon } from "@radix-ui/react-ic
 import { SortingState, ColumnFiltersState, useReactTable, getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel, flexRender, Column, ColumnDef } from "@tanstack/react-table";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useReservationTable } from "../../../hooks/useReservationTable";
-import ReservationTableItem from "../../../domain/entity/reservationTableItem";
+import { ReservationStatus } from "../../../data/models/Reservation";
+import { useReservationTable } from "../../../hooks/view_reservation/useReservationTable";
 
 export default function ReservationTable({ status }: { status: string }) {
 
@@ -212,13 +212,13 @@ const columns: ColumnDef<ReservationTableItem>[] = [
     },
 ]
 
-const StatusBar = ({ status }: { status: string }) => {
+const StatusBar = ({ status }: { status: ReservationStatus }) => {
 
-    const statusMap: { [key: string]: { text: string; bgColor: string; textColor: string; } } = {
-        pending: { text: "รออนุมัติ", bgColor: "bg-warning-100", textColor: "text-warning-700" },
-        processing: { text: "กำลังทดสอบ", bgColor: "bg-primary-100", textColor: "text-primary-700" },
-        success: { text: "สำเร็จ", bgColor: "bg-success-100", textColor: "text-success-500" },
-        canceled: { text: "ยกเลิก", bgColor: "bg-error-100", textColor: "text-error-700" },
+    const statusMap: { [key in ReservationStatus]: { text: string; bgColor: string; textColor: string; } } = {
+        [ReservationStatus.Pending]: { text: "รออนุมัติ", bgColor: "bg-warning-100", textColor: "text-warning-700" },
+        [ReservationStatus.Processing]: { text: "กำลังทดสอบ", bgColor: "bg-primary-100", textColor: "text-primary-700" },
+        [ReservationStatus.Success]: { text: "สำเร็จ", bgColor: "bg-success-100", textColor: "text-success-500" },
+        [ReservationStatus.Canceled]: { text: "ยกเลิก", bgColor: "bg-error-100", textColor: "text-error-700" },
     };
 
     const { text, bgColor, textColor } = statusMap[status] || { text: "Unknown", bgColor: "bg-gray-500", textColor: "text-slate-700" };
