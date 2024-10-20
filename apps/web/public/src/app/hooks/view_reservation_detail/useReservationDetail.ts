@@ -5,7 +5,6 @@ import {
   ReservationStatus,
 } from '../../data/models/Reservation';
 import ReservationDetailProps from '../../domain/entity/view_reservation_detail/ReservationDetailProps';
-import ReservationDetail from '../../views/view_reservation_detail/components/ReservationDetail';
 
 export function useReservationDetail() {
   const [data, setData] = useState<ReservationDetailProps>(
@@ -24,7 +23,7 @@ export function useReservationDetail() {
       status: ReservationStatus.Pending,
     });
 
-    if (data instanceof ReservationDetail) {
+    if (data instanceof ReservationDetailProps) {
       setData(data);
     }
 
