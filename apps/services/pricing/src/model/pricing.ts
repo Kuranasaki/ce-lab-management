@@ -7,6 +7,8 @@ import {
   PricingItemSchema as PricingItemElysiaSchema,
   MongoPricingItemModel,
   PricingItemDocument,
+  TagsSchema,
+  PricingSchema,
 } from '@ce-lab-mgmt/api-interfaces';
 
 // export { PricingItemDocument as IPricing };
@@ -30,8 +32,10 @@ export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
     error: t.String(),
   }),
   'price.requestBody': t.Object({
-    label: t.String(),
-    price: t.Number(),
+    name: t.String(),
+    tags: TagsSchema,
+    pricing: t.Array(PricingSchema),
+    description: t.String(),
   }),
 });
 
