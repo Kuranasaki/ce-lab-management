@@ -9,24 +9,26 @@ import { TestListForm } from '../../../../hooks/request_reservation/useTestListF
 import CustomerDetail from '../../../view_reservation_detail/components/CustomerDetail';
 import ReservationDetail from '../../../view_reservation_detail/components/ReservationDetail';
 import TestList from '../../../view_reservation_detail/components/TestList';
-import usePostRequestReservation from '../../../../hooks/request_reservation/usePostRequestReservation';
 import {
   OrgDataEntity,
   RequestReservationEntity,
   TestListEntity,
 } from '../../../../domain/entity/request_reservation/reqReservRequestEntity';
+import { PricingListProps } from '../../../../domain/entity/request_reservation/pricingListProps';
 
 export default function Stage3({
   orgForm,
   testListForm,
+  pricingList,
   setStage,
+  post,
 }: {
   orgForm: OrgInfoForm;
   testListForm: TestListForm;
+  pricingList: PricingListProps | null;
   setStage: (stage: number) => void;
+  post: (data: RequestReservationEntity) => void;
 }) {
-  const { post } = usePostRequestReservation();
-
   function handleSubmit() {
     post(
       new RequestReservationEntity({
@@ -71,22 +73,40 @@ export default function Stage3({
         <TestList
           data={
             new TestListTableProps(
-              testListForm
-                .getValues('testList')
-                .map(
-                  (item, index) =>
-                    new TestListTableItemProps(
-                      index.toString(),
-                      item.testName + ': ' + item.testSubName,
-                      0,
-                      item.testAmount,
-                      'ชิ้น',
-                      200,
-                      item.testDetails,
-                      item.testNote
-                    )
-                ),
-              0
+              testListForm.getValues('testList').map(
+                (item, index) =>
+                  new TestListTableItemProps(
+                    index.toString(),
+                    item.testName + ': ' + item.testSubName,
+                    pricingList?.categoryTestList
+                      .get(testListForm.getValues('testType'))
+                      ?.testItems.get(item.testName)
+                      ?.find(
+                        (testItem) => testItem.subName === item.testSubName
+                      )?.pricePerUnit || 0,
+
+                    item.testAmount,
+                    pricingList?.categoryTestList
+                      .get(testListForm.getValues('testType'))
+                      ?.testItems.get(item.testName)
+                      ?.find(
+                        (testItem) => testItem.subName === item.testSubName
+                      )?.unit || '',
+                    item.testDetails,
+                    item.testNote
+                  )
+              ),
+              testListForm.getValues('testList').reduce(
+                (acc, item) =>
+                  acc +
+                  (pricingList?.categoryTestList
+                    .get(testListForm.getValues('testType'))
+                    ?.testItems.get(item.testName)
+                    ?.find((testItem) => testItem.id === item.testID)
+                    ?.pricePerUnit || 0) *
+                    item.testAmount,
+                0
+              )
             )
           }
         />

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export const testItemFormSchema = z.object({
+  testID: z.string().min(1),
   testName: z.string().min(1),
   testSubName: z.string().min(1),
   testAmount: z
@@ -20,6 +21,7 @@ export function useTestItemForm() {
   const form = useForm<z.infer<typeof testItemFormSchema>>({
     resolver: zodResolver(testItemFormSchema),
     defaultValues: {
+      testID: '',
       testName: '',
       testSubName: '',
       testAmount: undefined,
