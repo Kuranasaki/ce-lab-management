@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  kong-database:
+    extends:
+      file: ./gateway/docker-compose.yaml
+      service: kong-database
+    networks:
+      - kong-net
+
+  kong-migration:
+    extends:
+      file: ./gateway/docker-compose.yaml
+      service: kong-migration
+    networks:
+      - kong-net
+
+  kong:
+    extends:
+      file: ./gateway/docker-compose.yaml
+      service: kong
+    networks:
+      - kong-net
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8443:8443"
+      - "8444:8444"
+
+  wage-service:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.template
+      target: svc
+      args:
+        - APP_NAME=wage-svc
+    networks:
+      - kong-net
+    environment:
+      - NODE_ENV=production
+  pricing-service:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.template
+      target: svc
+      args:
+        - APP_NAME=pricing-svc
+    networks:
+      - kong-net
+    environment:
+      - NODE_ENV=production
+
+networks:
+  kong-net:
+    driver: bridge
+
+volumes:
+  kong_data:
+    driver: local

@@ -4,10 +4,13 @@ import MainLayout from '../layouts/MainLayout';
 import HomePage from '../views/homepage/Homepage';
 import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
 import PricingPage from '../views/pricing/PricingPage';
+import ReservationDetailPage from '../views/view_reservation_detail/ReservationDetailPage';
+import GlobalLayout from '../layouts/GlobalLayout';
 
 export default createBrowserRouter([
   {
     path: '/',
+    element: <GlobalLayout />,
     children: [
       {
         path: '',
@@ -23,6 +26,16 @@ export default createBrowserRouter([
               {
                 path: '',
                 element: <ViewReservationPage />,
+              },
+            ],
+          },
+          {
+            path: ':id',
+            element: <MainLayout title="รายละเอียดคำขอรับบริการทดสอบ" />,
+            children: [
+              {
+                path: '',
+                element: <ReservationDetailPage />,
               },
             ],
           },

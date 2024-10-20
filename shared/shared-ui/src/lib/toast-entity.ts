@@ -1,16 +1,16 @@
 export class ToastEntity {
   title: string;
   description: string;
-  type: 'error' | 'success' | 'info' | 'warning';
+  variant: 'default' | 'success' | 'warning' | 'destructive';
 
   constructor(
     title: string,
     description: string,
-    type: 'error' | 'success' | 'info' | 'warning'
+    type: 'default' | 'success' | 'warning' | 'destructive'
   ) {
     this.title = title;
     this.description = description;
-    this.type = type;
+    this.variant = type;
   }
 
   static fromCode(code: number): ToastEntity {
@@ -20,9 +20,9 @@ export class ToastEntity {
 
   static unknownError(): ToastEntity {
     return new ToastEntity(
-      'Unknown Error',
-      'An unknown error occurred.',
-      'error'
+      'เกิดข้อผิดพลาด',
+      'ไม่สามารถทำรายการได้ในขณะนี้ โปรดลองอีกครั้งในภายหลัง',
+      'destructive'
     );
   }
 }
