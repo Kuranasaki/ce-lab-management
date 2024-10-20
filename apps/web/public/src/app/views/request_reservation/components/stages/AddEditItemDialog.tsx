@@ -175,7 +175,7 @@ export default function AddEditItemDialog({
             )}
 
             {/* Test Details & Notes Fields */}
-            {renderTextAreaFields(testItemForm)}
+            {testSubDetails && renderTextAreaFields(testItemForm)}
           </div>
 
           <DialogFooter>
