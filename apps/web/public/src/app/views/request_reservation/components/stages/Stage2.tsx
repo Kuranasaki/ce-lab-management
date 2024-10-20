@@ -61,7 +61,6 @@ export default function Stage2({
     }
     testItemForm.reset();
     setOpen(false);
-    console.log(testListForm.getValues('testList'));
   }
 
   function handleOpenEditDialog(index: number) {
@@ -86,7 +85,6 @@ export default function Stage2({
       shouldDirty: true,
     });
     testListForm.trigger('testList');
-    console.log(testListForm.getValues('testList'));
   }
 
   return (
