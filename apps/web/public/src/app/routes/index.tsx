@@ -6,10 +6,12 @@ import ViewReservationPage from '../views/view_reservation/ViewReservationPage';
 import ReservationDetailPage from '../views/view_reservation_detail/ReservationDetailPage';
 import SignInPage from '../views/auth_signin/SignInPage';
 import AuthLayout from '../layouts/AuthLayout';
+import GlobalLayout from '../layouts/GlobalLayout';
 
 export default createBrowserRouter([
   {
     path: '/',
+    element: <GlobalLayout />,
     children: [
       {
         path: '',

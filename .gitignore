@@ -44,4 +44,5 @@ Thumbs.db
 extract/*
 *.env*
 !*.env.example
+!*/env.d.ts
 *.log
