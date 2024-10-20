@@ -1,30 +1,58 @@
 {
-  "name": "pricing",
+  "name": "pricing-svc",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/services/pricing/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx-bun/nx:build",
+      "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
-        "entrypoints": ["apps/services/pricing/src/index.ts"],
-        "outputPath": "dist/apps/services/pricing/src/index.ts",
-        "bun": false,
-        "smol": false
+        "platform": "node",
+        "outputPath": "dist/apps/services/pricing",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/services/pricing/src/main.ts",
+        "tsConfig": "apps/services/pricing/tsconfig.app.json",
+        "assets": ["apps/services/pricing/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
       }
     },
     "serve": {
-      "executor": "@nx-bun/nx:run",
+      "executor": "@nx/js:node",
       "defaultConfiguration": "development",
+      "dependsOn": ["build"],
       "options": {
-        "buildTarget": "pricing:build",
-        "watch": true,
-        "hot": true,
-        "bun": true,
-        "smol": false
+        "buildTarget": "pricing-svc:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "pricing-svc:build:development"
+        },
+        "production": {
+          "buildTarget": "pricing-svc:build:production"
+        }
       }
     }
-  },
-  "tags": []
+  }
 }
