@@ -7,7 +7,7 @@ import {
 import ReservationDetailProps from '../../domain/entity/view_reservation_detail/ReservationDetailProps';
 import ReservationDetail from '../../views/view_reservation_detail/components/ReservationDetail';
 
-export function useReservationDetail(initData?: ReservationDetailProps) {
+export function useReservationDetail() {
   const [data, setData] = useState<ReservationDetailProps>(
     new ReservationDetailProps({})
   );
@@ -37,11 +37,7 @@ export function useReservationDetail(initData?: ReservationDetailProps) {
   };
 
   useEffect(() => {
-    if (initData) {
-      setData(initData);
-    } else {
-      fetchData();
-    }
+    fetchData();
   }, []);
 
   return { data, loading };

@@ -3,13 +3,7 @@ import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
 import TestListTableProps from '../../domain/entity/view_reservation_detail/TestListTableProps';
 import TestListTableItemProps from '../../domain/entity/view_reservation_detail/TestListTableItemProps';
 
-export function useTestList({
-  initData,
-  id,
-}: {
-  initData?: TestListTableProps;
-  id?: string;
-}) {
+export function useTestList({ id }: { id?: string; }) {
   const [data, setData] = useState<TestListTableProps>(
     new TestListTableProps()
   );
@@ -83,11 +77,7 @@ export function useTestList({
   };
 
   useEffect(() => {
-    if (initData) {
-      setData(initData);
-    } else {
-      fetchData();
-    }
+    fetchData();
   }, []);
 
   return { data, setData, loading };
