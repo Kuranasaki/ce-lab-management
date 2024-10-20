@@ -9,7 +9,7 @@ import { ReservationStatus } from "../../data/models/Reservation";
 
 export default function ReservationDetailPage() {
     const { id } = useParams();
-    const { data: testListData, setData: setTestListdata, loading: loadingTestListdata } = useTestList({ id });
+    const { data: testListData, loading: loadingTestListdata } = useTestList({ id });
     const { data: reservationDetail, loading: loadingReservationDetail } = useReservationDetail();
     const { data: customerDetail, loading: loadingCustomerDetail } = useCustomerDetail();
 
@@ -38,7 +38,7 @@ export default function ReservationDetailPage() {
             </div>
             <div className="flex flex-col gap-4">
                 <h4>รายการทดสอบ</h4>
-                <TestList data={testListData} editable={false} setData={setTestListdata} />
+                <TestList data={testListData} />
             </div>
         </div >
     );

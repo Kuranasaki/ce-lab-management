@@ -5,23 +5,19 @@ import TestListTable from "../../../domain/entity/detail_reservation/TestListTab
 import TestListTableItem from "../../../domain/entity/detail_reservation/TestListTableItem";
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 
-export default function TestList({ data, editable, setData }: { data: TestListTable, editable: boolean, setData: Dispatch<SetStateAction<TestListTable>> }) {
+export default function TestList({ data, editable = false, handleDeleteTest, handleEditTest }:
+    {
+        data: TestListTable,
+        editable?: boolean,
+        handleDeleteTest?: () => void,
+        handleEditTest?: () => void
+    }) {
 
     const table = useReactTable({
         data: data.items,
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
-
-    const handleDeleteTest = (itemId: string) => {
-        // Call removeItem with the specific itemId you want to delete
-        setData(data.removeItem(itemId));
-    };
-
-    const handleEditTest = (itemId: string, updatedItem: Partial<TestListTableItem>) => {
-        // Call editItem with the specific itemId and the updated item data
-        setData(data.editItem(itemId, updatedItem));
-    };
 
     return (
         <div className="rounded-lg border border-slate-300 overflow-clip">
@@ -58,8 +54,8 @@ export default function TestList({ data, editable, setData }: { data: TestListTa
                                 {editable ?
                                     <TableCell >
                                         <div className="flex gap-4 justify-center">
-                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleEditTest(row.original.id, { price: 450 })}><Pencil1Icon className="size-5" /></div>
-                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleDeleteTest(row.original.id)}><TrashIcon className="size-5" /></div>
+                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleEditTest ? handleEditTest() : null}><Pencil1Icon className="size-5" /></div>
+                                            <div className="hover:bg-slate-100 p-2 rounded-md cursor-pointer" onClick={() => handleDeleteTest ? handleDeleteTest() : null}><TrashIcon className="size-5" /></div>
                                         </div>
                                     </TableCell>
                                     : ""

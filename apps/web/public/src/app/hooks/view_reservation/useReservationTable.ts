@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import ReservationTableItem from '../domain/entity/reservationTableItem';
-import getReservationTable from '../domain/usecase/getReservationTable';
+import ReservationTableItem from '../../domain/entity/view_reservation/reservationTableItem';
+import getReservationTable from '../../domain/usecase/view_reservation/getReservationTable';
 
 export function useReservationTable() {
     const [data, setData] = useState<ReservationTableItem[]>([]);

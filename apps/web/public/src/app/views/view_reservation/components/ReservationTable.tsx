@@ -3,9 +3,8 @@ import { CaretLeftIcon, CaretRightIcon, CaretSortIcon } from "@radix-ui/react-ic
 import { SortingState, ColumnFiltersState, useReactTable, getCoreRowModel, getPaginationRowModel, getSortedRowModel, getFilteredRowModel, flexRender, Column, ColumnDef } from "@tanstack/react-table";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useReservationTable } from "../../../hooks/useReservationTable";
-import ReservationTableItem from "../../../domain/entity/reservationTableItem";
 import { ReservationStatus } from "../../../data/models/Reservation";
+import { useReservationTable } from "../../../hooks/view_reservation/useReservationTable";
 
 export default function ReservationTable({ status }: { status: string }) {
 

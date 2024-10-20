@@ -25,6 +25,14 @@ export default function ExampleEditableTable() {
         setTestListdata(testListdata.addItem(newItem))
     };
 
+    const handleDeleteTest = () => {
+        // setTestListdata(testListdata.removeItem(itemId));
+    };
+
+    const handleEditTest = () => {
+        // setTestListdata(testListdata.editItem(itemId, updatedItem));
+    };
+
     return (
         <div>
             <div className="flex flex-col gap-4">
@@ -32,7 +40,7 @@ export default function ExampleEditableTable() {
                     <h4>รายการทดสอบ</h4>
                     <Button onClick={handleAddTest}><PlusIcon />เพิ่ม</Button>
                 </div>
-                <TestList data={testListdata} editable={true} setData={setTestListdata} />
+                <TestList data={testListdata} editable={true} handleDeleteTest={handleDeleteTest} handleEditTest={handleEditTest} />
             </div>
         </div >
     );

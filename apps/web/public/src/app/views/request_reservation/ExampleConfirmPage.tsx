@@ -32,7 +32,7 @@ export default function ExampleConfirmPage() {
         "123-456-7890"             // orgFax
     );
 
-    const { data: testListData, setData: setTestListdata } = useTestList({ initData: mockTestList });
+    const { data: testListData } = useTestList({ initData: mockTestList });
     const { data: reservationDetail } = useReservationDetail(mockReservationDetail);
     const { data: customerDetail } = useCustomerDetail(mockCustomer);
 
@@ -49,7 +49,7 @@ export default function ExampleConfirmPage() {
             </div>
             <div className="flex flex-col gap-4">
                 <h4>รายการทดสอบ</h4>
-                <TestList data={testListData} editable={false} setData={setTestListdata} />
+                <TestList data={testListData} />
             </div>
             <div>[ย้อนกลับ] [ส่งคำขอบริการ]</div>
         </div >
