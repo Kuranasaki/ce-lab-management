@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
 import CustomerDetailProps from '../../domain/entity/view_reservation_detail/CustomerDetailProps';
 
-export function useCustomerDetail(initData?: CustomerDetailProps) {
+export function useCustomerDetail() {
   const [data, setData] = useState<CustomerDetailProps>(
     new CustomerDetailProps()
   );
@@ -34,11 +34,7 @@ export function useCustomerDetail(initData?: CustomerDetailProps) {
   };
 
   useEffect(() => {
-    if (initData) {
-      setData(initData);
-    } else {
-      fetchData();
-    }
+    fetchData();
   }, []);
 
   return { data, loading };

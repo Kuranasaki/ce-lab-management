@@ -192,6 +192,6 @@ const columns: ColumnDef<TestListTableItemProps>[] = [
     header: () => {
       return <Header className="text-center" title="ราคาต่อหน่วย" />;
     },
-    cell: ({ row }) => <Cell>{row.original.formatPrice()}</Cell>,
+    cell: ({ row }) => <Cell>{row.original.formatPricePerUnit()}</Cell>,
   },
 ];
