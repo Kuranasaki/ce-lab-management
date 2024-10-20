@@ -8,10 +8,10 @@ export default function ReservationDetail({ data }: { data: ReservationDetailPro
         return (
             <DetailBox>
                 <div className="grid grid-cols-1 gap-2">
-                    <Item title='หมายเลขคำขอ:' value={data.id} />
+                    {data.id ? <Item title='หมายเลขคำขอ:' value={data.id} /> : ""}
                     <Item title='วันที่ส่งคำขอ:' value={data.formatDate()} />
                     <Item title='ประเภทการทดสอบ:' value={data.type} />
-                    <Item title='สถานะ:' value={statusMap[data.status].text} className={statusMap[data.status].textColor} />
+                    {data.status ? <Item title='สถานะ:' value={statusMap[data.status].text} className={statusMap[data.status].textColor} /> : ""}
                 </div>
             </DetailBox>
         );

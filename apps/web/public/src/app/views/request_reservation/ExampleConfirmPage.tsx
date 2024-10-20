@@ -14,7 +14,7 @@ import TestList from "../detail_reservation/components/TestList";
 
 export default function ExampleConfirmPage() {
 
-    const mockReservationDetail = new ReservationDetailProps("1", new Date(), ReservationType.One, ReservationStatus.Pending);
+    const mockReservationDetail = new ReservationDetailProps(null, new Date(), ReservationType.One, null);
 
     const mockItems: TestListTableItem[] = [
         new TestListTableItem("1", "Test 1", 300, 1, "อัน", 30, "Detail 1", "Note 1"),

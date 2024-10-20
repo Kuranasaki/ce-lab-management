@@ -1,16 +1,16 @@
 import { ReservationType, ReservationStatus } from "../../data/models/Reservation";
 
 export default class ReservationDetailProps {
-    id: string;
+    id: string | null;
     date: Date;
     type: ReservationType;
-    status: ReservationStatus;
+    status: ReservationStatus | null;
 
     constructor(
-        id: string = "default-id",
+        id: string | null,
         date: Date = new Date(),
         type: ReservationType = ReservationType.One,
-        status: ReservationStatus = ReservationStatus.Pending
+        status: ReservationStatus | null,
     ) {
         this.id = id;
         this.date = date;
