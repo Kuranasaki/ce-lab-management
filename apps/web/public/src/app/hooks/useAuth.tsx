@@ -7,7 +7,7 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  registerUser: (name: string, email: string, password: string) => Promise<void>; // Add registerUser
+  registerUser: (email: string, password: string, name?: string) => Promise<void>; // Add registerUser
   signOut: () => Promise<void>;
 }
 
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth, db }
     }
   };
 
-  const registerUser = async (name: string, email: string, password: string) => {
+  const registerUser = async (email: string, password: string, name?: string) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const newUser = userCredential.user;
