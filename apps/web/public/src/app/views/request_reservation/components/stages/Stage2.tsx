@@ -29,7 +29,7 @@ export default function Stage2({
   setStage,
 }: {
   testListForm: TestListForm;
-  pricingList: PricingListProps | null;
+  pricingList: PricingListProps;
   setStage: (stage: number) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -160,7 +160,7 @@ export default function Stage2({
                         new TestListTableItemProps(
                           index.toString(),
                           item.testName + ': ' + item.testSubName,
-                          pricingList?.categoryTestList
+                          pricingList.categoryTestList
                             .get(testListForm.getValues('testType'))
                             ?.testItems.get(item.testName)
                             ?.find(
@@ -169,7 +169,7 @@ export default function Stage2({
                             )?.pricePerUnit || 0,
 
                           item.testAmount,
-                          pricingList?.categoryTestList
+                          pricingList.categoryTestList
                             .get(testListForm.getValues('testType'))
                             ?.testItems.get(item.testName)
                             ?.find(
@@ -183,7 +183,7 @@ export default function Stage2({
                     testListForm.getValues('testList').reduce(
                       (acc, item) =>
                         acc +
-                        (pricingList?.categoryTestList
+                        (pricingList.categoryTestList
                           .get(testListForm.getValues('testType'))
                           ?.testItems.get(item.testName)
                           ?.find((testItem) => testItem.id === item.testID)

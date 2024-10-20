@@ -6,8 +6,10 @@ import StageNavigator from './components/StageNavigator';
 import { useTestListForm } from '../../hooks/request_reservation/useTestListForm';
 import { useOrgInfoForm } from '../../hooks/request_reservation/useOrgInfoForm';
 import usePricingList from '../../hooks/request_reservation/usePricingList';
-import { Loading } from '@ce-lab-mgmt/shared-ui';
+import { Button, Loading } from '@ce-lab-mgmt/shared-ui';
 import usePostRequestReservation from '../../hooks/request_reservation/usePostRequestReservation';
+import { CrossCircledIcon } from '@radix-ui/react-icons';
+import { useNavigate } from 'react-router-dom';
 
 export default function RequestReservationPage() {
   const [stage, setStage] = useState(1);
@@ -15,11 +17,23 @@ export default function RequestReservationPage() {
   const { testListForm } = useTestListForm();
   const { pricingList, loading: pricingLoading } = usePricingList();
   const { post, loading: postLoadling } = usePostRequestReservation();
+  const navigate = useNavigate();
 
   if (pricingLoading || postLoadling) {
     return (
       <div className="w-full h-[50dvh] flex items-center justify-center">
         <Loading />
+      </div>
+    );
+  }
+
+  if (!pricingList) {
+    return (
+      <div className="w-full md:h-[50dvh] h-[30dvh] flex flex-col gap-8 items-center justify-center">
+        <CrossCircledIcon className="md:size-32 size-16 text-error-500" />
+        <h4 className="text-center">เกิดข้อผิดพลาด</h4>
+        <p className="text-center">ไม่สามารถดึงข้อมูลราคาการทดสอบได้</p>
+        <Button onClick={() => navigate(0)}>ลองอีกครั้ง</Button>
       </div>
     );
   }
