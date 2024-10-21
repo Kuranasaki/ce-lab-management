@@ -1,10 +1,24 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Auth, signInWithPopup, signOut, GoogleAuthProvider } from 'firebase/auth';
+import {
+  User,
+  Auth,
+  signInWithPopup,
+  signOut,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signInWithEmail: (email: string, password: string) => Promise<void>;
+  registerUser: (
+    email: string,
+    password: string,
+    name?: string
+  ) => Promise<void>; // Add registerUser
   signOut: () => Promise<void>;
 }
 
@@ -16,7 +30,10 @@ interface AuthProviderProps {
   auth: Auth;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({
+  children,
+  auth,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,12 +46,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth }) =>
     return unsubscribe;
   }, [auth]);
 
-  const signIn = async () => {
+  const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error('Error signing in with Google', error);
+    }
+  };
+
+  const signInWithEmail = async (email: string, password: string) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error('Error signing in with email and password', error);
+      throw error;
+    }
+  };
+
+  const registerUser = async (
+    email: string,
+    password: string,
+    name?: string
+  ) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const newUser = userCredential.user;
+
+      console.log('User registered successfully:', newUser);
+    } catch (error) {
+      console.error('Error registering user:', error);
+      throw error;
     }
   };
 
@@ -49,7 +95,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth }) =>
   const value = {
     user,
     loading,
-    signIn,
+    signInWithGoogle,
+    signInWithEmail,
+    registerUser, // Include registerUser in context value
     signOut: signOutUser,
   };
 

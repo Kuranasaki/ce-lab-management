@@ -8,6 +8,8 @@ import ReservationDetailPage from '../views/view_reservation_detail/ReservationD
 import SignInPage from '../views/auth_signin/SignInPage';
 import AuthLayout from '../layouts/AuthLayout';
 import GlobalLayout from '../layouts/GlobalLayout';
+import ProtectedLayout from '../layouts/ProtectedLayout';
+import SignUpPage from '../views/auth_signin/SignUpPage';
 
 export default createBrowserRouter([
   {
@@ -20,53 +22,58 @@ export default createBrowserRouter([
       },
       {
         path: 'auth/',
+        element: <AuthLayout />,
         children: [
           {
-            path: 'signin',
-            element: <AuthLayout />,
-            children: [
-              {
-                path: '',
-                element: <SignInPage />,
-              },
-            ],
+            path: 'signin/',
+            element: <SignInPage />,
+          },
+          {
+            path: 'signup/',
+            element: <SignUpPage />,
           },
         ],
       },
       {
-        path: 'reservation/',
+        path: '',
+        element: <ProtectedLayout />,
         children: [
           {
-            path: '',
-            element: <MainLayout title="คำขอรับบริการทดสอบ" />,
+            path: 'reservation/',
             children: [
               {
                 path: '',
-                element: <ViewReservationPage />,
+                element: <MainLayout title="คำขอรับบริการทดสอบ" />,
+                children: [
+                  {
+                    path: '',
+                    element: <ViewReservationPage />,
+                  },
+                ],
               },
-            ],
-          },
-          {
-            path: ':id',
-            element: <MainLayout title="รายละเอียดคำขอรับบริการทดสอบ" />,
-            children: [
               {
-                path: '',
-                element: <ReservationDetailPage />,
+                path: ':id',
+                element: <MainLayout title="รายละเอียดคำขอรับบริการทดสอบ" />,
+                children: [
+                  {
+                    path: '',
+                    element: <ReservationDetailPage />,
+                  },
+                ],
               },
-            ],
-          },
-          {
-            path: 'request',
-            element: <MainLayout title="สร้างคำขอรับบริการทดสอบ" />,
-            children: [
               {
-                path: '',
-                element: <RequestReservationPage />,
+                path: 'request',
+                element: <MainLayout title="สร้างคำขอรับบริการทดสอบ" />,
+                children: [
+                  {
+                    path: '',
+                    element: <RequestReservationPage />,
+                  },
+                ],
               },
             ],
           },
-        ],
+        ]
       },
       {
         path: 'pricing/',
@@ -81,3 +88,4 @@ export default createBrowserRouter([
     ],
   },
 ]);
+

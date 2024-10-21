@@ -9,7 +9,7 @@ import { z } from "zod"
 
 const SignInPage: React.FC = () => {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signInWithEmail, signInWithGoogle } = useAuth();
 
   const formSchema = z.object({
     email: z.string().email({
@@ -20,22 +20,24 @@ const SignInPage: React.FC = () => {
     })
   });
 
-
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-  }
-
-  const handleSignIn = async () => {
+  const handleSignIn = async (provider?: string) => {
     try {
-      await signIn();
+      switch (provider) {
+        case "google":
+          await signInWithGoogle();
+          break;
+        default:
+          await signInWithEmail(form.getValues().email, form.getValues().password);
+          break;
+      }
       navigate('/');
     } catch (error) {
-      console.error('Error signing in with Google', error);
+      console.log('ไม่สามารถลงชื่อเข้าใช้ได้ กรุณาตรวจสอบข้อมูลของคุณ');
+      form.setError("root", { type: "manual", message: "ไม่สามารถลงชื่อเข้าใช้ได้ กรุณาตรวจสอบข้อมูลของคุณ" });
     }
   };
 
@@ -46,37 +48,41 @@ const SignInPage: React.FC = () => {
         <div className='flex flex-col gap-4 w-full'>
           <p className='text-slate-500'>ลงชื่อเข้าใช้เพื่อจองการทดสอบของคุณ</p>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="flex flex-col items-start gap-1">
-                    <FormLabel className="font-medium">อีเมล</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    {error && <p className="text-error-500 text-sm">{error.message}</p>}
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field, fieldState: { error } }) => (
-                  <FormItem className="flex flex-col items-start gap-1">
-                    <FormLabel className="font-medium">รหัสผ่าน</FormLabel>
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    {error && <p className="text-error-500 text-sm">{error.message}</p>}
-                  </FormItem>
-                )}
-              />
-
+            <form onSubmit={form.handleSubmit(() => handleSignIn())} className="space-y-4">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="flex flex-col items-start gap-1">
+                      <FormLabel className="font-medium">อีเมล</FormLabel>
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      {error && <FormMessage className="text-error-500 text-sm">{error.message}</FormMessage>}
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState: { error } }) => (
+                    <FormItem className="flex flex-col items-start gap-1">
+                      <FormLabel className="font-medium">รหัสผ่าน</FormLabel>
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      {error && <FormMessage className="text-error-500 text-sm">{error.message}</FormMessage>}
+                    </FormItem>
+                  )}
+                />
+              </div>
               <Button type="submit" className="w-full">
                 ลงชื่อเข้าใช้
               </Button>
+              {form.formState.errors.root && (
+                <FormMessage className="text-error-500 text-sm">{form.formState.errors.root.message}</FormMessage>
+              )}
             </form>
           </Form>
 
@@ -86,7 +92,7 @@ const SignInPage: React.FC = () => {
             <div className="flex-1 h-px bg-slate-300" />
           </div>
 
-          <Button variant="outline" onClick={handleSignIn} className="">
+          <Button variant="outline" onClick={() => handleSignIn("google")} className="">
             <Icon icon="logos:google-icon" className='size-4' />
             ลงชื่อเข้าใช้ด้วย Google
           </Button>
@@ -97,7 +103,7 @@ const SignInPage: React.FC = () => {
         <h2>ล็อกอิน</h2>
         <p>สร้างบัญชีเพื่อจองการทดสอบ</p>
         <Link to="/auth/signup">
-          <Button variant="default" onClick={() => { }} className="bg-white text-primary-500 border border-primary-500 hover:bg-slate-100">
+          <Button variant="default" className="bg-white text-primary-500 border border-primary-500 hover:bg-slate-100">
             ลงทะเบียน
           </Button>
         </Link>
