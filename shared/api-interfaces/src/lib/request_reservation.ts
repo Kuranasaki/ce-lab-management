@@ -24,6 +24,10 @@ export interface TestItem {
   testNote?: string;
 }
 
+export interface RequestReservationResponse {
+  code: number;
+}
+
 import { t } from 'elysia';
 
 const TestItemSchema = t.Object({

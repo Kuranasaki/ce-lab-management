@@ -1,11 +1,13 @@
-import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
+import {
+  BaseResponse,
+  RequestReservationForm,
+  RequestReservationResponse,
+} from '@ce-lab-mgmt/api-interfaces';
 import { api } from '../../axios/api';
-import { RequestReservationRequest } from '../../models/request_reservation/request';
-import { RequestReservationResponse } from '../../models/request_reservation/response';
 import { AxiosError } from 'axios';
 
 export default async function postRequestReservationRepository(
-  data: RequestReservationRequest
+  data: RequestReservationForm
 ): Promise<BaseResponse<RequestReservationResponse>> {
   try {
     const result = await api.post<BaseResponse<RequestReservationResponse>>(
