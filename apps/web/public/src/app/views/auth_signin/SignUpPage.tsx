@@ -1,5 +1,5 @@
 import { useAuth } from "../../hooks/useAuth";
-import { Button, FormField, FormItem, FormLabel, FormControl, Input, FormMessage, Form } from "@ce-lab-mgmt/shared-ui";
+import { Button, FormField, FormItem, FormLabel, FormControl, Input, FormMessage, Form, useToast, ToastEntity } from "@ce-lab-mgmt/shared-ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FirebaseError } from "firebase/app";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import { z } from "zod";
 
 const SignUpPage: React.FC = () => {
     const navigate = useNavigate();
+    const { toast } = useToast();
     const { registerUser } = useAuth();
 
     const formSchema = z.object({
@@ -26,19 +27,19 @@ const SignUpPage: React.FC = () => {
     const handleSubmit = async () => {
         try {
             await registerUser(form.getValues().email, form.getValues().password);
+            toast(new ToastEntity("ลงทะเบียนสำเร็จ", "คุณลงทะเบียนสำเร็จแล้ว", "success"));
             navigate('/');
         } catch (error) {
             if (error instanceof FirebaseError) {
                 if (error.code === "auth/email-already-in-use") {
                     form.setError("email", { type: "manual", message: "อีเมลนี้ถูกใช้งานแล้ว" });
-                } else {
-                    form.setError("root", { type: "manual", message: "เกิดข้อผิดพลาดในการลงทะเบียน กรุณาลองอีกครั้ง" });
+                    return;
                 }
-            } else {
-                form.setError("root", { type: "manual", message: "เกิดข้อผิดพลาดที่ไม่คาดคิด กรุณาลองใหม่" });
             }
+            toast(new ToastEntity("เกิดข้อผิดพลาด", "เกิดข้อผิดพลาดในการลงทะเบียน กรุณาลองอีกครั้ง", "destructive"));
         }
     };
+
 
     return (
         <div className="flex max-w-screen-lg w-full h-[670px] bg-white shadow-md rounded-md m-24 overflow-clip">

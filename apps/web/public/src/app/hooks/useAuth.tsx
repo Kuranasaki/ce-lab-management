@@ -52,6 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error('Error signing in with Google', error);
+      throw error
     }
   };
 
@@ -67,7 +68,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   const registerUser = async (
     email: string,
     password: string,
-    name?: string
   ) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(

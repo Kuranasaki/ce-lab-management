@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from '@ce-lab-mgmt/shared-ui';
+import { Button, Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, ToastEntity, useToast } from '@ce-lab-mgmt/shared-ui';
 import { Icon } from '@iconify/react';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -9,6 +9,7 @@ import { z } from "zod"
 
 const SignInPage: React.FC = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { signInWithEmail, signInWithGoogle } = useAuth();
 
   const formSchema = z.object({
@@ -26,20 +27,20 @@ const SignInPage: React.FC = () => {
 
   const handleSignIn = async (provider?: string) => {
     try {
-      switch (provider) {
-        case "google":
-          await signInWithGoogle();
-          break;
-        default:
-          await signInWithEmail(form.getValues().email, form.getValues().password);
-          break;
+      if (provider === "google") {
+        await signInWithGoogle();
+      } else {
+        await signInWithEmail(form.getValues().email, form.getValues().password);
       }
+
+      toast(new ToastEntity("ยินดีต้อนรับ", "ลงชื่อเข้าใช้สำเร็จแล้ว", "success"));
       navigate('/');
     } catch (error) {
       console.log('ไม่สามารถลงชื่อเข้าใช้ได้ กรุณาตรวจสอบข้อมูลของคุณ');
       form.setError("root", { type: "manual", message: "ไม่สามารถลงชื่อเข้าใช้ได้ กรุณาตรวจสอบข้อมูลของคุณ" });
     }
   };
+
 
   return (
     <div className="flex max-w-screen-lg w-full h-[670px] bg-white shadow-md rounded-md m-24 overflow-clip">
