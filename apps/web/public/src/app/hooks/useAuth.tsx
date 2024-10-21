@@ -1,5 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Auth, signInWithPopup, signOut, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  User,
+  Auth,
+  signInWithPopup,
+  signOut,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
 import { doc, setDoc, Firestore } from 'firebase/firestore'; // Import Firestore functions
 
 interface AuthContextType {
@@ -7,7 +15,11 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  registerUser: (email: string, password: string, name?: string) => Promise<void>; // Add registerUser
+  registerUser: (
+    email: string,
+    password: string,
+    name?: string
+  ) => Promise<void>; // Add registerUser
   signOut: () => Promise<void>;
 }
 
@@ -20,7 +32,11 @@ interface AuthProviderProps {
   db: Firestore;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth, db }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({
+  children,
+  auth,
+  db,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,9 +67,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth, db }
     }
   };
 
-  const registerUser = async (email: string, password: string, name?: string) => {
+  const registerUser = async (
+    email: string,
+    password: string,
+    name?: string
+  ) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const newUser = userCredential.user;
 
       // // Store additional user data in Firestore
@@ -61,7 +85,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children, auth, db }
       //   name: name,
       // });
 
-      console.log("User registered successfully:", newUser);
+      console.log('User registered successfully:', newUser);
     } catch (error) {
       console.error('Error registering user:', error);
       throw error;
