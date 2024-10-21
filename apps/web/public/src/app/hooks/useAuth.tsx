@@ -8,7 +8,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
-import { doc, setDoc, Firestore } from 'firebase/firestore'; // Import Firestore functions
 
 interface AuthContextType {
   user: User | null;
@@ -29,13 +28,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 interface AuthProviderProps {
   children: React.ReactNode;
   auth: Auth;
-  db: Firestore;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({
   children,
   auth,
-  db,
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -79,11 +76,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         password
       );
       const newUser = userCredential.user;
-
-      // // Store additional user data in Firestore
-      // await setDoc(doc(db, "users", newUser.uid), {
-      //   name: name,
-      // });
 
       console.log('User registered successfully:', newUser);
     } catch (error) {
