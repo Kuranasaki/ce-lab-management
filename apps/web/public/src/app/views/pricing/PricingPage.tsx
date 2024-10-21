@@ -14,11 +14,11 @@ import {
   Button,
   Loading,
 } from '@ce-lab-mgmt/shared-ui';
-import { usePricingTable } from '../../hooks/usePricingTable';
+import { usePricingTable } from '../../hooks/view_pricing/usePricingTable';
 
 import { InfoCircledIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
-import { PricingGroup } from '../../domain/entity/pricingTableItem';
+import { PricingGroup } from '../../domain/entity/view_pricing/pricingTableItem';
 
 // interface Test {
 //   test_name: string;
