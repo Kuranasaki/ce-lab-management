@@ -1,18 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { testItemFormSchema } from './useTestItemForm';
-
-const formSchema = z.object({
-  testType: z.string().min(1),
-  testList: z
-    .array(testItemFormSchema)
-    .min(1, 'กรุณาเพิ่มรายการทดสอบอย่างน้อย 1 รายการ'),
-});
+import {
+  testListformSchema,
+  TestListFormType,
+} from '../../domain/entity/request_reservation/reqReservRequestFormEntity';
 
 export function useTestListForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<TestListFormType>({
+    resolver: zodResolver(testListformSchema),
     defaultValues: {
       testType: '',
       testList: [],
@@ -21,5 +17,3 @@ export function useTestListForm() {
 
   return { testListForm: form };
 }
-
-export type TestListForm = ReturnType<typeof useTestListForm>['testListForm'];
