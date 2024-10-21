@@ -6,11 +6,11 @@ export class ToastEntity {
   constructor(
     title: string,
     description: string,
-    type: 'default' | 'success' | 'warning' | 'destructive'
+    variant: 'default' | 'success' | 'warning' | 'destructive'
   ) {
     this.title = title;
     this.description = description;
-    this.variant = type;
+    this.variant = variant;
   }
 
   static fromCode(code: number): ToastEntity {
