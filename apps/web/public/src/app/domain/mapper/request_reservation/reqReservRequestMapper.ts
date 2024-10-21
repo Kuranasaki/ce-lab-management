@@ -1,5 +1,5 @@
 import { RequestReservationRequest } from '../../../data/models/request_reservation/request';
-import { RequestReservationEntity } from '../../entity/request_reservation/reqReservRequestEntity';
+import { RequestReservationEntity } from '../../entity/request_reservation/reqReservRequestFormEntity';
 
 export default function reqReservRequestMapper(
   data: RequestReservationEntity

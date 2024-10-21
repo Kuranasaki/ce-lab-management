@@ -4,17 +4,15 @@ import CustomerDetailProps from '../../../../domain/entity/view_reservation_deta
 import ReservationDetailProps from '../../../../domain/entity/view_reservation_detail/ReservationDetailProps';
 import TestListTableProps from '../../../../domain/entity/view_reservation_detail/TestListTableProps';
 import TestListTableItemProps from '../../../../domain/entity/view_reservation_detail/TestListTableItemProps';
-import { OrgInfoForm } from '../../../../hooks/request_reservation/useOrgInfoForm';
-import { TestListForm } from '../../../../hooks/request_reservation/useTestListForm';
 import CustomerDetail from '../../../view_reservation_detail/components/CustomerDetail';
 import ReservationDetail from '../../../view_reservation_detail/components/ReservationDetail';
 import TestList from '../../../view_reservation_detail/components/TestList';
-import {
-  OrgDataEntity,
-  RequestReservationEntity,
-  TestListEntity,
-} from '../../../../domain/entity/request_reservation/reqReservRequestEntity';
 import { PricingListProps } from '../../../../domain/entity/request_reservation/pricingListProps';
+import {
+  OrgInfoFormReturned,
+  TestListFormReturned,
+  TestListFormType,
+} from '../../../../domain/entity/request_reservation/reqReservRequestFormEntity';
 
 export default function Stage3({
   orgForm,
@@ -23,22 +21,14 @@ export default function Stage3({
   setStage,
   post,
 }: {
-  orgForm: OrgInfoForm;
-  testListForm: TestListForm;
+  orgForm: OrgInfoFormReturned;
+  testListForm: TestListFormReturned;
   pricingList: PricingListProps;
   setStage: (stage: number) => void;
-  post: (data: RequestReservationEntity) => void;
+  post: (data: TestListFormReturned) => void;
 }) {
   function handleSubmit() {
-    post(
-      new RequestReservationEntity({
-        orgData: new OrgDataEntity({ ...orgForm.getValues() }),
-        testList: new TestListEntity({
-          testType: testListForm.getValues('testType'),
-          testItems: [...testListForm.getValues('testList')],
-        }),
-      })
-    );
+    post(testListForm);
   }
 
   return (
