@@ -15,21 +15,16 @@ import {
 
 export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
   'prices.success': t.Object({
-    success: t.Boolean(),
-    prices: t.Array(PricingItemElysiaSchema),
+    data: t.Array(PricingItemElysiaSchema),
   }),
   'price.success': t.Object({
-    success: t.Boolean(),
-    price: PricingItemElysiaSchema,
+    data: PricingItemElysiaSchema,
   }),
   'price.notFound': t.Object({
-    success: t.Boolean(),
-    message: t.String(),
+    error: t.Object({ code: t.Number() }),
   }),
   'price.error': t.Object({
-    success: t.Boolean(),
-    message: t.String(),
-    error: t.String(),
+    error: t.Object({ code: t.Number() }),
   }),
   'price.requestBody': t.Object({
     name: t.String(),

@@ -11,13 +11,11 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         const newPrice = new MongoPricingItemModel(body);
         const savedPrice = await newPrice.save();
         set.status = 200;
-        return { success: true, price: savedPrice };
+        return { data: savedPrice };
       } catch (error: any) {
         set.status = 500;
         return {
-          success: false,
-          message: 'Failed to create pricing item',
-          error: error.message,
+          error: 500,
         };
       }
     },
@@ -39,14 +37,10 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
       try {
         const prices = await MongoPricingItemModel.find({});
         set.status = 200;
-        return { success: true, prices };
+        return { data: prices };
       } catch (error: any) {
         set.status = 500;
-        return {
-          success: false,
-          message: 'Failed to fetch pricing items',
-          error: error.message,
-        };
+        return { error: { code: 500 } };
       }
     },
     {
@@ -69,16 +63,12 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         console.log('price', price);
         if (!price) {
           set.status = 404;
-          return { success: false, message: 'Pricing item not found' };
+          return { error: { code: 404 } };
         }
-        return { success: true, price };
+        return { data: price };
       } catch (error: any) {
         set.status = 500;
-        return {
-          success: false,
-          message: 'Failed to fetch pricing item',
-          error: error.message,
-        };
+        return { error: { code: 500 } };
       }
     },
     {
@@ -104,16 +94,12 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         const deletedPrice = await MongoPricingItemModel.findByIdAndDelete(id);
         if (!deletedPrice) {
           set.status = 404;
-          return { success: false, message: 'Pricing item not found' };
+          return { error: { code: 404 } };
         }
         return { success: true, price: deletedPrice };
       } catch (error: any) {
         set.status = 500;
-        return {
-          success: false,
-          message: 'Failed to delete pricing item',
-          error: error.message,
-        };
+        return { error: { code: 500 } };
       }
     },
     {
