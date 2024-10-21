@@ -12,12 +12,13 @@ import {
   TooltipTrigger,
   Input,
   Button,
+  Loading,
 } from '@ce-lab-mgmt/shared-ui';
 import { usePricingTable } from '../../hooks/usePricingTable';
 
 import { InfoCircledIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
-import { PricingGroup } from '../../data/models/Pricing';
+import { PricingGroup } from '../../domain/entity/pricingTableItem';
 
 // interface Test {
 //   test_name: string;
@@ -1252,10 +1253,10 @@ import { PricingGroup } from '../../data/models/Pricing';
 // ];
 
 const PricingPage: FC = () => {
-  const { transformedData, loading } = usePricingTable();
+  const { data, loading } = usePricingTable();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredData, setFilteredData] = useState(transformedData);
+  const [filteredData, setFilteredData] = useState(data);
   // const [filterExtraData, setFilterExtraData] = useState(extraTestData);
   // const [filterRailwaySleepersData, setFilterRailwaySleepersData] = useState(
   //   railwaySleepersTestData
@@ -1263,12 +1264,12 @@ const PricingPage: FC = () => {
   const [isFiltered, setIsFiltered] = useState(false);
 
   useEffect(() => {
-    setFilteredData(transformedData);
-  }, [transformedData]);
+    setFilteredData(data);
+  }, [data]);
 
   const handleSearch = () => {
     if (!searchTerm) {
-      setFilteredData(transformedData);
+      setFilteredData(data);
       // setFilterExtraData(extraTestData);
       // setFilterRailwaySleepersData(railwaySleepersTestData);
       setIsFiltered(false);
@@ -1332,7 +1333,7 @@ const PricingPage: FC = () => {
     //   });
 
     // Filter each dataset
-    const newFilteredData = filterData(transformedData);
+    const newFilteredData = filterData(data);
     // const newFilterExtraData = filterData(extraTestData);
     // const newFilterRailwaySleepersData = filterRailwaySleepers(
     //   railwaySleepersTestData
@@ -1343,6 +1344,14 @@ const PricingPage: FC = () => {
     // setFilterRailwaySleepersData(newFilterRailwaySleepersData);
     setIsFiltered(true);
   };
+
+  if (loading) {
+    return (
+      <div className="w-full h-[50dvh] flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
   const RenderPricingTable: FC<{ dataList: PricingGroup[] }> = ({
     dataList,
@@ -1543,7 +1552,7 @@ const PricingPage: FC = () => {
           onChange={(e) => {
             setSearchTerm(e.target.value);
             if (!e.target.value) {
-              setFilteredData(transformedData);
+              setFilteredData(data);
             }
           }}
           className="mb-4 rounded-r-none"
@@ -1586,7 +1595,7 @@ const PricingPage: FC = () => {
               ศูนย์ทดสอบวัสดุขอสงวนสิทธ์ไม่ทำการทดสอบให้จนกว่าผู้ขอใช้บริการได้ชำระค่าทดสอบเต็มจพนวนเสียก่อน
             </li>
           </ol>
-          <p>ราคาค่าทดสอบเพิ่มเติม</p>
+          {/* <p>ราคาค่าทดสอบเพิ่มเติม</p> */}
         </>
       )}
 
