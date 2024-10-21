@@ -1,6 +1,6 @@
 import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
 import { RawData } from '../models/rawData';
-import { api } from '../adapter/axios';
+import { api } from '../axios/api';
 import { AxiosError } from 'axios';
 
 export default async function getAllRawData(): Promise<

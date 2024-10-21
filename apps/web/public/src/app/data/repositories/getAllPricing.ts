@@ -1,5 +1,5 @@
 import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
-import { api } from '../adapter/axios';
+import { api } from '../axios/api';
 import { AxiosError } from 'axios';
 import { PricingApiResponse } from '../models/Pricing';
 
