@@ -1,5 +1,5 @@
 import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
-import { api } from '../../axios/api';
+import { api } from '../../adapter/axios';
 import { RequestReservationRequest } from '../../models/request_reservation/request';
 import { RequestReservationResponse } from '../../models/request_reservation/response';
 import { AxiosError } from 'axios';
