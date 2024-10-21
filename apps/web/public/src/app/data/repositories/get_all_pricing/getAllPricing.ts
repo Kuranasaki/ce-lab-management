@@ -1,14 +1,12 @@
-import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
-import { api } from '../axios/api';
+import { BaseResponse, PricingItem } from '@ce-lab-mgmt/api-interfaces';
+import { api } from '../../adapter/axios';
 import { AxiosError } from 'axios';
-import { PricingItem } from '../models/Pricing';
 
 export default async function getAllPricing(): Promise<
   BaseResponse<PricingItem[]>
 > {
   try {
     const response = await api.get<BaseResponse<PricingItem[]>>('/pricing');
-
     return response.data;
 
     // return response.data;

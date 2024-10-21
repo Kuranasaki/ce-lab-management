@@ -3,7 +3,7 @@ import {
   RequestReservationForm,
   RequestReservationResponse,
 } from '@ce-lab-mgmt/api-interfaces';
-import { api } from '../../axios/api';
+import { api } from '../../adapter/axios';
 import { AxiosError } from 'axios';
 
 export default async function postRequestReservationRepository(
