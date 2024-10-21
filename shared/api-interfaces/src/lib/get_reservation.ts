@@ -4,8 +4,8 @@ const TestItemSchema = t.Object({
     testID: t.String(),
     testName: t.String(),
     testAmount: t.Number(),
-    testPrice: t.Number(),
     testPricePerUnit: t.Number(),
+    testUnit: t.String(),
     testDetails: t.Optional(t.String()),
     testNote: t.Optional(t.String()),
 });
@@ -25,6 +25,7 @@ const OrganizationInfoSchema = t.Object({
 });
 
 const GetReservationSchema = t.Object({
+    reservationID: t.String(),
     orgInfo: OrganizationInfoSchema,
     testInfo: TestInfoSchema,
     Status: t.Enum({
@@ -33,6 +34,7 @@ const GetReservationSchema = t.Object({
         Success: 'success',
         Canceled: 'canceled',
     }),
+    totalPrice: t.Number(),
     CreatedOn: t.Date(),
 });
 

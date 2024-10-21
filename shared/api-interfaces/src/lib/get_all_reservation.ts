@@ -1,6 +1,6 @@
 import { t } from 'elysia';
 
-const GetAllReservationSchema = t.Object({
+const ReservationSchema = t.Object({
     reservationID: t.String(),
     Status: t.Enum({
         Pending: 'pending',
@@ -10,6 +10,9 @@ const GetAllReservationSchema = t.Object({
     }),
     testType: t.String(),
     CreatedOn: t.Date(),
+    totalPrice: t.Number(),
 });
 
-export { GetAllReservationSchema }
+const GetAllReservationSchema = t.Array(ReservationSchema);
+
+export { GetAllReservationSchema };
