@@ -1,7 +1,11 @@
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
 import PricingTableItem from '../entity/pricingTableItem';
 import { BaseResponse, PricingItem } from '@ce-lab-mgmt/api-interfaces';
-import { PricingGroup, SubTest, Test } from '../../data/models/Pricing';
+import {
+  PricingGroup,
+  SubTest,
+  Test,
+} from '../../domain/entity/pricingTableItem';
 
 export default async function mapper(
   rawData: BaseResponse<PricingItem[]>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import { PricingGroup } from '../data/models/Pricing';
+import { PricingGroup } from '../domain/entity/pricingTableItem';
 import getPricingTable from '../domain/usecase/getPricingTable';
 
 export function usePricingTable() {

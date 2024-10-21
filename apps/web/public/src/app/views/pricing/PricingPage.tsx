@@ -18,7 +18,7 @@ import { usePricingTable } from '../../hooks/usePricingTable';
 
 import { InfoCircledIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
-import { PricingGroup } from '../../data/models/Pricing';
+import { PricingGroup } from '../../domain/entity/pricingTableItem';
 
 // interface Test {
 //   test_name: string;
