@@ -1,4 +1,4 @@
-import { PricingItem } from '@ce-lab-mgmt/api-interfaces';
+export { PricingItem } from '@ce-lab-mgmt/api-interfaces';
 
 export interface Test {
   test_name: string;
@@ -21,10 +21,3 @@ export interface PricingGroup {
   note?: string; // Optional note for the category
   tests: Test[]; // Array of tests for this category
 }
-
-export interface PricingApiResponse {
-  success: boolean;
-  prices: PricingItem[];
-}
-
-export { PricingItem };

@@ -1,13 +1,13 @@
 import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
 import { api } from '../axios/api';
 import { AxiosError } from 'axios';
-import { PricingApiResponse } from '../models/Pricing';
+import { PricingItem } from '../models/Pricing';
 
 export default async function getAllPricing(): Promise<
-  PricingApiResponse | BaseResponse<PricingApiResponse>
+  BaseResponse<PricingItem[]>
 > {
   try {
-    const response = await api.get<PricingApiResponse>('/pricing');
+    const response = await api.get<BaseResponse<PricingItem[]>>('/pricing');
 
     return response.data;
 
