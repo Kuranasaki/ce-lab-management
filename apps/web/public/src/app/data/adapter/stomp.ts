@@ -39,7 +39,8 @@ export async function sendToQueue<T>(
       clearTimeout(timeout);
 
       client.publish({
-        destination: `/${queue}`,
+        destination: `/queue/
+        ${queue}`,
         body: JSON.stringify(data),
         headers: {
           persistent: 'true',
