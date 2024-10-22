@@ -30,19 +30,19 @@ export interface RequestReservationResponse {
 
 import { t } from 'elysia';
 
-const TestItemSchema = t.Object({
+export const TestItemSchema = t.Object({
   testID: t.String(),
   testAmount: t.Number(),
   testDetails: t.Optional(t.String()),
   testNote: t.Optional(t.String()),
 });
 
-const TestInfoSchema = t.Object({
+export const TestInfoSchema = t.Object({
   testType: t.String(),
   testList: t.Array(TestItemSchema),
 });
 
-const OrganizationInfoSchema = t.Object({
+export const OrganizationInfoSchema = t.Object({
   orgName: t.String(),
   orgProjectName: t.Optional(t.String()),
   orgAddress: t.String(),
@@ -51,7 +51,7 @@ const OrganizationInfoSchema = t.Object({
   orgFax: t.Optional(t.String()),
 });
 
-const RequestReservationFormSchema = t.Object({
+export const RequestReservationFormSchema = t.Object({
   orgInfo: OrganizationInfoSchema,
   testInfo: TestInfoSchema,
 });
