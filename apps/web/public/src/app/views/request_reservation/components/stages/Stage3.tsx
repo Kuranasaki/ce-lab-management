@@ -11,7 +11,6 @@ import { PricingListProps } from '../../../../domain/entity/request_reservation/
 import {
   OrgInfoFormReturned,
   TestListFormReturned,
-  TestListFormType,
 } from '../../../../domain/entity/request_reservation/reqReservRequestFormEntity';
 
 export default function Stage3({
@@ -25,10 +24,16 @@ export default function Stage3({
   testListForm: TestListFormReturned;
   pricingList: PricingListProps;
   setStage: (stage: number) => void;
-  post: (data: TestListFormReturned) => void;
+  post: ({
+    orgForm,
+    testListForm,
+  }: {
+    orgForm: OrgInfoFormReturned;
+    testListForm: TestListFormReturned;
+  }) => void;
 }) {
   function handleSubmit() {
-    post(testListForm);
+    post({ orgForm, testListForm });
   }
 
   return (
