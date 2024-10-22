@@ -14,7 +14,10 @@ export default function reqReservRequestMapper({
   return {
     orgInfo: {
       orgName: orgForm.getValues('orgName'),
-      orgProjectName: orgForm.getValues('orgProjectName'),
+      orgProjectName:
+        orgForm.getValues('orgProjectName').length > 0
+          ? orgForm.getValues('orgProjectName')
+          : undefined,
       orgAddress: orgForm.getValues('orgAddress'),
       orgEmail: orgForm.getValues('orgEmail'),
       orgPhone: orgForm.getValues('orgPhone'),

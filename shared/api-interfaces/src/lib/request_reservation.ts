@@ -5,7 +5,7 @@ export interface RequestReservationForm {
 
 export interface OrganizationInfo {
   orgName: string;
-  orgProjectName: string;
+  orgProjectName?: string;
   orgAddress: string;
   orgEmail: string;
   orgPhone: string;
@@ -44,11 +44,11 @@ const TestInfoSchema = t.Object({
 
 const OrganizationInfoSchema = t.Object({
   orgName: t.String(),
-  orgProjectName: t.String(),
+  orgProjectName: t.Optional(t.String()),
   orgAddress: t.String(),
   orgEmail: t.String(),
   orgPhone: t.String(),
-  orgFax: t.String(),
+  orgFax: t.Optional(t.String()),
 });
 
 const RequestReservationFormSchema = t.Object({
