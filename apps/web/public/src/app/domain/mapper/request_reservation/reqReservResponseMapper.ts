@@ -1,8 +1,11 @@
+import {
+  BaseResponse,
+  RequestReservationResponse,
+} from '@ce-lab-mgmt/api-interfaces';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
-import { RequestReservationResponse } from '../../../data/models/request_reservation/response';
 
 export default function reqReservResponseMapper(
-  data: RequestReservationResponse
+  data: BaseResponse<RequestReservationResponse>
 ): ToastEntity {
-  return ToastEntity.fromCode(data['code']);
+  return ToastEntity.fromCode(data.data?.code ?? data.error?.code ?? 500);
 }

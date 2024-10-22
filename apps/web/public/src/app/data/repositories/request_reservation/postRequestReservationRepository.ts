@@ -11,6 +11,7 @@ export default async function postRequestReservationRepository(
   data: RequestReservationForm
 ): Promise<BaseResponse<RequestReservationResponse>> {
   try {
+    console.log(data);
     const rabbitResult = await sendToQueue('reservation', data);
 
     if (rabbitResult.code !== 200) {

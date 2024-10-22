@@ -9,7 +9,7 @@ export interface OrganizationInfo {
   orgAddress: string;
   orgEmail: string;
   orgPhone: string;
-  orgFax: string;
+  orgFax?: string;
 }
 
 export interface TestInfo {
