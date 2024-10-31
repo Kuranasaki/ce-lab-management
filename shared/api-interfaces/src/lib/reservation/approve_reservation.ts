@@ -6,6 +6,7 @@ Request:
   - No request body
 
 -> Change status to Processing
+-> Generate experiment for each test in reservation (Copy from test form template)
 
 Response:
   - success
