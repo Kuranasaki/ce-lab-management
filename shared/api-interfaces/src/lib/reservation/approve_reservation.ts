@@ -1,4 +1,4 @@
-import { GetReservationSchema } from './get_reservation';
+import { t } from 'elysia';
 
 /*
 Request: 
@@ -13,4 +13,12 @@ Response:
     - statusCode: 200
     - body: GetReservationSchema
 */
-export const approveReservationResponseSchema = GetReservationSchema;
+export const approveReservationResponseSchema = t.Object({
+  id: t.String(),
+  Status: t.Enum({
+    Pending: 'pending',
+    Processing: 'processing',
+    Success: 'success',
+    Canceled: 'canceled',
+  }),
+});
