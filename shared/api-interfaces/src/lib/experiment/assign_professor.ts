@@ -12,10 +12,11 @@ export const AssignProfessorRequestSchema = t.Object({
 
 /*
 Response
-- Status: 200
-- Body: AssignProfessorResponseSchema
+- Success -> Status: 200, Body: AssignProfessorResponseSchema
+- No Professor Found -> Status: 404
  */
 export const AssignProfessorResponseSchema = t.Object({
   assignedProfessorID: t.String(),
-  // Other fields to be added (Experiment info)
+  assignedProfessorName: t.String(),
+  experimentID: t.String(),
 });
