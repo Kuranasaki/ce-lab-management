@@ -16,7 +16,7 @@ export const UpdateTestFormRequestSchema = t.Object({
 export const UpdateTestFormResponseSchema = t.Object({
   id: t.String(),
   name: t.String(),
-  oneDriveURL: t.String(),
+  templateFileURL: t.String(),
   dataAreaLabelTopLeft: t.String(),
   dataAreaLabelBottomRight: t.String(),
 });

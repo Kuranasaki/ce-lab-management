@@ -13,7 +13,7 @@ Response
 export const GetOneTestFormResponseSchema = t.Object({
   id: t.String(),
   name: t.String(),
-  oneDriveURL: t.String(),
+  templateFileURL: t.String(),
   dataAreaLabelTopLeft: t.String(),
   dataAreaLabelBottomRight: t.String(),
 });
