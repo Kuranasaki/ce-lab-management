@@ -15,20 +15,16 @@ Response
 - Body: GetCertificateResponseSchema
  */
 
-export const GetCertificateNotFoundResponse = t.Object({
-  message: t.String().default('Certificate not found'),
-});
-/*
-Response
-- Status: 404
-- Body: GetCertificateNotFoundResponse
- */
+export enum GetCertificateResponseMessage {
+  NotFound = 'Certificate not found',
+  InternalServerError = 'Internal server error',
+}
 
-export const GetCertificateInternalServerErrorResponse = t.Object({
-  message: t.String().default('Internal server error'),
+export const GetCertificateErrorResponse = t.Object({
+  message: t.Enum(GetCertificateResponseMessage),
 });
 /*
 Response
-- Status: 500
-- Body: GetCertificateInternalServerErrorResponse
+- Status: 404 or 500
+- Body: GetCertificateErrorResponse
 */
