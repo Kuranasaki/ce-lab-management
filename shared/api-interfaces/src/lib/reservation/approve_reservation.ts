@@ -2,7 +2,7 @@ import { t } from 'elysia';
 
 /*
 Request: 
-  - POST /reservation/approve/:reservationID
+  - POST /reservations/approve/:reservationID
   - No request body
 
 -> Change status to Processing
