@@ -32,6 +32,79 @@ export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
     pricing: t.Array(PricingSchema),
     description: t.String(),
   }),
+  // {
+  //   "name": "Fire-Rating Doors",
+  //   "tags": {
+  //     "type": "ทดสอบทนไฟ"
+  //   },
+  //   "pricing": [
+  //     {
+  //       "price": 49000,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 30,
+  //         "unit": "นาที"
+  //       }
+  //     },
+  //     {
+  //       "price": 52500,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 60,
+  //         "unit": "นาที"
+  //       }
+  //     },
+  //     {
+  //       "price": 56000,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 90,
+  //         "unit": "นาที"
+  //       }
+  //     },
+  //     {
+  //       "price": 59500,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 120,
+  //         "unit": "นาที"
+  //       }
+  //     },
+  //     {
+  //       "price": 63000,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 150,
+  //         "unit": "นาที"
+  //       }
+  //     },
+  //     {
+  //       "price": 66500,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 180,
+  //         "unit": "นาที"
+  //       }
+  //     },
+  //     {
+  //       "price": 70000,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 210,
+  //         "unit": "นาที"
+  //       }
+  //     },
+  //     {
+  //       "price": 73500,
+  //       "pricingUnit": "บาท",
+  //       "perUnit": {
+  //         "quantity": 240,
+  //         "unit": "นาที"
+  //       }
+  //     }
+  //   ],
+  //   "description": ""
+  // }
 });
 
 export default MongoPricingItemModel;
