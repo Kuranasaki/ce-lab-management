@@ -12,7 +12,10 @@ import {
 } from '@ce-lab-mgmt/shared-ui';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Dialog } from '@radix-ui/react-dialog';
-import { TestListForm } from '../../../../hooks/request_reservation/useTestListForm';
+import {
+  // TestListForm,
+  useTestListForm,
+} from '../../../../hooks/request_reservation/useTestListForm';
 import AddEditItemDialog from './AddEditItemDialog';
 import { useEffect, useState } from 'react';
 import { useTestItemForm } from '../../../../hooks/request_reservation/useTestItemForm';
@@ -21,17 +24,20 @@ import TestListTableItemProps from '../../../../domain/entity/view_reservation_d
 import TestList from '../../../view_reservation_detail/components/TestList';
 import { ReservationType } from '../../../../data/models/Reservation';
 import { PricingListProps } from '../../../../domain/entity/request_reservation/pricingListProps';
+import { PricingType } from '../../../../domain/entity/view_pricing/pricingTableItem';
 import test from 'node:test';
 
 export default function Stage2({
-  testListForm,
+  // testListForm,
   pricingList,
   setStage,
 }: {
-  testListForm: TestListForm;
+  // testListForm: TestListForm;
   pricingList: PricingListProps;
   setStage: (stage: number) => void;
 }) {
+  const { testListForm } = useTestListForm();
+
   const [open, setOpen] = useState(false);
   const [editIndex, setEditIndex] = useState(-1);
   const { testItemForm } = useTestItemForm();
