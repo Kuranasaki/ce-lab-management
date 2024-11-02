@@ -8,78 +8,53 @@ import {
 export default function pricingListMapper(
   data: PricingItem[]
 ): PricingListProps {
-  // const categoryTestList = new PricingListProps({
-  //   categoryTestList: new Map<string, CategoryTestList>([
-  //     [
-  //       '1',
-  //       new CategoryTestList({
-  //         testItems: new Map<string, TestItem[]>([
-  //           [
-  //             'Cement test',
-  //             [
-  //               new TestItem({
-  //                 id: '6714b4c54314e4e43a99134c',
-  //                 subName: 'Fineness test',
-  //                 pricePerUnit: 2000,
-  //                 unit: 'ตัวอย่าง',
-  //               }),
-  //               new TestItem({
-  //                 id: '6714b8a842898021fa53acd2',
-  //                 subName: 'Cement test',
-  //                 pricePerUnit: 3000,
-  //                 unit: 'ตัวอย่าง',
-  //               }),
-  //               new TestItem({
-  //                 id: '6714bb8a954669ac0362dfd9',
-  //                 subName: 'Compressive strength of mortar test',
-  //                 pricePerUnit: 900,
-  //                 unit: 'ตัวอย่าง',
-  //               }),
-  //               new TestItem({
-  //                 id: '671540ab26151dbead007a10',
-  //                 subName: 'Tensile strength test',
-  //                 pricePerUnit: 900,
-  //                 unit: 'ตัวอย่าง',
-  //               }),
-  //             ],
-  //           ],
-  //         ]),
-  //       }),
-  //     ],
-  //   ]),
-  // });
   function mapTests(data: PricingItem[]): PricingListProps {
-    const testItemsMap = new Map<string, TestItem[]>();
+    const testItemsMap = [
+      new Map<string, TestItem[]>(),
+      new Map<string, TestItem[]>(),
+      new Map<string, TestItem[]>(),
+    ] as Map<string, TestItem[]>[];
 
     data.forEach((test) => {
-      const category = test.tags.category || 'Uncategorized';
-      const pricingInfo = test.pricing[0]; // Assuming only one pricing entry per test
+      const indexType =
+        test.tags.type === 'ทดสอบวัสดุ'
+          ? 0
+          : test.tags.type === 'ทดสอบเทียบ'
+          ? 1
+          : 2;
+      const category = test.tags.category || 'อื่น ๆ';
+      const pricingInfo = test.pricing;
 
       const testItem = new TestItem({
         id: test.id,
         subName: test.name,
-        pricePerUnit: pricingInfo.price,
-        unit: pricingInfo.perUnit.unit,
+        prices: pricingInfo.map((price) => ({
+          price: price.price,
+          unit: price.perUnit.unit,
+          amount: price.perUnit.quantity,
+        })),
       });
 
-      if (!testItemsMap.has(category)) {
-        testItemsMap.set(category, []);
+      if (!testItemsMap[indexType].has(category)) {
+        testItemsMap[indexType].set(category, []);
       }
-      testItemsMap.get(category)?.push(testItem);
+      testItemsMap[indexType].get(category)?.push(testItem);
     });
 
     return new PricingListProps({
-      categoryTestList: new Map<string, CategoryTestList>([
-        [
-          '1',
-          new CategoryTestList({
-            testItems: testItemsMap,
-          }),
-        ],
-      ]),
+      categoryTestList: new Map<string, CategoryTestList>(
+        testItemsMap
+          .map(
+            (testItems, idx) =>
+              [(idx + 1).toString(), new CategoryTestList({ testItems })] as [
+                string,
+                CategoryTestList
+              ]
+          )
+          .filter((testItem) => testItem[1].testItems.size > 0)
+      ),
     });
   }
-  // console.log(mapTests(data));
   const categoryTestList = mapTests(data);
   return categoryTestList;
 }

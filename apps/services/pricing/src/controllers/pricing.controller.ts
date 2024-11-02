@@ -36,8 +36,12 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
     async ({ set }) => {
       try {
         const prices = await MongoPricingItemModel.find({});
+        const formettedPrices = prices.map((p) => ({
+          ...p._doc,
+          id: p._id.toString(),
+        }));
         set.status = 200;
-        return { data: prices };
+        return { data: formettedPrices };
       } catch (error: any) {
         set.status = 500;
         return { error: { code: 500 } };
@@ -60,12 +64,15 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
     async ({ params: { id }, set }) => {
       try {
         const price = await MongoPricingItemModel.findById({ _id: id });
-        console.log('price', price);
         if (!price) {
           set.status = 404;
           return { error: { code: 404 } };
         }
-        return { data: price };
+        const formettedPrice = {
+          ...price._doc,
+          id: price._id.toString(),
+        };
+        return { data: formettedPrice };
       } catch (error: any) {
         set.status = 500;
         return { error: { code: 500 } };

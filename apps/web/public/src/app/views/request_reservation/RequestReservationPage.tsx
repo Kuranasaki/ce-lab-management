@@ -46,7 +46,7 @@ export default function RequestReservationPage() {
           1: <Stage1 orgForm={orgForm} setStage={setStage} />,
           2: (
             <Stage2
-              // testListForm={testListForm}
+              testListForm={testListForm}
               pricingList={pricingList}
               setStage={setStage}
             />

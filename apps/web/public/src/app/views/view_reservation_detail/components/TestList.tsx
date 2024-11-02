@@ -108,7 +108,7 @@ export default function TestList({
             >
               <div className="flex gap-4 justify-end">
                 <p className="font-bold">ราคารวม</p>
-                <p>{data.totalPrice.toFixed(2)} บาท</p>
+                <p>{Number(data.totalPrice.toFixed(2)).toLocaleString()} บาท</p>
               </div>
             </TableCell>
           </TableRow>
