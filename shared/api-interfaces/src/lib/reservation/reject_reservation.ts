@@ -2,18 +2,17 @@ import { t } from 'elysia';
 
 /*
 Request: 
-  - POST /reservations/approve/:reservationID
+  - POST /reservations/reject/:reservationID
   - No request body
 
--> Change status to Processing
--> Generate experiment for each test in reservation (Copy from test form template)
+-> Change status to Canceled
 
 Response:
   - success
     - statusCode: 200
-    - body: GetReservationSchema
+    - body: RejectReservationResponseSchema
 */
-export const ApproveReservationResponseSchema = t.Object({
+export const RejectReservationResponseSchema = t.Object({
   id: t.String(),
   Status: t.Enum({
     Pending: 'pending',
