@@ -13,6 +13,13 @@ import {
 
 // export { PricingItemDocument as IPricing };
 
+const body = t.Object({
+  name: t.String(),
+  tags: TagsSchema,
+  pricing: t.Array(PricingSchema),
+  description: t.String(),
+});
+
 export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
   'prices.success': t.Object({
     data: t.Array(PricingItemElysiaSchema),
@@ -26,12 +33,9 @@ export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
   'price.error': t.Object({
     error: t.Object({ code: t.Number() }),
   }),
-  'price.requestBody': t.Object({
-    name: t.String(),
-    tags: TagsSchema,
-    pricing: t.Array(PricingSchema),
-    description: t.String(),
-  }),
+  'price.requestBody': body,
+  'price.requestBodyArray': t.Array(body),
+
   // {
   //   "name": "Fire-Rating Doors",
   //   "tags": {

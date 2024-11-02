@@ -31,6 +31,47 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
       },
     }
   )
+  .post(
+    '/addMany',
+    async ({ body, set }) => {
+      try {
+        // Ensure body is an array
+        if (!Array.isArray(body)) {
+          set.status = 400;
+          return { code: 400 };
+        }
+
+        const newPrices = body.map(
+          (priceData) => new MongoPricingItemModel(priceData)
+        );
+
+        const savedPrices = await MongoPricingItemModel.insertMany(newPrices);
+
+        set.status = 200;
+        return { data: savedPrices };
+      } catch (error: any) {
+        console.error(error);
+        set.status = 500;
+        return {
+          error: 'Failed to add pricing items',
+          details: error.message,
+        };
+      }
+    },
+    {
+      detail: {
+        tags: ['Pricing'],
+        description: 'Post new pricing in bulk',
+      },
+      body: 'price.requestBodyArray', // The request body should be defined as an array of price objects
+      response: {
+        200: 'prices.success',
+        400: 'price.error',
+        500: 'price.error',
+      },
+    }
+  )
+
   .get(
     '/',
     async ({ set }) => {
