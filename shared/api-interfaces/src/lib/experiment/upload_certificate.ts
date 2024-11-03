@@ -19,8 +19,6 @@ export const UploadCertificateResponseSchema = t.Object({
   id: t.String(),
   reservationID: t.String(),
   testItemID: t.String(),
-  assignedProfessorID: t.String(),
-  testFormURL: t.String(),
-  certificateURL: t.String(),
-  isDone: t.Boolean(),
+  certificateURL: t.String(), // Should never be null at this point
+  certificateUploadedAt: t.Date(),
 });

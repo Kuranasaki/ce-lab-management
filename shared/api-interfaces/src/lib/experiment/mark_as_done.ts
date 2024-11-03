@@ -17,8 +17,6 @@ export const MarkAsDoneResponseSchema = t.Object({
   id: t.String(),
   reservationID: t.String(),
   testItemID: t.String(),
-  assignedProfessorID: t.String(),
-  testFormURL: t.String(),
-  certificateURL: t.Nullable(t.String()),
-  isDone: t.Boolean(),
+  testFormURL: t.String(), // Should never be null at this point
+  markedAsDone: t.Boolean(),
 });
