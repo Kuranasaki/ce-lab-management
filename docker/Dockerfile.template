@@ -28,8 +28,10 @@ RUN bun i --production
 
 FROM service-base AS svc
 ARG SERVICE_NAME
-COPY --from=builder /app/dist/apps/services/${SERVICE_NAME} .
-CMD ["bun", "run", "start"]
+COPY --from=builder /app/dist/apps/services/${SERVICE_NAME}/* .
+# CMD ["bun", "run", "start"]
+CMD ["bun", "main.js"]
+# ENTRYPOINT [ "executable" ]
 
 
 FROM nginx:alpine AS web
