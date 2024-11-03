@@ -272,7 +272,7 @@ const renderTestDetails = (testSubDetails: TestItem) => (
       <p>{testSubDetails.prices[0].price} บาท</p>
     </div>
     <div className="flex flex-row gap-2">
-      <p className="font-bold">จำนวน:</p>
+      <p className="font-bold">จำนวนต่อหน่วย:</p>
       <p>{testSubDetails.prices[0].amount}</p>
       <p>{testSubDetails.prices[0].unit}</p>
     </div>
