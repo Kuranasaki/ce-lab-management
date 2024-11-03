@@ -11,8 +11,10 @@ import {
 
 // MongoDB connection
 const MONGO_URL = process.env.RESV_MONGO_URI || 'mongodb://localhost:27017'
+console.log(MONGO_URL)
 const MONGO_DB = process.env.MONGO_DB || 'ce-lab'
 const AMQP_URL = process.env.AMQP_URL || 'amqp://localhost'
+console.log(AMQP_URL)
 
 class ReservationService {
   private db!: MongoClient
