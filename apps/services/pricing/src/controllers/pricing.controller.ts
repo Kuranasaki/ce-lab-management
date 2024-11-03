@@ -1,6 +1,6 @@
-import { Elysia, t } from 'elysia';
-import { PricingDataSchema } from '@ce-lab-mgmt/api-interfaces';
+import { Elysia, Static, t } from 'elysia';
 import MongoPricingItemModel, { PricingModel } from '../model/pricing';
+import { PricingItemSchema as PricingItemElysiaSchema } from '@ce-lab-mgmt/api-interfaces';
 
 export const PricingController = new Elysia({ prefix: '/pricing' })
   .use(PricingModel)
@@ -10,12 +10,19 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
       try {
         const newPrice = new MongoPricingItemModel(body);
         const savedPrice = await newPrice.save();
+        const formattedPrice: Static<typeof PricingItemElysiaSchema> = {
+          name: savedPrice.name,
+          id: (savedPrice._id as string).toString(),
+          tags: savedPrice.tags,
+          pricing: savedPrice.pricing,
+          description: savedPrice.description,
+        };
         set.status = 200;
-        return { data: savedPrice };
+        return { data: formattedPrice };
       } catch (error: any) {
         set.status = 500;
         return {
-          error: 500,
+          error: { code: 500 },
         };
       }
     },
@@ -38,7 +45,7 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         // Ensure body is an array
         if (!Array.isArray(body)) {
           set.status = 400;
-          return { code: 400 };
+          return { error: { code: 400 } };
         }
 
         const newPrices = body.map(
@@ -47,14 +54,22 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
 
         const savedPrices = await MongoPricingItemModel.insertMany(newPrices);
 
+        const formattedPrices: Static<typeof PricingItemElysiaSchema>[] =
+          savedPrices.map((p) => ({
+            name: p.name,
+            id: (p._id as string).toString(),
+            tags: p.tags,
+            pricing: p.pricing,
+            description: p.description,
+          }));
+
         set.status = 200;
-        return { data: savedPrices };
+        return { data: formattedPrices };
       } catch (error: any) {
         console.error(error);
         set.status = 500;
         return {
-          error: 'Failed to add pricing items',
-          details: error.message,
+          error: { code: 500 },
         };
       }
     },
@@ -77,8 +92,16 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
     async ({ set }) => {
       try {
         const prices = await MongoPricingItemModel.find({});
+        const formattedPrices: Static<typeof PricingItemElysiaSchema>[] =
+          prices.map((p) => ({
+            name: p.name,
+            id: (p._id as string).toString(),
+            tags: p.tags,
+            pricing: p.pricing,
+            description: p.description,
+          }));
         set.status = 200;
-        return { data: prices };
+        return { data: formattedPrices };
       } catch (error: any) {
         set.status = 500;
         return { error: { code: 500 } };
@@ -106,7 +129,14 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
           set.status = 404;
           return { error: { code: 404 } };
         }
-        return { data: price };
+        const formattedPrice: Static<typeof PricingItemElysiaSchema> = {
+          name: price.name,
+          id: (price._id as string).toString(),
+          tags: price.tags,
+          pricing: price.pricing,
+          description: price.description,
+        };
+        return { data: formattedPrice };
       } catch (error: any) {
         set.status = 500;
         return { error: { code: 500 } };
@@ -137,7 +167,14 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
           set.status = 404;
           return { error: { code: 404 } };
         }
-        return { success: true, price: deletedPrice };
+        const formattedPrice: Static<typeof PricingItemElysiaSchema> = {
+          name: deletedPrice.name,
+          id: (deletedPrice._id as string).toString(),
+          tags: deletedPrice.tags,
+          pricing: deletedPrice.pricing,
+          description: deletedPrice.description,
+        };
+        return { data: formattedPrice };
       } catch (error: any) {
         set.status = 500;
         return { error: { code: 500 } };

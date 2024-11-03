@@ -78,7 +78,7 @@ const tagsSchema = new Schema<Tags>({
   type: { type: String, required: true },
 });
 
-const pricingItemSchema = new Schema<PricingItem>({
+const pricingItemSchema = new Schema({
   name: { type: String, required: true },
   tags: { type: tagsSchema, required: true },
   pricing: { type: [pricingSchema], required: true },
@@ -86,7 +86,9 @@ const pricingItemSchema = new Schema<PricingItem>({
 });
 
 // Mongoose model
-export interface PricingItemDocument extends PricingItem, Document {}
+export interface PricingItemDocument
+  extends PricingItem,
+    Omit<Document, 'id'> {}
 const MongoPricingItemModel = model<PricingItemDocument>(
   'PricingItem',
   pricingItemSchema
