@@ -1,38 +1,21 @@
 # Don't use oven/bun:latest in build stage or it fcked up
+ARG SERVICE_NAME
 FROM node:21.2.0 AS builder
 
 WORKDIR /app
 
 RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH="/root/.bun/bin:${PATH}"
+ENV PATH "/root/.bun/bin:${PATH}"
 
 WORKDIR /app
 
 COPY package.json bun.lockb ./
-COPY nx.json tsconfig.base.json ./
+COPY tsconfig.base.json ./
 
 RUN bun i
 
 COPY . .
-
-RUN ls
-
-RUN bunx nx run-many --target=build --all --verbose
-
-FROM oven/bun:1 AS service-base
-WORKDIR /app
-
-COPY package.json bun.lockb ./
-
-RUN bun i --production
-
-FROM service-base AS svc
-ARG SERVICE_NAME
-COPY --from=builder /app/dist/apps/services/${SERVICE_NAME}/* .
-# CMD ["bun", "run", "start"]
-CMD ["bun", "main.js"]
-# ENTRYPOINT [ "executable" ]
-
+RUN bunx nx run-many --target=build --projects=tag:type:web
 
 FROM nginx:alpine AS web
 COPY --from=builder /app/dist/apps/web/public-web /usr/share/nginx/html/public

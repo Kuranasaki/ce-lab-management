@@ -5,13 +5,35 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
+        "platform": "node",
         "outputPath": "dist/apps/services/reservation",
-        "main": "apps/services/prireservationcing/src/index.ts",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/services/reservation/src/index.ts",
         "tsConfig": "apps/services/reservation/tsconfig.json",
-        "clean": false
+        "assets": ["apps/services/reservation/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
       }
     },
     "bun-build": {
