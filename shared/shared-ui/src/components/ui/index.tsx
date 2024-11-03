@@ -14,3 +14,4 @@ export * from './dialog';
 export * from './loading';
 export * from './toast';
 export * from './toaster';
+export * from './card';
