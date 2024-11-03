@@ -1,3 +1,6 @@
+import { t } from 'elysia';
+import { TestItemSchema } from './reservation';
+
 export interface RequestReservationForm {
   orgInfo: OrganizationInfo;
   testInfo: TestInfo;
@@ -24,19 +27,6 @@ export interface TestItem {
   testNote?: string;
 }
 
-export interface RequestReservationResponse {
-  code: number;
-}
-
-import { t } from 'elysia';
-
-export const TestItemSchema = t.Object({
-  testID: t.String(),
-  testAmount: t.Number(),
-  testDetails: t.Optional(t.String()),
-  testNote: t.Optional(t.String()),
-});
-
 export const TestInfoSchema = t.Object({
   testType: t.String(),
   testList: t.Array(TestItemSchema),
@@ -51,7 +41,25 @@ export const OrganizationInfoSchema = t.Object({
   orgFax: t.Optional(t.String()),
 });
 
+/*
+Request
+- POST /reservation
+- Body: RequestReservationFormSchema
+- Header: authorization: Barear token
+*/
+
 export const RequestReservationFormSchema = t.Object({
   orgInfo: OrganizationInfoSchema,
   testInfo: TestInfoSchema,
 });
+
+export const ResponseReservationSchema = t.Object({
+  reservationId: t.String(),
+});
+
+/*
+Response
+- Success -> Status: 200, Body: ResponseReservationSchema
+- Missing Field -> Status: 400
+- Unauthorized -> Status: 401
+ */
