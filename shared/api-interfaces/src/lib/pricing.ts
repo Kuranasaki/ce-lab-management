@@ -83,8 +83,10 @@ const pricingItemSchema = new Schema<PricingItem>({
 });
 
 // Mongoose model
-export interface PricingItemDocument extends PricingItem, Document {}
-const MongoPricingItemModel = model<PricingItemDocument>('PricingItem', pricingItemSchema);
+export interface PricingItemDocument extends PricingItem, Document {
+  id: string;
+}
+const MongoPricingItemModel = model('PricingItem', pricingItemSchema);
 
 export {
   PricingUnit,

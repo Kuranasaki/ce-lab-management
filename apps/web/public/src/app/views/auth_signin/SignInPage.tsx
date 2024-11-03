@@ -1,55 +1,85 @@
-import React from 'react';
+import React, { FC, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Input } from '@ce-lab-mgmt/shared-ui';
+import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  ToastEntity,
+  useToast,
+} from '@ce-lab-mgmt/shared-ui';
 import { Icon } from '@iconify/react';
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import IMAGES from '../../../assets/images';
 
-const SignInPage: React.FC = () => {
+const SignInPage: FC = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { signInWithEmail, signInWithGoogle } = useAuth();
+
+  useEffect(() => {
+    [IMAGES.loginBg, IMAGES.signupBg].forEach((picture) => {
+      const img = new Image();
+      img.src = picture;
+    });
+  }, []);
 
   const formSchema = z.object({
     email: z.string().email({
-      message: "อีเมลไม่ถูกต้อง",
+      message: 'อีเมลไม่ถูกต้อง',
     }),
     password: z.string().min(8, {
-      message: "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร",
-    })
+      message: 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร',
+    }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-  })
+  });
 
   const handleSignIn = async (provider?: string) => {
     try {
-      switch (provider) {
-        case "google":
-          await signInWithGoogle();
-          break;
-        default:
-          await signInWithEmail(form.getValues().email, form.getValues().password);
-          break;
+      if (provider === 'google') {
+        await signInWithGoogle();
+      } else {
+        await signInWithEmail(
+          form.getValues().email,
+          form.getValues().password
+        );
       }
+
+      toast(
+        new ToastEntity('ยินดีต้อนรับ', 'ลงชื่อเข้าใช้สำเร็จแล้ว', 'success')
+      );
       navigate('/');
     } catch (error) {
       console.log('ไม่สามารถลงชื่อเข้าใช้ได้ กรุณาตรวจสอบข้อมูลของคุณ');
-      form.setError("root", { type: "manual", message: "ไม่สามารถลงชื่อเข้าใช้ได้ กรุณาตรวจสอบข้อมูลของคุณ" });
+      form.setError('root', {
+        type: 'manual',
+        message: 'ไม่สามารถลงชื่อเข้าใช้ได้ กรุณาตรวจสอบข้อมูลของคุณ',
+      });
     }
   };
 
   return (
-    <div className="flex max-w-screen-lg w-full h-[670px] bg-white shadow-md rounded-md m-24 overflow-clip">
-      <div className='flex flex-1 flex-col justify-center text-center items-center gap-10 px-28'>
+    <div className="flex max-w-screen-lg w-full h-[600px] bg-white shadow-md rounded-md m-24 overflow-clip">
+      <div className="flex flex-1 flex-col justify-center text-center items-center gap-10 px-28">
         <h2 className="text-slate-900">ลงชื่อเข้าใช้</h2>
-        <div className='flex flex-col gap-4 w-full'>
-          <p className='text-slate-500'>ลงชื่อเข้าใช้เพื่อจองการทดสอบของคุณ</p>
+        <div className="flex flex-col gap-4 w-full">
+          <p className="text-slate-500">ลงชื่อเข้าใช้เพื่อจองการทดสอบของคุณ</p>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(() => handleSignIn())} className="space-y-4">
-              <div className="space-y-2">
+            <form
+              onSubmit={form.handleSubmit(() => handleSignIn())}
+              className="space-y-4"
+            >
+              <div className="space-y-4">
                 <FormField
                   control={form.control}
                   name="email"
@@ -59,7 +89,13 @@ const SignInPage: React.FC = () => {
                       <FormControl>
                         <Input placeholder="" {...field} />
                       </FormControl>
-                      {error && <FormMessage className="text-error-500 text-sm">{error.message}</FormMessage>}
+                      {error && (
+                        <FormMessage className="text-error-500 text-sm">
+                          {error.message === 'Required'
+                            ? 'กรุณาระบุอีเมล'
+                            : error.message}
+                        </FormMessage>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -70,9 +106,13 @@ const SignInPage: React.FC = () => {
                     <FormItem className="flex flex-col items-start gap-1">
                       <FormLabel className="font-medium">รหัสผ่าน</FormLabel>
                       <FormControl>
-                        <Input placeholder="" {...field} />
+                        <Input placeholder="" {...field} type="password" />
                       </FormControl>
-                      {error && <FormMessage className="text-error-500 text-sm">{error.message}</FormMessage>}
+                      {error && (
+                        <FormMessage className="text-error-500 text-sm">
+                          {error.message}
+                        </FormMessage>
+                      )}
                     </FormItem>
                   )}
                 />
@@ -81,7 +121,9 @@ const SignInPage: React.FC = () => {
                 ลงชื่อเข้าใช้
               </Button>
               {form.formState.errors.root && (
-                <FormMessage className="text-error-500 text-sm">{form.formState.errors.root.message}</FormMessage>
+                <FormMessage className="text-error-500 text-sm">
+                  {form.formState.errors.root.message}
+                </FormMessage>
               )}
             </form>
           </Form>
@@ -92,21 +134,39 @@ const SignInPage: React.FC = () => {
             <div className="flex-1 h-px bg-slate-300" />
           </div>
 
-          <Button variant="outline" onClick={() => handleSignIn("google")} className="">
-            <Icon icon="logos:google-icon" className='size-4' />
+          <Button
+            variant="outline"
+            onClick={() => handleSignIn('google')}
+            className=""
+          >
+            <Icon icon="logos:google-icon" className="size-4" />
             ลงชื่อเข้าใช้ด้วย Google
           </Button>
         </div>
       </div>
 
-      <div className='text-white w-full max-w-96 flex flex-col justify-center text-center items-center gap-10 px-16 bg-blue-400 bg-opacity-70'>
-        <h2>ล็อกอิน</h2>
-        <p>สร้างบัญชีเพื่อจองการทดสอบ</p>
-        <Link to="/auth/signup">
-          <Button variant="default" className="bg-white text-primary-500 border border-primary-500 hover:bg-slate-100">
+      <div className="text-white w-full max-w-96 flex flex-col justify-center overflow-hidden relative text-center items-center gap-10 px-16  shadow-md">
+        <h2 className="z-20">ล็อกอิน</h2>
+        <p className="z-20">สร้างบัญชีเพื่อจองการทดสอบ</p>
+
+        <Link to="/auth/signup" className="z-20">
+          <Button
+            variant="default"
+            className="bg-white text-primary-500 border border-primary-500 hover:bg-slate-100"
+          >
             ลงทะเบียน
           </Button>
         </Link>
+        <img
+          src={IMAGES.loginBg}
+          alt=""
+          className="absolute z-10 w-full h-full object-cover"
+        />
+        <img
+          src={IMAGES.signupBg}
+          alt=""
+          className="absolute -z-10 w-full h-full object-cover"
+        />
       </div>
     </div>
   );
