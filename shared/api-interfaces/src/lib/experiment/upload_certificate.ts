@@ -17,8 +17,6 @@ export const UploadCertificateRequestSchema = t.Object({
 
 export const UploadCertificateResponseSchema = t.Object({
   id: t.String(),
-  reservationID: t.String(),
-  testItemID: t.String(),
   certificateURL: t.String(), // Should never be null at this point
   certificateUploadedAt: t.Date(),
 });

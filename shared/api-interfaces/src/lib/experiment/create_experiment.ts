@@ -13,11 +13,5 @@ export const CreateExperimentRequestSchema = t.Object({
 // You may change the response schema, it's not used in the frontend
 export const CreateExperimentResponseSchema = t.Object({
   id: t.String(),
-  reservationID: t.String(),
-  testItemID: t.String(),
-  assignedProfessorID: t.Nullable(t.String()),
   testFormURL: t.String(), // Copy from test-form template
-  markedAsDone: t.Boolean(),
-  certificateURL: t.Nullable(t.String()),
-  certificateUploadedAt: t.Nullable(t.Date()),
 });
