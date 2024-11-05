@@ -9,14 +9,33 @@ import { t } from 'elysia';
 export const UpdateTestFormRequestSchema = t.Object({
   name: t.Optional(t.String()),
   templateFile: t.Optional(t.File()),
-  dataAreaLabelTopLeft: t.Optional(t.String()), // Excel cell e.g. A12
-  dataAreaLabelBottomRight: t.Optional(t.String()),
+  dataSheetName: t.Optional(t.String()),
+  dataFirstRow: t.Optional(t.Number()),
+  dataLastRow: t.Optional(t.Number()),
+  dataColumn: t.Optional(
+    t.Array(
+      t.Object({
+        label: t.String(),
+        dataType: t.String(),
+        dataFirstColumn: t.Number(),
+        dataLastColumn: t.Number(),
+      })
+    )
+  ),
 });
 
 export const UpdateTestFormResponseSchema = t.Object({
-  id: t.String(),
   name: t.String(),
   templateFileURL: t.String(),
-  dataAreaLabelTopLeft: t.String(),
-  dataAreaLabelBottomRight: t.String(),
+  dataSheetName: t.String(),
+  dataFirstRow: t.Number(),
+  dataLastRow: t.Number(),
+  dataColumn: t.Array(
+    t.Object({
+      label: t.String(),
+      dataType: t.String(),
+      dataFirstColumn: t.Number(),
+      dataLastColumn: t.Number(),
+    })
+  ),
 });
