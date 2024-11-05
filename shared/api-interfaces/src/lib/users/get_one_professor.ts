@@ -14,4 +14,5 @@ export const GetOneProfessorResponseSchema = t.Object({
   id: t.String(),
   name: t.String(),
   email: t.String(),
+  // More fields maybe added here later
 });
