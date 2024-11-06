@@ -1,7 +1,11 @@
 import { BaseResponse } from '@ce-lab-mgmt/api-interfaces';
 import { api } from '../adapter/axios';
 import { AxiosError } from 'axios';
-import { Reservation } from '../models/Reservation';
+import {
+  Reservation,
+  ReservationStatus,
+  ReservationType,
+} from '../models/Reservation';
 
 export default async function getAllReservations(): Promise<
   BaseResponse<Reservation[]>
@@ -13,15 +17,15 @@ export default async function getAllReservations(): Promise<
       {
         id: 'm5gr84i8',
         date: new Date(),
-        type: 'one',
-        status: 'pending',
+        type: ReservationType.One,
+        status: ReservationStatus.Pending,
         amount: 3000,
       },
       {
         id: 'm5gr84i9',
         date: new Date(),
-        type: 'two',
-        status: 'success',
+        type: ReservationType.Two,
+        status: ReservationStatus.Success,
         amount: 5000,
       },
     ];

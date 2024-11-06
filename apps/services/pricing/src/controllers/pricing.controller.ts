@@ -125,7 +125,6 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
     async ({ params: { id }, set }) => {
       try {
         const price = await MongoPricingItemModel.findById({ _id: id });
-        console.log('price', price);
         if (!price) {
           set.status = 404;
           return { error: { code: 404 } };

@@ -23,23 +23,19 @@ export class CategoryTestList {
 export class TestItem {
   id: string;
   subName: string;
-  pricePerUnit: number;
-  unit: string;
+  prices: { price: number; unit: string; amount: number }[];
 
   constructor({
     id,
     subName,
-    pricePerUnit,
-    unit,
+    prices,
   }: {
     id: string;
     subName: string;
-    pricePerUnit: number;
-    unit: string;
+    prices: { price: number; unit: string; amount: number }[];
   }) {
     this.id = id;
     this.subName = subName;
-    this.pricePerUnit = pricePerUnit;
-    this.unit = unit;
+    this.prices = prices;
   }
 }

@@ -32,7 +32,9 @@ export default function ReservationDetail({
               title="สถานะ:"
               value={statusMap[data.status].text}
               valueClassName={statusMap[data.status].textColor}
-            ><QuestionMarkCircledIcon className='text-slate-500 cursor-pointer' /></Item>
+            >
+              <QuestionMarkCircledIcon className="text-slate-500 cursor-pointer" />
+            </Item>
           ) : (
             ''
           )}
