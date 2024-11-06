@@ -103,6 +103,7 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         set.status = 200;
         return { data: formattedPrices };
       } catch (error: any) {
+        console.log('error', error);
         set.status = 500;
         return { error: { code: 500 } };
       }
@@ -185,7 +186,6 @@ export const PricingController = new Elysia({ prefix: '/pricing' })
         tags: ['Pricing'],
         description: 'Delete pricing by id',
       },
-
       params: t.Object({
         id: t.String(),
       }),
