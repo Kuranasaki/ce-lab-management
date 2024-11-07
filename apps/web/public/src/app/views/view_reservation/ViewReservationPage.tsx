@@ -87,15 +87,14 @@ export default function ViewReservationPage() {
             </Button>
           </Link>
         </div>
-        <div className="rounded-lg border border-slate-300">
-          <GlobalTable
-            columns={columns}
-            data={data}
-            loading={loading}
-            filterFieldName={'status'}
-            filterValue={activeTab}
-          />
-        </div>
+        <GlobalTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          filterFieldName={'status'}
+          filterValue={activeTab}
+          showPagination
+        />
       </Tabs>
     </div>
   );

@@ -25,7 +25,7 @@ import {
   Column,
   ColumnDef,
 } from '@tanstack/react-table';
-import React, { FC, useEffect } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface TableProps {
@@ -34,6 +34,10 @@ interface TableProps {
   loading: boolean;
   filterFieldName?: string;
   filterValue?: any;
+  pageIndex?: number;
+  pageSize?: number;
+  showPagination?: boolean;
+  renderFooterCell?: () => ReactNode;
 }
 
 export const GlobalTable: FC<TableProps> = ({
@@ -42,11 +46,17 @@ export const GlobalTable: FC<TableProps> = ({
   loading,
   filterFieldName,
   filterValue,
+  pageIndex = 0,
+  pageSize = 10,
+  showPagination = false,
+  renderFooterCell,
 }) => {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex,
+    pageSize,
+  });
 
   const table = useReactTable({
     data,
@@ -57,9 +67,11 @@ export const GlobalTable: FC<TableProps> = ({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
+      pagination,
     },
   });
 
@@ -85,7 +97,7 @@ export const GlobalTable: FC<TableProps> = ({
 
   if (data != null) {
     return (
-      <>
+      <div className="rounded-lg border border-slate-300">
         <Table>
           <TableHeader className="bg-slate-50">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -135,48 +147,58 @@ export const GlobalTable: FC<TableProps> = ({
               </TableRow>
             )}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="bg-slate-50 text-slate-500 py-3 px-5"
-              >
-                <div className="flex justify-between ">
-                  <p>
-                    {rowStart}-{rowEnd} <span>of</span> {totalRows}
-                  </p>
-                  <div className="flex justify-between">
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        className="px-1 py-1 w-fit h-fit border-slate-500"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                      >
-                        <CaretLeftIcon className="size-4 stroke-slate-500" />
-                      </Button>
+          {renderFooterCell ? (
+            <TableFooter>
+              <TableRow className="bg-slate-50 py-3 px-5 text-slate-500">
+                {renderFooterCell()}
+              </TableRow>
+            </TableFooter>
+          ) : (
+            showPagination && (
+              <TableFooter>
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="bg-slate-50 text-slate-500 py-3 px-5"
+                  >
+                    <div className="flex justify-between ">
                       <p>
-                        {table.getRowModel().rows?.length
-                          ? table.getState().pagination.pageIndex + 1
-                          : 0}{' '}
-                        / {table.getPageCount()}
+                        {rowStart}-{rowEnd} <span>of</span> {totalRows}
                       </p>
-                      <Button
-                        variant="outline"
-                        className="px-1 py-1 w-fit h-fit border-slate-500"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                      >
-                        <CaretRightIcon className="size-4 stroke-slate-500" />
-                      </Button>
+                      <div className="flex justify-between">
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            className="px-1 py-1 w-fit h-fit border-slate-500"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                          >
+                            <CaretLeftIcon className="size-4 stroke-slate-500" />
+                          </Button>
+                          <p>
+                            {table.getRowModel().rows?.length
+                              ? table.getState().pagination.pageIndex + 1
+                              : 0}{' '}
+                            / {table.getPageCount()}
+                          </p>
+                          <Button
+                            variant="outline"
+                            className="px-1 py-1 w-fit h-fit border-slate-500"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                          >
+                            <CaretRightIcon className="size-4 stroke-slate-500" />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </TableCell>
-            </TableRow>
-          </TableFooter>
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            )
+          )}
         </Table>
-      </>
+      </div>
     );
   }
 
@@ -186,15 +208,18 @@ export const GlobalTable: FC<TableProps> = ({
 export const Header = ({
   title,
   column,
+  className,
 }: {
   title: string;
   column: Column<any>;
+  className?: string;
 }) => {
   return (
     <Button
       variant="ghost"
       size="default"
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      className={className}
     >
       {title}
       <CaretSortIcon className="ml-2 h-4 w-4" />
@@ -202,8 +227,14 @@ export const Header = ({
   );
 };
 
-export const Cell = ({ children }: { children: React.ReactNode }) => {
-  return <div className="pl-4 py-1 text-base">{children}</div>;
+export const Cell = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => {
+  return <div className={`pl-4 py-1 text-base ${className}`}>{children}</div>;
 };
 
 export const StatusBar = ({ status }: { status: string }) => {
