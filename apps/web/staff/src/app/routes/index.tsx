@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import GlobalLayout from '../layouts/GlobalLayout';
 import HomePage from '../views/homepage/HomePage';
 import BreadcrumbLayout from '../layouts/BreadcrumbLayout';
-import ViewAllTestFormPage from '../views/test-form/ViewAllTestFormPage';
+import ViewAllTestFormPage from '../views/viewAllTestForm/ViewAllTestFormPage';
 
 export default createBrowserRouter([
   {
