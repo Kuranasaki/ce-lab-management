@@ -43,11 +43,12 @@ interface TableProps {
   filterValue?: any;
   pageIndex?: number;
   pageSize?: number;
-  showPagination?: boolean;
+  enablePagination?: boolean;
   renderFooterCell?: () => ReactNode;
   editable?: boolean;
   handleDeleteTest?: (id: number) => void;
   handleEditTest?: (id: number) => void;
+  emptyDataText?: string;
 }
 
 export const GlobalTable: FC<TableProps> = ({
@@ -58,11 +59,12 @@ export const GlobalTable: FC<TableProps> = ({
   filterValue,
   pageIndex = 0,
   pageSize = 10,
-  showPagination = false,
+  enablePagination = false,
   renderFooterCell,
   editable = false,
   handleDeleteTest,
   handleEditTest,
+  emptyDataText = 'ไม่มีพบข้อมูล',
 }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -181,7 +183,7 @@ export const GlobalTable: FC<TableProps> = ({
                   colSpan={columns.length}
                   className="h-32 text-center text-slate-500"
                 >
-                  <p>No results.</p>
+                  <p>{emptyDataText}</p>
                 </TableCell>
               </TableRow>
             )}
@@ -193,14 +195,14 @@ export const GlobalTable: FC<TableProps> = ({
               </TableRow>
             </TableFooter>
           ) : (
-            showPagination && (
+            enablePagination && (
               <TableFooter>
                 <TableRow>
                   <TableCell
                     colSpan={editable ? columns.length + 1 : columns.length}
                     className="bg-slate-50 text-slate-500 py-3 px-5"
                   >
-                    <div className="flex justify-between ">
+                    <div className="flex items-center justify-between ">
                       <p>
                         {rowStart}-{rowEnd} <span>of</span> {totalRows}
                       </p>

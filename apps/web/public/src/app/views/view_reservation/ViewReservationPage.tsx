@@ -93,7 +93,8 @@ export default function ViewReservationPage() {
           loading={loading}
           filterFieldName={'status'}
           filterValue={activeTab}
-          showPagination
+          emptyDataText="ไม่มีรายการทดสอบในขณะนี้"
+          enablePagination
         />
       </Tabs>
     </div>
