@@ -5,9 +5,7 @@ export default function GlobalLayout() {
   return (
     <div className="flex flex-col justify-start items-start w-screen">
       <NavBar />
-      <div className="p-12 pt-28">
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   );
 }
