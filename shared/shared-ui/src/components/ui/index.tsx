@@ -16,3 +16,4 @@ export * from './toast';
 export * from './toaster';
 export * from './card';
 export * from './global-table';
+export * from './collapsible';
