@@ -21,8 +21,8 @@ export const GetOneTestFormResponseSchema = t.Object({
     t.Object({
       label: t.String(),
       dataType: t.String(),
-      dataFirstColumn: t.Number(),
-      dataLastColumn: t.Number(),
+      dataFirstColumn: t.String(),
+      dataLastColumn: t.String(),
     })
   ),
 });

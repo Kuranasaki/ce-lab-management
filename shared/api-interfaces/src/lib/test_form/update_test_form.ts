@@ -17,8 +17,8 @@ export const UpdateTestFormRequestSchema = t.Object({
       t.Object({
         label: t.String(),
         dataType: t.String(),
-        dataFirstColumn: t.Number(),
-        dataLastColumn: t.Number(),
+        dataFirstColumn: t.String(),
+        dataLastColumn: t.String(),
       })
     )
   ),
@@ -34,8 +34,8 @@ export const UpdateTestFormResponseSchema = t.Object({
     t.Object({
       label: t.String(),
       dataType: t.String(),
-      dataFirstColumn: t.Number(),
-      dataLastColumn: t.Number(),
+      dataFirstColumn: t.String(),
+      dataLastColumn: t.String(),
     })
   ),
 });
