@@ -16,19 +16,7 @@ export default createBrowserRouter([
       },
       {
         path: '/',
-        element: (
-          <BreadcrumbLayout
-            pathToTransKey={
-              new Map([
-                ['/', 'homepage'],
-                ['/testForms', 'testForm'],
-                ['/testForms/add', 'addTestForm'],
-                ['/reservation', 'reservation'],
-                ['/wage', 'wage'],
-              ])
-            }
-          />
-        ),
+        element: <BreadcrumbLayout />,
         children: [
           {
             path: 'testForms',
