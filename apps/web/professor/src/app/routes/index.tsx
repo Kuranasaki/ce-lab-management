@@ -1,0 +1,61 @@
+import { createBrowserRouter } from 'react-router-dom';
+import MainLayout from '../layouts/MainLayout';
+import HomePage from '../views/homepage/Homepage';
+import SignInPage from '../views/auth_signin/SignInPage';
+import AuthLayout from '../layouts/AuthLayout';
+import GlobalLayout from '../layouts/GlobalLayout';
+import ProtectedLayout from '../layouts/ProtectedLayout';
+
+export default createBrowserRouter([
+  {
+    path: '/',
+    element: <GlobalLayout />,
+    children: [
+      {
+        path: 'auth/',
+        element: <AuthLayout />,
+        children: [
+          {
+            path: 'signin/',
+            element: <SignInPage />,
+          },
+        ],
+      },
+      {
+        path: '',
+        element: <ProtectedLayout />,
+        children: [
+          {
+            path: '',
+            element: <HomePage />,
+          },
+          {
+            path: 'experiment/',
+            children: [
+              {
+                path: '',
+                element: <MainLayout title="รายการทดสอบ" />,
+                children: [
+                  {
+                    path: '',
+                    element: <div>PAGE</div>,
+                  },
+                ],
+              },
+              {
+                path: ':id',
+                element: <MainLayout title="รายละเอียดการทดสอบ" />,
+                children: [
+                  {
+                    path: '',
+                    element: <div>PAGE</div>,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]);
