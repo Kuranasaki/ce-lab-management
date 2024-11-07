@@ -3,6 +3,7 @@ import GlobalLayout from '../layouts/GlobalLayout';
 import HomePage from '../views/homepage/HomePage';
 import BreadcrumbLayout from '../layouts/BreadcrumbLayout';
 import ViewAllTestFormPage from '../views/viewAllTestForm/ViewAllTestFormPage';
+import AddTestFormPage from '../views/addTestForm/AddTestFormPage';
 
 export default createBrowserRouter([
   {
@@ -17,19 +18,25 @@ export default createBrowserRouter([
         path: '/',
         element: (
           <BreadcrumbLayout
-            staticPaths={[
-              'testForms',
-              'wages',
-              'reservations',
-              'create',
-              'edit',
-            ]}
+            pathToTransKey={
+              new Map([
+                ['/', 'homepage'],
+                ['/testForms', 'testForm'],
+                ['/testForms/add', 'addTestForm'],
+                ['/reservation', 'reservation'],
+                ['/wage', 'wage'],
+              ])
+            }
           />
         ),
         children: [
           {
             path: 'testForms',
             element: <ViewAllTestFormPage />,
+          },
+          {
+            path: 'testForms/add',
+            element: <AddTestFormPage />,
           },
         ],
       },

@@ -1,8 +1,7 @@
 export default {
-  home: 'หน้าแรก',
-  testForms: 'แบบฟอร์มการทดสอบ',
-  reservations: 'คำขอรับบริการทดสอบ',
-  wages: 'สรุปค่าตอบแทน',
-  create: 'สร้าง',
-  edit: 'แก้ไข',
+  homepage: 'หน้าแรก',
+  testForm: 'แบบฟอร์มการทดสอบ',
+  addTestForm: 'เพิ่มแบบฟอร์มการทดสอบ',
+  reservation: 'คำขอรับบริการทดสอบ',
+  wage: 'สรุปค่าตอบแทน',
 };

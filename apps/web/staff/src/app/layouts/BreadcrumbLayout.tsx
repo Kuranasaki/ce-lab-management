@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
 export default function BreadcrumbLayout({
-  staticPaths,
+  pathToTransKey,
 }: {
-  staticPaths: string[];
+  pathToTransKey: Map<string, string>;
 }) {
   const location = useLocation();
   const { t } = useTranslation('translation', { keyPrefix: 'paths' });
@@ -16,13 +16,15 @@ export default function BreadcrumbLayout({
       <BreadcrumbGenerator
         paths={[
           {
-            title: t('home'),
+            title: t('homepage'),
             path: '/',
           },
           ...pathSegments.map((path, index) => {
             const fullPath = `/${pathSegments.slice(0, index + 1).join('/')}`;
+            const translationKey = pathToTransKey.get(fullPath);
+
             return {
-              title: staticPaths.includes(path) ? t(path) : path,
+              title: translationKey ? t(translationKey) : path,
               path: fullPath,
             };
           }),
