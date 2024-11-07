@@ -14,6 +14,15 @@ export const GetOneTestFormResponseSchema = t.Object({
   id: t.String(),
   name: t.String(),
   templateFileURL: t.String(),
-  dataAreaLabelTopLeft: t.String(),
-  dataAreaLabelBottomRight: t.String(),
+  dataSheetName: t.String(),
+  dataFirstRow: t.Number(),
+  dataLastRow: t.Number(),
+  dataColumn: t.Array(
+    t.Object({
+      label: t.String(),
+      dataType: t.String(),
+      dataFirstColumn: t.String(),
+      dataLastColumn: t.String(),
+    })
+  ),
 });
