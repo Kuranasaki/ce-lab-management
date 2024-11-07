@@ -23,14 +23,16 @@ export const addTestFormFormSchema = z.object({
   dataSheetName: z.string().min(1),
   dataFirstRow: z.number(),
   dataLastRow: z.number(),
-  dataColumn: z.array(
-    z.object({
-      label: z.string(),
-      dataType: z.string(),
-      dataFirstColumn: z.string(),
-      dataLastColumn: z.string(),
-    })
-  ),
+  dataColumn: z
+    .array(
+      z.object({
+        label: z.string(),
+        dataType: z.string(),
+        dataFirstColumn: z.string(),
+        dataLastColumn: z.string(),
+      })
+    )
+    .min(1),
 });
 
 export type AddTestFormFormType = z.infer<typeof addTestFormFormSchema>;

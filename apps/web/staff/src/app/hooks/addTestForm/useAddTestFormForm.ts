@@ -22,8 +22,8 @@ export default function useAddTestFormForm() {
       name: '',
       templateFile: null,
       dataSheetName: '',
-      dataFirstRow: 0,
-      dataLastRow: 0,
+      dataFirstRow: undefined,
+      dataLastRow: undefined,
       dataColumn: [],
     },
   });
@@ -55,5 +55,10 @@ export default function useAddTestFormForm() {
     addColumnForm.reset();
   };
 
-  return { form, addColumn };
+  const handleSubmit = () => {
+    console.log(form.getValues());
+    // TODO: Handle form submission
+  };
+
+  return { form, addColumn, handleSubmit };
 }
