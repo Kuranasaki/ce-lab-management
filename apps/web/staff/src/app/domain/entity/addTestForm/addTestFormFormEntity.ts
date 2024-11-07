@@ -35,3 +35,34 @@ export const addTestFormFormSchema = z.object({
 
 export type AddTestFormFormType = z.infer<typeof addTestFormFormSchema>;
 export type AddTestFormFormReturned = UseFormReturn<AddTestFormFormType>;
+
+const letterToNumber = (str: string): number => {
+  let result = 0;
+  for (let i = 0; i < str.length; i++) {
+    result = result * 26 + (str.charCodeAt(i) - 'A'.charCodeAt(0) + 1);
+  }
+  return result;
+};
+
+export const addColumnDataSchema = z
+  .object({
+    label: z.string().min(1),
+    dataType: z.string().min(1),
+    dataFirstColumn: z.string().regex(/^[A-Z]{1,2}$/, {
+      message: 'Invalid',
+    }),
+    dataLastColumn: z.string().regex(/^[A-Z]{1,2}$/, {
+      message: 'Invalid',
+    }),
+  })
+  .refine(
+    ({ dataFirstColumn, dataLastColumn }) =>
+      letterToNumber(dataFirstColumn) <= letterToNumber(dataLastColumn),
+    {
+      message: 'Last column must come after first column.',
+      path: ['root'],
+    }
+  );
+
+export type AddColumnData = z.infer<typeof addColumnDataSchema>;
+export type AddColumnDataReturned = UseFormReturn<AddColumnData>;

@@ -35,11 +35,14 @@ export default {
           typeLabel: 'ประเภทของข้อมูล',
           startLabel: 'คอลัมน์เริ่มต้น',
           endLabel: 'คอลัมน์สุดท้าย',
-          namePlaceholder:
-            'ระบุชื่อคอลัมน์ที่ต้องการบันทึก ไม่จำเป็นต้องตรงกับชื่อในไฟล์',
+          namePlaceholder: 'ไม่จำเป็นต้องตรงกับชื่อในไฟล์',
           typePlaceholder: 'เลือกประเภทของข้อมูล',
           startPlaceholder: 'เช่น A',
           endPlaceholder: 'เช่น F',
+          typeOptions: {
+            text: 'ข้อความ',
+            number: 'ตัวเลข',
+          },
         },
         preview: {
           title: 'พรีวิวส่วนของข้อมูลที่ต้องการบันทึกลงฐานข้อมูล',

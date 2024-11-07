@@ -7,11 +7,11 @@ export default function AddTestFormPage() {
   const { t } = useTranslation('translation', {
     keyPrefix: 'testForm.add',
   });
-  const [form] = useAddTestFormForm();
+  const { form, addColumn } = useAddTestFormForm();
   return (
     <div className="flex flex-col px-40 gap-8">
       <h2>{t('title')}</h2>
-      <AddTestForm form={form} />
+      <AddTestForm form={form} addCol={addColumn} />
       <AddTestFormDataPreview />
     </div>
   );
