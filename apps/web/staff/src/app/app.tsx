@@ -1,13 +1,8 @@
-import { Button } from '@ce-lab-mgmt/shared-ui';
+import { RouterProvider } from 'react-router-dom';
+import router from './routes/index';
 
 export function App() {
-  return (
-    <div>
-      <h1>Welcome to staff!</h1>
-      <h1 className="text-primary-300">ทดสอบจ้า</h1>
-      <Button>Test</Button>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
