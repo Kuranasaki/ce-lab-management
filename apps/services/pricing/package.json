@@ -5,7 +5,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },
-  "dependencies": { "@elysiajs/cors": "^1.1.1", "@elysiajs/swagger": "^1.1.1", "elysia": "^1.1.12", "mongoose": "^8.6.2" },
+  "dependencies": {
+    "@elysiajs/cors": "^1.1.1",
+    "@elysiajs/swagger": "^1.1.1",
+    "elysia": "^1.1.12",
+    "mongoose": "^8.6.2"
+  },
   "devDependencies": {},
   "module": "src/index.js"
 }
