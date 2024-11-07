@@ -2,11 +2,13 @@ import { BreadcrumbGenerator } from '@ce-lab-mgmt/shared-ui';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
-export default function BreadcrumbLayout() {
+export default function BreadcrumbLayout({
+  staticPaths,
+}: {
+  staticPaths: string[];
+}) {
   const location = useLocation();
   const { t } = useTranslation('translation', { keyPrefix: 'paths' });
-  const staticPaths = ['testForms', 'wages', 'reservations', 'create', 'edit'];
-
   const pathSegments = location.pathname.slice(1).split('/');
 
   return (

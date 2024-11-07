@@ -15,7 +15,17 @@ export default createBrowserRouter([
       },
       {
         path: '/',
-        element: <BreadcrumbLayout />,
+        element: (
+          <BreadcrumbLayout
+            staticPaths={[
+              'testForms',
+              'wages',
+              'reservations',
+              'create',
+              'edit',
+            ]}
+          />
+        ),
         children: [
           {
             path: 'testForms',
