@@ -14,8 +14,9 @@ interface Pricing {
 }
 
 interface Tags {
-  category: string[];
-  subcategory: string[];
+  category?: string;
+  subcategory?: string;
+  type: string;
 }
 
 interface PricingItem {
@@ -33,18 +34,19 @@ import { t } from 'elysia';
 
 const PricingUnitSchema = t.Object({
   quantity: t.Number(),
-  unit: t.String()
+  unit: t.String(),
 });
 
 const PricingSchema = t.Object({
   price: t.Number(),
   pricingUnit: t.String(),
-  perUnit: PricingUnitSchema
+  perUnit: PricingUnitSchema,
 });
 
 const TagsSchema = t.Object({
-  category: t.Array(t.String()),
-  subcategory: t.Array(t.String())
+  category: t.Optional(t.String()),
+  subcategory: t.Optional(t.String()),
+  type: t.String(),
 });
 
 const PricingItemSchema = t.Object({
@@ -52,7 +54,7 @@ const PricingItemSchema = t.Object({
   name: t.String(),
   tags: TagsSchema,
   pricing: t.Array(PricingSchema),
-  description: t.String()
+  description: t.String(),
 });
 
 const PricingDataSchema = t.Array(PricingItemSchema);
@@ -61,32 +63,36 @@ const PricingDataSchema = t.Array(PricingItemSchema);
 
 const pricingUnitSchema = new Schema<PricingUnit>({
   quantity: { type: Number, required: true },
-  unit: { type: String, required: true }
+  unit: { type: String, required: true },
 });
 
 const pricingSchema = new Schema<Pricing>({
   price: { type: Number, required: true },
   pricingUnit: { type: String, required: true },
-  perUnit: { type: pricingUnitSchema, required: true }
+  perUnit: { type: pricingUnitSchema, required: true },
 });
 
 const tagsSchema = new Schema<Tags>({
-  category: { type: [String], required: true },
-  subcategory: { type: [String], required: true }
+  category: { type: String, required: false },
+  subcategory: { type: String, required: false },
+  type: { type: String, required: true },
 });
 
-const pricingItemSchema = new Schema<PricingItem>({
+const pricingItemSchema = new Schema({
   name: { type: String, required: true },
   tags: { type: tagsSchema, required: true },
   pricing: { type: [pricingSchema], required: true },
-  description: { type: String, default: '' }
+  description: { type: String, default: '' },
 });
 
 // Mongoose model
-export interface PricingItemDocument extends PricingItem, Document {
-  id: string;
-}
-const MongoPricingItemModel = model('PricingItem', pricingItemSchema);
+export interface PricingItemDocument
+  extends PricingItem,
+    Omit<Document, 'id'> {}
+const MongoPricingItemModel = model<PricingItemDocument>(
+  'PricingItem',
+  pricingItemSchema
+);
 
 export {
   PricingUnit,
@@ -99,5 +105,5 @@ export {
   TagsSchema,
   PricingItemSchema,
   PricingDataSchema,
-  MongoPricingItemModel
+  MongoPricingItemModel,
 };
