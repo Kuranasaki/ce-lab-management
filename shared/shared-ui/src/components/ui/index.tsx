@@ -17,3 +17,4 @@ export * from './toaster';
 export * from './card';
 export * from './global-table';
 export * from './collapsible';
+export * from './file-card';
