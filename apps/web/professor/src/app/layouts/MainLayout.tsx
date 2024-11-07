@@ -25,9 +25,6 @@ export default function MainLayout({
               getPathName(
                 r as
                   | 'experiment'
-                  | 'auth'
-                  | 'signin'
-                  | 'signup'
               )
             )}
         />

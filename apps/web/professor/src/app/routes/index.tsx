@@ -5,6 +5,7 @@ import SignInPage from '../views/auth_signin/SignInPage';
 import AuthLayout from '../layouts/AuthLayout';
 import GlobalLayout from '../layouts/GlobalLayout';
 import ProtectedLayout from '../layouts/ProtectedLayout';
+import ViewExperimentsPage from '../views/view_experiments/ViewExperiment';
 
 export default createBrowserRouter([
   {
@@ -38,7 +39,7 @@ export default createBrowserRouter([
                 children: [
                   {
                     path: '',
-                    element: <div>PAGE</div>,
+                    element: <ViewExperimentsPage />,
                   },
                 ],
               },

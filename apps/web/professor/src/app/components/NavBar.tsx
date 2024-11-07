@@ -2,8 +2,10 @@ import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMe
 import logo from '../../../src/assets/logo-civil-engineering.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChevronDownIcon } from "@radix-ui/react-icons"
+import { useTranslation } from 'react-i18next';
 
 export default function NavBar({ variant }: { variant?: string }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     // const { user, signOut } = useAuth();
     const { user, signOut } = { user: { displayName: "imp", email: "k.satapornimp@gmail.com" }, signOut: () => { } };
@@ -22,8 +24,8 @@ export default function NavBar({ variant }: { variant?: string }) {
             <div className='h-full flex items-center gap-16'>
                 <img src={logo} alt="Civil Engineering Logo" className="h-10" />
                 <div className='h-full flex gap-6 items-center'>
-                    <NavBarItem to="/" label="หน้าแรก" />
-                    <NavBarItem to="/experiment" label="รายการทดสอบ" />
+                    <NavBarItem to="/" label={t("homepage")}/>
+                    <NavBarItem to="/experiment" label={t("experiment")} />
                 </div>
             </div>
             <div className='flex items-center gap-4'>
@@ -37,10 +39,10 @@ export default function NavBar({ variant }: { variant?: string }) {
                     <DropdownMenuContent >
                         <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>ข้อมูลส่วนตัว</DropdownMenuItem>
-                        <Link to="/wage"><DropdownMenuItem>ประวัติการทดสอบ</DropdownMenuItem></Link>
-                        <DropdownMenuItem>ตั้งค่า</DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleSignOut}>ออกจากระบบ</DropdownMenuItem>
+                        <DropdownMenuItem>{t('profile')}</DropdownMenuItem>
+                        <Link to="/wage"><DropdownMenuItem>{t('test_history')}</DropdownMenuItem></Link>
+                        <DropdownMenuItem>{t('setting')}</DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleSignOut}>{t('signout')}</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
