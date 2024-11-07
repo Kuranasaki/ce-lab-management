@@ -7,11 +7,18 @@ import {
   TableCell,
   Button,
   TableFooter,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@ce-lab-mgmt/shared-ui';
 import {
   CaretLeftIcon,
   CaretRightIcon,
   CaretSortIcon,
+  Pencil1Icon,
+  TrashIcon,
 } from '@radix-ui/react-icons';
 import {
   SortingState,
@@ -38,6 +45,9 @@ interface TableProps {
   pageSize?: number;
   showPagination?: boolean;
   renderFooterCell?: () => ReactNode;
+  editable?: boolean;
+  handleDeleteTest?: (id: number) => void;
+  handleEditTest?: (id: number) => void;
 }
 
 export const GlobalTable: FC<TableProps> = ({
@@ -50,6 +60,9 @@ export const GlobalTable: FC<TableProps> = ({
   pageSize = 10,
   showPagination = false,
   renderFooterCell,
+  editable = false,
+  handleDeleteTest,
+  handleEditTest,
 }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -97,14 +110,14 @@ export const GlobalTable: FC<TableProps> = ({
 
   if (data != null) {
     return (
-      <div className="rounded-lg border border-slate-300">
+      <div className="rounded-lg overflow-hidden border border-slate-300">
         <Table>
           <TableHeader className="bg-slate-50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className="py-2" key={header.id}>
+                    <TableHead className="py-3 px-5" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -114,6 +127,7 @@ export const GlobalTable: FC<TableProps> = ({
                     </TableHead>
                   );
                 })}
+                {editable && <TableHead className="w-[60px]" />}
               </TableRow>
             ))}
           </TableHeader>
@@ -134,6 +148,31 @@ export const GlobalTable: FC<TableProps> = ({
                       </Link>
                     </TableCell>
                   ))}
+                  {editable ? (
+                    <TableCell>
+                      <div className="flex gap-4 justify-center">
+                        <div
+                          className="hover:bg-slate-100 p-2 rounded-md cursor-pointer"
+                          onClick={() =>
+                            handleEditTest && handleEditTest(parseInt(row.id))
+                          }
+                        >
+                          <Pencil1Icon className="size-5" />
+                        </div>
+                        <div
+                          className="hover:bg-slate-100 p-2 rounded-md cursor-pointer"
+                          onClick={() =>
+                            handleDeleteTest &&
+                            handleDeleteTest(parseInt(row.id))
+                          }
+                        >
+                          <TrashIcon className="size-5" />
+                        </div>
+                      </div>
+                    </TableCell>
+                  ) : (
+                    ''
+                  )}
                 </TableRow>
               ))
             ) : (
@@ -158,38 +197,58 @@ export const GlobalTable: FC<TableProps> = ({
               <TableFooter>
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={editable ? columns.length + 1 : columns.length}
                     className="bg-slate-50 text-slate-500 py-3 px-5"
                   >
                     <div className="flex justify-between ">
                       <p>
                         {rowStart}-{rowEnd} <span>of</span> {totalRows}
                       </p>
-                      <div className="flex justify-between">
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            className="px-1 py-1 w-fit h-fit border-slate-500"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                          >
-                            <CaretLeftIcon className="size-4 stroke-slate-500" />
-                          </Button>
-                          <p>
-                            {table.getRowModel().rows?.length
-                              ? table.getState().pagination.pageIndex + 1
-                              : 0}{' '}
-                            / {table.getPageCount()}
-                          </p>
-                          <Button
-                            variant="outline"
-                            className="px-1 py-1 w-fit h-fit border-slate-500"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                          >
-                            <CaretRightIcon className="size-4 stroke-slate-500" />
-                          </Button>
-                        </div>
+                      <div className="flex items-center gap-2 min-w-[200px]">
+                        <p>Page Size:</p>
+                        <Select
+                          onValueChange={(e) => {
+                            setPagination((prev) => {
+                              return {
+                                ...prev,
+                                pageSize: parseInt(e),
+                              };
+                            });
+                          }}
+                        >
+                          <SelectTrigger className="w-[80px]">
+                            <SelectValue placeholder={pageSize.toString()} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="5">5</SelectItem>
+                            <SelectItem value="10">10</SelectItem>
+                            <SelectItem value="20">20</SelectItem>
+                            <SelectItem value="50">50</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="outline"
+                          className="p-1 w-fit h-fit border-slate-500"
+                          onClick={() => table.previousPage()}
+                          disabled={!table.getCanPreviousPage()}
+                        >
+                          <CaretLeftIcon className="size-4 stroke-slate-500" />
+                        </Button>
+                        <p>
+                          {table.getRowModel().rows?.length
+                            ? table.getState().pagination.pageIndex + 1
+                            : 0}{' '}
+                          / {table.getPageCount()}
+                        </p>
+
+                        <Button
+                          variant="outline"
+                          className="px-1 py-1 w-fit h-fit border-slate-500"
+                          onClick={() => table.nextPage()}
+                          disabled={!table.getCanNextPage()}
+                        >
+                          <CaretRightIcon className="size-4 stroke-slate-500" />
+                        </Button>
                       </div>
                     </div>
                   </TableCell>
@@ -209,12 +268,14 @@ export const Header = ({
   title,
   column,
   className,
+  sortable = false,
 }: {
   title: string;
   column: Column<any>;
   className?: string;
+  sortable?: boolean;
 }) => {
-  return (
+  return sortable ? (
     <Button
       variant="ghost"
       size="default"
@@ -224,6 +285,10 @@ export const Header = ({
       {title}
       <CaretSortIcon className="ml-2 h-4 w-4" />
     </Button>
+  ) : (
+    <div className={`text-base text-slate-900 w-full ${className}`}>
+      {title}
+    </div>
   );
 };
 
