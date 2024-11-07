@@ -1,6 +1,6 @@
-import { DownloadIcon, TrashIcon } from '@radix-ui/react-icons';
+import { DownloadIcon } from '@radix-ui/react-icons';
 import { FileClock, Trash } from 'lucide-react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Button } from './button';
 import { Card, CardContent } from './card';
 
