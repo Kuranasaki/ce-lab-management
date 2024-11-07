@@ -17,7 +17,7 @@ export default function ViewReservationPage() {
       header: ({ column }) => {
         return <Header title="หมายเลขการจอง" column={column} />;
       },
-      cell: ({ row }) => <Cell>{row.original.status}</Cell>,
+      cell: ({ row }) => <Cell>{row.original.id}</Cell>,
     },
     {
       accessorKey: 'date',
