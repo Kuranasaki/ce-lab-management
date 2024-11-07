@@ -12,7 +12,7 @@ export default function BreadcrumbLayout({
   const pathSegments = location.pathname.slice(1).split('/');
 
   return (
-    <div className="flex flex-col pt-28 p-12 gap-10">
+    <div className="flex flex-col pt-28 p-12 gap-10 w-full">
       <BreadcrumbGenerator
         paths={[
           {
