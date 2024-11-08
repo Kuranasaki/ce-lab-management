@@ -10,6 +10,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import GlobalLayout from '../layouts/GlobalLayout';
 import ProtectedLayout from '../layouts/ProtectedLayout';
 import SignUpPage from '../views/auth_signin/SignUpPage';
+import CheckCert from '../views/check_certificate/CheckCert';
 
 export default createBrowserRouter([
   {
@@ -73,7 +74,7 @@ export default createBrowserRouter([
               },
             ],
           },
-        ]
+        ],
       },
       {
         path: 'pricing/',
@@ -85,7 +86,16 @@ export default createBrowserRouter([
           },
         ],
       },
+      {
+        path: 'certificate/',
+        element: <MainLayout showTitle={false} />,
+        children: [
+          {
+            path: '',
+            element: <CheckCert />,
+          },
+        ],
+      },
     ],
   },
 ]);
-

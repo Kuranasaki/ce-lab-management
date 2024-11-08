@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 // Connect to the MongoDB database
 const mongoDBURI = process.env.MONGODB_URI ?? 'mongodb://localhost:27017';
-// console.log(mongoDBURI);
+console.log(mongoDBURI);
 
 mongoose
   .connect(mongoDBURI)

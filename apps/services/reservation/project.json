@@ -5,20 +5,53 @@
   "projectType": "application",
   "targets": {
     "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/services/reservation",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/services/reservation/src/index.ts",
+        "tsConfig": "apps/services/reservation/tsconfig.json",
+        "assets": ["apps/services/reservation/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "bun-build": {
       "executor": "@nx-bun/nx:build",
       "outputs": ["{options.outputPath}"],
       "options": {
         "entrypoints": ["apps/services/reservation/src/index.ts"],
         "outputPath": "dist/reservation-svc/src/index.ts",
-        "bun": false,
-        "smol": false
+        "bun": true,
+        "smol": false,
+        "target": "bun"
       }
     },
     "serve": {
       "executor": "@nx-bun/nx:run",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "reservation_svc:build",
+        "buildTarget": "reservation_svc:bun-build",
         "watch": true,
         "hot": true,
         "bun": true,

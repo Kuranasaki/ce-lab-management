@@ -14,10 +14,15 @@ export class ToastEntity {
   }
 
   static fromCode(code: number): ToastEntity {
+    if (code === 200) {
+      return this.success();
+    }
     // To be implemented
     return this.unknownError();
   }
-
+  static success(): ToastEntity {
+    return new ToastEntity('สำเร็จ', 'ทำรายการสำเร็จ', 'success');
+  }
   static unknownError(): ToastEntity {
     return new ToastEntity(
       'เกิดข้อผิดพลาด',

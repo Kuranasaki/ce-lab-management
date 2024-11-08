@@ -18,4 +18,10 @@ export class BaseResponse<T> {
     this.data = data;
     this.error = error;
   }
+  toJSON(): { data?: T; error?: Error } {
+    return {
+      data: this.data,
+      error: this.error
+    };
+  }
 }

@@ -1,4 +1,5 @@
 import { t } from 'elysia'
+import { TestItemSchema } from './request_reservation'
 
 export const OrgDataSchema = t.Object({
   orgName: t.String(),
@@ -7,13 +8,6 @@ export const OrgDataSchema = t.Object({
   orgPhone: t.String(),
   orgEmail: t.String(),
   orgFax: t.String(),
-})
-
-export const TestItemSchema = t.Object({
-  testID: t.String(),
-  testAmount: t.Number(),
-  testDetails: t.String(),
-  testNote: t.String(),
 })
 
 export const TestListSchema = t.Object({
