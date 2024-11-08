@@ -1,5 +1,5 @@
 import { Button } from '@ce-lab-mgmt/shared-ui';
-import { ReservationType } from '../../../../data/models/Reservation';
+import { ReservationType } from '@ce-lab-mgmt/api-interfaces';
 import CustomerDetailProps from '../../../../domain/entity/view_reservation_detail/CustomerDetailProps';
 import ReservationDetailProps from '../../../../domain/entity/view_reservation_detail/ReservationDetailProps';
 import TestListTableProps from '../../../../domain/entity/view_reservation_detail/TestListTableProps';

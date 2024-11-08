@@ -1,7 +1,7 @@
 import {
   ReservationStatus,
   ReservationType,
-} from '../../../data/models/Reservation';
+} from '@ce-lab-mgmt/api-interfaces';
 
 export default class ReservationDetailProps {
   id?: string;
