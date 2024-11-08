@@ -2,7 +2,7 @@ import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
 import {
   ReservationStatus,
   ReservationType,
-} from '../../../data/models/Reservation';
+} from '@ce-lab-mgmt/api-interfaces';
 import ReservationDetailProps from '../../../domain/entity/view_reservation_detail/ReservationDetailProps';
 import DetailBox from './DetailBox';
 
@@ -25,14 +25,18 @@ export default function ReservationDetail({
           <Item title="วันที่ส่งคำขอ:" value={data.formatDate()} />
           <Item
             title="ประเภทการทดสอบ:"
-            value={testTypeDisplayName[data.type]}
+            value={testTypeDisplayName[data.type as ReservationType]}
           />
           {data.status ? (
             <Item
               title="สถานะ:"
-              value={statusMap[data.status].text}
-              valueClassName={statusMap[data.status].textColor}
-            ><QuestionMarkCircledIcon className='text-slate-500 cursor-pointer' /></Item>
+              value={statusMap[data.status as ReservationStatus].text}
+              valueClassName={
+                statusMap[data.status as ReservationStatus].textColor
+              }
+            >
+              <QuestionMarkCircledIcon className="text-slate-500 cursor-pointer" />
+            </Item>
           ) : (
             ''
           )}
