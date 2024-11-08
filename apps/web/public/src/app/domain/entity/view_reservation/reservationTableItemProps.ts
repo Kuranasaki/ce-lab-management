@@ -1,19 +1,16 @@
-import {
-  ReservationType,
-  ReservationStatus,
-} from '../../../data/models/Reservation';
+import { ReservationStatus } from "@ce-lab-mgmt/api-interfaces";
 
 export default class ReservationTableItemProps {
   id: string;
   date: Date;
-  type: ReservationType;
+  type: string;
   status: ReservationStatus;
   amount: number;
 
   constructor(
     id: string,
     date: Date,
-    type: ReservationType,
+    type: string,
     status: ReservationStatus,
     amount: number
   ) {
