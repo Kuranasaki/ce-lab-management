@@ -1,44 +1,50 @@
 interface TestItem {
-    testID: string;
-    testName: string;
-    testAmount: number;
-    testPricePerUnit: number;
-    testUnit: string;
-    testDetails?: string;
-    testNote?: string;
+  testID: string;
+  testName: string;
+  testAmount: number;
+  testPricePerUnit: number;
+  testUnit: string;
+  testDetails?: string;
+  testNote?: string;
 }
 
 interface TestInfo {
-    testType: string;
-    testList: TestItem[];
+  testType: string;
+  testList: TestItem[];
 }
 
 interface OrganizationInfo {
-    orgName: string;
-    orgProjectName?: string;
-    orgAddress: string;
-    orgEmail: string;
-    orgPhone: string;
-    orgFax?: string;
+  orgName: string;
+  orgProjectName?: string;
+  orgAddress: string;
+  orgEmail: string;
+  orgPhone: string;
+  orgFax?: string;
 }
 
 enum ReservationStatus {
-    Pending = 'pending',
-    Processing = 'processing',
-    Success = 'success',
-    Canceled = 'canceled'
+  Pending = 'pending',
+  Processing = 'processing',
+  Success = 'success',
+  Canceled = 'canceled',
+}
+
+enum ReservationType {
+  One = '1',
+  Two = '2',
+  Three = '3',
 }
 
 interface GetReservationResponse {
-    reservationID: string;
-    orgInfo: OrganizationInfo;
-    testInfo: TestInfo;
-    status: ReservationStatus;
-    totalPrice: number;
-    createdOn: Date;
+  reservationID: string;
+  orgInfo: OrganizationInfo;
+  testInfo: TestInfo;
+  status: ReservationStatus;
+  totalPrice: number;
+  createdOn: Date;
 }
 
-export { GetReservationResponse, ReservationStatus }
+export { GetReservationResponse, ReservationStatus, ReservationType };
 
 import { t } from 'elysia';
 
@@ -64,12 +70,12 @@ const TestInfoSchema = t.Object({
 });
 
 const OrganizationInfoSchema = t.Object({
-    orgName: t.String(),
-    orgProjectName: t.Optional(t.String()),
-    orgAddress: t.String(),
-    orgEmail: t.String(),
-    orgPhone: t.String(),
-    orgFax: t.Optional(t.String()),
+  orgName: t.String(),
+  orgProjectName: t.Optional(t.String()),
+  orgAddress: t.String(),
+  orgEmail: t.String(),
+  orgPhone: t.String(),
+  orgFax: t.Optional(t.String()),
 });
 
 const GetReservationSchema = t.Object({

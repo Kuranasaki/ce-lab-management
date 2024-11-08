@@ -10,13 +10,13 @@ import {
   Textarea,
 } from '@ce-lab-mgmt/shared-ui';
 import { Link } from 'react-router-dom';
-import { OrgInfoForm } from '../../../../hooks/request_reservation/useOrgInfoForm';
+import { OrgInfoFormReturned } from '../../../../domain/entity/request_reservation/reqReservRequestFormEntity';
 
 export default function Stage1({
   orgForm,
   setStage,
 }: {
-  orgForm: OrgInfoForm;
+  orgForm: OrgInfoFormReturned;
   setStage: (value: number) => void;
 }) {
   return (
