@@ -1,4 +1,17 @@
+interface Reservation {
+    reservationID: string,
+    Status: ReservationStatus,
+    testType: string,
+    CreatedOn: Date,
+    totalPrice: number,
+}
+
+type GetAllReservationResponse = Reservation[];
+
+export { GetAllReservationResponse };
+
 import { t } from 'elysia';
+import { ReservationStatus } from './get_reservation';
 
 const ReservationSchema = t.Object({
     reservationID: t.String(),
