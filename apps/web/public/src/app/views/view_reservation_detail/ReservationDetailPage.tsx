@@ -1,23 +1,16 @@
 import { useParams } from 'react-router-dom';
-import { useTestList } from '../../hooks/view_reservation_detail/useTestList';
 import ReservationDetail from './components/ReservationDetail';
 import { useReservationDetail } from '../../hooks/view_reservation_detail/useReservationDetail';
-import { useCustomerDetail } from '../../hooks/view_reservation_detail/useCustomerDetail';
 import CustomerDetail from './components/CustomerDetail';
-import { ReservationStatus } from '../../data/models/Reservation';
+import { ReservationStatus } from '@ce-lab-mgmt/api-interfaces';
 import { Cell, GlobalTable, Header, TableCell } from '@ce-lab-mgmt/shared-ui';
 import { ColumnDef } from '@tanstack/react-table';
 import TestListTableItemProps from '../../domain/entity/view_reservation_detail/TestListTableItemProps';
 
 export default function ReservationDetailPage() {
   const { id } = useParams();
-  const { data: testListData, loading: loadingTestListdata } = useTestList({
-    id,
-  });
-  const { data: reservationDetail, loading: loadingReservationDetail } =
-    useReservationDetail();
-  const { data: customerDetail, loading: loadingCustomerDetail } =
-    useCustomerDetail();
+  const { customer, reservationDetail, testList, loading } =
+    useReservationDetail(id || '');
 
   const columns: ColumnDef<TestListTableItemProps>[] = [
     {
@@ -92,12 +85,11 @@ export default function ReservationDetailPage() {
   if (!id) {
     return;
   }
+  if (!id) {
+    return;
+  }
 
-  if (
-    loadingTestListdata ||
-    loadingReservationDetail ||
-    loadingCustomerDetail
-  ) {
+  if (loading) {
     return <p>Loading...</p>;
   }
 
@@ -105,7 +97,7 @@ export default function ReservationDetailPage() {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <h4>ข้อมูลผู้ขอรับบริการทดสอบ</h4>
-        <CustomerDetail data={customerDetail} />
+        <CustomerDetail data={customer} />
       </div>
       <div className="flex flex-col gap-4">
         <h4>ข้อมูลคำขอรับบริการทดสอบ</h4>
@@ -122,8 +114,8 @@ export default function ReservationDetailPage() {
         <h4>รายการทดสอบ</h4>
         <GlobalTable
           columns={columns}
-          data={testListData.items}
-          loading={loadingTestListdata}
+          data={testList.items}
+          loading={loading}
           editable
           renderFooterCell={() => (
             <TableCell
@@ -133,7 +125,7 @@ export default function ReservationDetailPage() {
               <div className="flex gap-4 justify-end">
                 <p className="font-bold">ราคารวม</p>
                 <p>
-                  {testListData.totalPrice.toLocaleString(undefined, {
+                  {testList.totalPrice.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                   })}{' '}
                   บาท
