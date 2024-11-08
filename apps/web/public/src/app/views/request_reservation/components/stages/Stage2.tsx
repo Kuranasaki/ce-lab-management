@@ -18,7 +18,7 @@ import { useTestItemForm } from '../../../../hooks/request_reservation/useTestIt
 import TestListTableProps from '../../../../domain/entity/view_reservation_detail/TestListTableProps';
 import TestListTableItemProps from '../../../../domain/entity/view_reservation_detail/TestListTableItemProps';
 import TestList from '../../../view_reservation_detail/components/TestList';
-import { ReservationType } from '../../../../data/models/Reservation';
+import { ReservationType } from '@ce-lab-mgmt/api-interfaces';
 import { PricingListProps } from '../../../../domain/entity/request_reservation/pricingListProps';
 import { TestListFormReturned } from '../../../../domain/entity/request_reservation/reqReservRequestFormEntity';
 
