@@ -1,4 +1,4 @@
-interface TestItem {
+export interface TestItem {
   testID: string;
   testName: string;
   testAmount: number;
@@ -6,6 +6,7 @@ interface TestItem {
   testUnit: string;
   testDetails?: string;
   testNote?: string;
+  testTotalPrice: number;
 }
 
 interface TestInfo {
@@ -36,12 +37,12 @@ enum ReservationType {
 }
 
 interface GetReservationResponse {
-  reservationID: string;
+  id: string;
   orgInfo: OrganizationInfo;
   testInfo: TestInfo;
-  status: ReservationStatus;
+  Status: ReservationStatus;
   totalPrice: number;
-  createdOn: Date;
+  CreatedOn: Date;
 }
 
 export { GetReservationResponse, ReservationStatus, ReservationType };
@@ -53,10 +54,10 @@ const TestItemSchema = t.Object({
   testItemID: t.String(),
   testName: t.String(),
   testAmount: t.Number(),
-  testPricePerUnit: t.Number(),
   testUnit: t.String(),
   testDetails: t.Nullable(t.String()),
   testNote: t.Nullable(t.String()),
+  testTotalPrice: t.Number(),
 
   // Experiment data
   assignedProfessorName: t.Nullable(t.String()),
@@ -79,7 +80,7 @@ const OrganizationInfoSchema = t.Object({
 });
 
 const GetReservationSchema = t.Object({
-  reservationID: t.String(),
+  id: t.String(),
   orgInfo: OrganizationInfoSchema,
   testInfo: TestInfoSchema,
   Status: t.Enum({
@@ -92,4 +93,4 @@ const GetReservationSchema = t.Object({
   CreatedOn: t.Date(),
 });
 
-export { GetReservationSchema };
+export { GetReservationSchema, TestItemSchema };

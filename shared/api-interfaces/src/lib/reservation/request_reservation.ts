@@ -22,6 +22,7 @@ export interface TestItem {
   testAmount: number;
   testDetails?: string;
   testNote?: string;
+  testTotalPrice: number;
 }
 
 export interface RequestReservationResponse {
@@ -31,10 +32,18 @@ export interface RequestReservationResponse {
 import { t } from 'elysia';
 
 export const TestItemSchema = t.Object({
-  testID: t.String(),
+  testItemID: t.String(),
+  testName: t.String(),
   testAmount: t.Number(),
-  testDetails: t.Optional(t.String()),
-  testNote: t.Optional(t.String()),
+  testUnit: t.String(),
+  testDetails: t.Nullable(t.String()),
+  testNote: t.Nullable(t.String()),
+  testTotalPrice: t.Number(),
+
+  // Experiment data
+  assignedProfessorName: t.Nullable(t.String()),
+  markedAsDone: t.Nullable(t.Boolean()), // Null If not apprpoved yet (no experiment)
+  certificateUploadedAt: t.Nullable(t.Date()),
 });
 
 export const TestInfoSchema = t.Object({
