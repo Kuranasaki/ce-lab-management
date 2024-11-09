@@ -314,7 +314,13 @@ export default function AddTestForm({
                               placeholder={t(
                                 'form.dataArea.column.startPlaceholder'
                               )}
-                              {...field}
+                              value={field.value ?? ''}
+                              onChange={(e) => {
+                                const filteredValue = e.target.value
+                                  .toUpperCase()
+                                  .replace(/[^A-Z]/g, '');
+                                field.onChange(filteredValue);
+                              }}
                             />
                           </FormItem>
                         )}
@@ -334,7 +340,13 @@ export default function AddTestForm({
                               placeholder={t(
                                 'form.dataArea.column.endPlaceholder'
                               )}
-                              {...field}
+                              value={field.value ?? ''}
+                              onChange={(e) => {
+                                const filteredValue = e.target.value
+                                  .toUpperCase()
+                                  .replace(/[^A-Z]/g, '');
+                                field.onChange(filteredValue);
+                              }}
                             />
                           </FormItem>
                         )}
