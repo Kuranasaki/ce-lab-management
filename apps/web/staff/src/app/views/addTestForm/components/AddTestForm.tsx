@@ -318,7 +318,8 @@ export default function AddTestForm({
                               onChange={(e) => {
                                 const filteredValue = e.target.value
                                   .toUpperCase()
-                                  .replace(/[^A-Z]/g, '');
+                                  .replace(/[^A-Z]/g, '')
+                                  .slice(0, 2);
                                 field.onChange(filteredValue);
                               }}
                             />
@@ -344,7 +345,8 @@ export default function AddTestForm({
                               onChange={(e) => {
                                 const filteredValue = e.target.value
                                   .toUpperCase()
-                                  .replace(/[^A-Z]/g, '');
+                                  .replace(/[^A-Z]/g, '')
+                                  .slice(0, 2);
                                 field.onChange(filteredValue);
                               }}
                             />
