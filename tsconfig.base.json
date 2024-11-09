@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@ce-lab-mgmt/api-interfaces": ["shared/api-interfaces/src/index.ts"],
+      "@ce-lab-mgmt/svc/*": ["apps/services/*/src/index.ts"],
       "@ce-lab-mgmt/core-utils": ["shared/core-utils/src/index.ts"],
       "@ce-lab-mgmt/shared-ui": ["shared/shared-ui/src/index.ts"],
       "@ce-lab-mgmt/trpc-api": ["shared/trpc-api/src/index.ts"]
