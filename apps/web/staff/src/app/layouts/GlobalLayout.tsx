@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 
 export default function GlobalLayout() {
   return (
-    <div className="flex flex-col justify-start items-start w-screen">
+    <div className="flex flex-col justify-start items-start w-full">
       <NavBar />
       <Outlet />
     </div>
