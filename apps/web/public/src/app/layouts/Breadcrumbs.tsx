@@ -43,8 +43,6 @@ export function Breadcrumbs({ routes = [] }: { routes: string[] }) {
     }
   }
 
-  console.log('breadcrumbItems', breadcrumbItems);
-
   return (
     <Breadcrumb>
       <BreadcrumbList>
