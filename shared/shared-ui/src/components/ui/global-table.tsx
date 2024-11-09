@@ -49,6 +49,7 @@ interface TableProps {
   handleDeleteTest?: (id: number) => void;
   handleEditTest?: (id: number) => void;
   emptyDataText?: string;
+  clickForGetDetail?: boolean;
 }
 
 export const GlobalTable: FC<TableProps> = ({
@@ -65,6 +66,7 @@ export const GlobalTable: FC<TableProps> = ({
   handleDeleteTest,
   handleEditTest,
   emptyDataText = 'ไม่มีพบข้อมูล',
+  clickForGetDetail = false,
 }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -142,12 +144,19 @@ export const GlobalTable: FC<TableProps> = ({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      <Link to={`/reservation/${cell.row.original.id}`}>
-                        {flexRender(
+                      {clickForGetDetail ? (
+                        <Link to={`${cell.row.original.id}`} relative="route">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </Link>
+                      ) : (
+                        flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
-                        )}
-                      </Link>
+                        )
+                      )}
                     </TableCell>
                   ))}
                   {editable ? (
