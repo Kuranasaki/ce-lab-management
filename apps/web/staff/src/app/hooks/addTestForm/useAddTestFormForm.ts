@@ -21,7 +21,7 @@ export default function useAddTestFormForm() {
     resolver: zodResolver(addTestFormFormSchema),
     defaultValues: {
       name: '',
-      templateFile: null,
+      templateFile: undefined,
       dataSheetName: '',
       dataFirstRow: undefined,
       dataLastRow: undefined,

@@ -6,20 +6,26 @@ export const addTestFormFormSchema = z.object({
     .custom<File | null>((file) => file === null || file instanceof File, {
       message: 'A file is required.',
     })
-    .nullable() // Allows `templateFile` to be null
-    .refine((file) => file === null || file.size <= 50 * 1024 * 1024, {
-      message: 'File size must be less than 50 MB.',
-    })
+    .refine(
+      (file) => file === null || (file && file.size <= 50 * 1024 * 1024),
+      {
+        message: 'File size must be less than 50 MB.',
+      }
+    )
     .refine(
       (file) =>
         file === null ||
-        file.type ===
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-        file.type === 'application/vnd.ms-excel',
+        (file &&
+          (file.type ===
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+            file.type === 'application/vnd.ms-excel')),
       {
         message: 'Only Excel files are allowed.',
       }
-    ),
+    )
+    .refine((file) => file !== null, {
+      message: 'A file is required to submit.',
+    }),
   dataSheetName: z.string().min(1),
   dataFirstRow: z.number(),
   dataLastRow: z.number(),

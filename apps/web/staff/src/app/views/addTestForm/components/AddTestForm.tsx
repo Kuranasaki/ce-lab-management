@@ -54,7 +54,11 @@ export default function AddTestForm({
           control={form.control}
           name="name"
           render={({ field }) => (
-            <Input placeholder={t('form.name.placeholder')} {...field} />
+            <Input
+              className={form.formState.errors.name && 'ring-1 ring-error-500'}
+              placeholder={t('form.name.placeholder')}
+              {...field}
+            />
           )}
         />
       </div>
@@ -73,7 +77,13 @@ export default function AddTestForm({
               >
                 {t('form.file.button', 'Choose File')}
               </Button>
-              <p className="text-slate-500">
+              <p
+                className={
+                  form.formState.errors.templateFile
+                    ? ' text-error-500'
+                    : 'text-slate-500'
+                }
+              >
                 {field.value?.name ||
                   t('form.file.placeholder', 'No file chosen')}
               </p>
@@ -81,7 +91,10 @@ export default function AddTestForm({
                 id="file-input"
                 type="file"
                 onChange={(e) => {
-                  form.setValue('templateFile', e.target.files?.[0] ?? null);
+                  if (e.target.files?.[0]) {
+                    field.onChange(e.target.files?.[0]);
+                    form.setValue('templateFile', e.target.files?.[0]);
+                  }
                 }}
                 className="hidden"
               />
@@ -102,6 +115,9 @@ export default function AddTestForm({
             <FormItem>
               <FormLabel>{t('form.dataArea.sheet.label')}</FormLabel>
               <Input
+                className={
+                  form.formState.errors.dataSheetName && 'ring-1 ring-error-500'
+                }
                 placeholder={t('form.dataArea.sheet.placeholder')}
                 {...field}
               />
@@ -120,6 +136,10 @@ export default function AddTestForm({
                 <FormItem>
                   <FormLabel>{t('form.dataArea.row.startLabel')}</FormLabel>
                   <Input
+                    className={
+                      form.formState.errors.dataFirstRow &&
+                      'ring-1 ring-error-500'
+                    }
                     type="number"
                     placeholder={t('form.dataArea.row.startPlaceholder')}
                     {...field}
@@ -134,6 +154,10 @@ export default function AddTestForm({
                 <FormItem>
                   <FormLabel>{t('form.dataArea.row.endLabel')}</FormLabel>
                   <Input
+                    className={
+                      form.formState.errors.dataLastRow &&
+                      'ring-1 ring-error-500'
+                    }
                     type="number"
                     placeholder={t('form.dataArea.row.endPlaceholder')}
                     {...field}
@@ -147,7 +171,12 @@ export default function AddTestForm({
         {/* Column */}
         <div className="flex flex-col gap-2">
           <p className="medium">{t('form.dataArea.column.title')}</p>
-          <div className="rounded-lg border border-slate-300 overflow-clip">
+          <div
+            className={
+              'rounded-lg border border-slate-300 overflow-clip' +
+              (form.formState.errors.dataColumn ? ' ring-1 ring-error-500' : '')
+            }
+          >
             <Table>
               <TableHeader>
                 <TableRow>
