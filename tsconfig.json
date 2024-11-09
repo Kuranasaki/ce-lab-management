@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@ce-lab-mgmt/shared": ["shared/shared-ui/src/index.ts"],
+      "@ce-lab-mgmt/shared/*": ["shared/shared-ui/src/*"]
+    }
+  }
+}
