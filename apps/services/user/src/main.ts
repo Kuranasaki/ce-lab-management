@@ -5,7 +5,7 @@ import { UserRepository } from './repository/userRepo';
 import { AuthService } from './service/auth';
 import firebase from 'firebase-admin';
 import mongoose from 'mongoose';
-import { UserSchema } from '@ce-lab-mgmt/api-interfaces';
+import { UserSchema, UserAPI } from '@ce-lab-mgmt/api-interfaces';
 
 firebase.initializeApp();
 mongoose.connect(Bun.env.USER_MONGO_URI ?? '');
@@ -18,7 +18,7 @@ const authService = new AuthService(
   Bun.env.CUSSO_APP_SECRET ?? ''
 );
 
-const app = new Elysia()
+export const App = new Elysia()
   .use(
     swagger({
       provider: 'scalar',
@@ -41,12 +41,8 @@ const app = new Elysia()
       return { token };
     },
     {
-      body: t.Object({
-        ticket: t.String(),
-      }),
-      response: t.Object({
-        token: t.String(),
-      }),
+      body: UserAPI.CUSSORequestSchema,
+      response: UserAPI.CUSSOResponseSchema,
     }
   )
   .post(
@@ -60,13 +56,8 @@ const app = new Elysia()
       return { token };
     },
     {
-      body: t.Object({
-        username: t.String(),
-        password: t.String(),
-      }),
-      response: t.Object({
-        token: t.String(),
-      }),
+      body: UserAPI.CULDAPRequestSchema,
+      response: UserAPI.CULDAPResponseSchema,
     }
   )
   .listen(3000);
