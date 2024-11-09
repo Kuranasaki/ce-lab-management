@@ -187,12 +187,12 @@ export default function Stage2({
 
                       return new TestListTableItemProps(
                         index.toString(),
-                        name,
-                        priceperunit,
+                        item.testName,
                         item.testAmount,
-                        unit,
+                        item.testUnit,
                         item.testDetails,
-                        item.testNote
+                        item.testNote,
+                        item.testTotalPrice
                       );
                     }),
                     testListForm.getValues('testList').reduce((acc, item) => {

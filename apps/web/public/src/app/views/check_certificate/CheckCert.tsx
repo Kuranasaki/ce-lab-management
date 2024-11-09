@@ -1,12 +1,22 @@
-import { Button, Card, CardContent, Input } from '@ce-lab-mgmt/shared-ui';
+import {
+  Button,
+  Card,
+  CardContent,
+  FileCard,
+  Input,
+  ToastEntity,
+} from '@ce-lab-mgmt/shared-ui';
 import IMAGES from '../../../assets/images';
 import { DownloadIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
+import { Certificate } from '../../domain/entity/get_certificate/certificateEntity';
+import getCertificateUsecase from '../../domain/usecase/get_certificate/getCertificate';
+import axios from 'axios';
 
 const CheckCert = () => {
   const [certId, setCertId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResult, setSearchResult] = useState(null);
+  const [searchResult, setSearchResult] = useState<Certificate | null>(null);
   const [error, setError] = useState('');
 
   const handleSearch = async () => {
@@ -14,24 +24,15 @@ const CheckCert = () => {
       setError('กรุณากรอกหมายเลขการทดสอบ');
       return;
     }
-
     setIsLoading(true);
-    setError('');
-    setSearchResult(null);
-
     try {
-      const response = await fetch(`/api/certificates/${certId}`);
-      if (response.status === 404) {
-        setError(
-          'ไม่พบการทดสอบของคุณ โปรดตรวจสอบหมายเลขการทดสอบของคุณอีกครั้ง'
-        );
+      const cert = await getCertificateUsecase(certId);
+      if (cert instanceof Certificate) {
+        setSearchResult(cert);
+      } else if (cert instanceof ToastEntity) {
+        setError((cert as ToastEntity).description);
         return;
       }
-      if (!response.ok) {
-        throw new Error('Server Error');
-      }
-      const data = await response.json();
-      setSearchResult(data);
     } catch (err) {
       setError('เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง');
       setSearchResult(null);
@@ -41,27 +42,16 @@ const CheckCert = () => {
   };
 
   const handleDownload = async () => {
+    if (!searchResult) return;
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/certificates/${certId}/download`);
-      if (response.status === 404) {
-        setError(
-          'ไม่พบการทดสอบของคุณ โปรดตรวจสอบหมายเลขการทดสอบของคุณอีกครั้ง'
-        );
-        return;
-      }
-      if (!response.ok) {
-        throw new Error('Download Error');
-      }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `certificate-${certId}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      const link = document.createElement('a');
+      link.href = searchResult.url;
+      link.target = '_blank';
+      link.download = `certificate-${certId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (err) {
       setError('เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง');
     } finally {
@@ -71,7 +61,7 @@ const CheckCert = () => {
 
   return (
     <div className="h-full items-center flex mt-6 lg:mt-54 flex-col">
-      <div className="w-full max-w-[350px] flex flex-col gap-y-6 lg:gap-y-8">
+      <div className="w-full max-w-[500px] flex flex-col gap-y-6 lg:gap-y-8">
         <p className="font-bold text-2xl md:text-3xl text-center">
           ตรวจสอบผลการทดสอบ
         </p>
@@ -101,30 +91,20 @@ const CheckCert = () => {
           </Button>
         </div>
 
-        {(searchResult || true) && (
-          <Card className="w-full">
-            <CardContent className="flex items-center p-6 justify-between">
-              <div className="flex items-center gap-x-4">
-                <img
-                  src={IMAGES.pdfIcon}
-                  alt="PDF Icon"
-                  className="h-12 w-12"
-                />
-                <div className="space-y-1">
-                  <p className="font-medium">ชื่อไฟล์</p>
-                  <p className="text-sm text-gray-500">รายละเอียด</p>
-                </div>
-              </div>
-              <Button
-                variant="link"
-                onClick={handleDownload}
-                disabled={isLoading}
-                className="hover:no-underline"
-              >
-                <DownloadIcon className="h-6 w-6" />
-              </Button>
-            </CardContent>
-          </Card>
+        {searchResult && (
+          <FileCard
+            isLoading={isLoading}
+            fileName={searchResult.fileName}
+            description={searchResult.getDescription()}
+            handleDownload={handleDownload}
+            imgUrl={
+              searchResult.mimeType === 'application/pdf'
+                ? IMAGES.pdfIcon
+                : searchResult.mimeType === 'application/xlsx'
+                ? IMAGES.excelIcon
+                : undefined
+            }
+          />
         )}
 
         {isLoading && (

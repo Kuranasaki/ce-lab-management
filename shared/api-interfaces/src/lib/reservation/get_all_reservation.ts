@@ -1,31 +1,13 @@
-interface Reservation {
-    reservationID: string,
-    Status: ReservationStatus,
-    testType: string,
-    CreatedOn: Date,
-    totalPrice: number,
-}
-
-type GetAllReservationResponse = Reservation[];
+type GetAllReservationResponse = GetReservationResponse[];
 
 export { GetAllReservationResponse };
 
 import { t } from 'elysia';
-import { ReservationStatus } from './get_reservation';
+import {
+  GetReservationResponse,
+  GetReservationSchema,
+} from './get_reservation';
 
-const ReservationSchema = t.Object({
-    reservationID: t.String(),
-    Status: t.Enum({
-        Pending: 'pending',
-        Processing: 'processing',
-        Success: 'success',
-        Canceled: 'canceled',
-    }),
-    testType: t.String(),
-    CreatedOn: t.Date(),
-    totalPrice: t.Number(),
-});
-
-const GetAllReservationSchema = t.Array(ReservationSchema);
+const GetAllReservationSchema = t.Array(GetReservationSchema);
 
 export { GetAllReservationSchema };
