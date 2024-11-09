@@ -1,13 +1,49 @@
-import { Button, Input, Tabs, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { Cell, GlobalTable, Header, Input, Tabs, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-
+import { ColumnDef } from "@tanstack/react-table";
+import ExperimentTableItemProps from "../../domain/entity/view_experiment/experimentTableItemProps";
+import { useExperimentTable } from "../../hooks/view_experiment/useExperimentTable";
 export default function ViewExperimentsPage() {
     const { t } = useTranslation(['common', 'view_experiments']);
 
     const [activeTab, setActiveTab] = useState<string>('');
+    const { data, loading } = useExperimentTable();
+
+    const columns: ColumnDef<ExperimentTableItemProps>[] = [
+        {
+            accessorKey: 'id',
+            header: ({ column }) => {
+                return <Header title="หมายเลขการทดสอบ" column={column} />;
+            },
+            cell: ({ row }) => <Cell>{row.original.id}</Cell>,
+        },
+        {
+            accessorKey: 'assignedAt',
+            header: ({ column }) => {
+                return <Header title="วันที่มอบหมาย" column={column} />;
+            },
+            cell: ({ row }) => <Cell>{row.original.assignedAt.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            })}</Cell>,
+        },
+        {
+            accessorKey: 'testName',
+            header: ({ column }) => {
+                return <Header title="ชื่อการทดสอบ" column={column} />;
+            },
+            cell: ({ row }) => <Cell>{row.original.testName}</Cell>,
+        },
+        {
+            accessorKey: 'status',
+            header: ({ column }) => {
+                return <Header title="สถานะ" column={column} />;
+            },
+            cell: ({ row }) => <Cell>{t(`view_experiments:${row.original.status}`)}</Cell>,
+        },
+    ];
 
     return (
         <div className="flex flex-col gap-6">
@@ -23,10 +59,19 @@ export default function ViewExperimentsPage() {
                         <TabsTrigger value="waiting_for_certificate">{t('view_experiments:waiting_for_certificate')}</TabsTrigger>
                         <TabsTrigger value="completed">{t('view_experiments:completed')}</TabsTrigger>
                     </TabsList>
-                    <Input className="w-1/4" placeholder={t('search')} />
+                    <Input className="w-1/4" disabled placeholder={t('search')} />
                 </div>
                 <div className="rounded-lg border border-slate-300">
-                    TODO: TABLE
+                    <GlobalTable
+                        columns={columns}
+                        data={data}
+                        loading={loading}
+                        filterFieldName={'status'}
+                        filterValue={activeTab}
+                        emptyDataText={t('view_experiments:not_found_text')}
+                        enablePagination
+                        clickForGetDetail
+                    />
                 </div>
             </Tabs>
         </div>
