@@ -1,7 +1,7 @@
 {
   "name": "@ce-lab-mgmt/api-interfaces",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": { "elysia": "^1.1.22", "mongoose": "^8.7.1" },
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts",
