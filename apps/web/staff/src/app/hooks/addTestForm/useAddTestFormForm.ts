@@ -5,6 +5,7 @@ import {
   AddTestFormFormType,
 } from '../../domain/entity/addTestForm/addTestFormFormEntity';
 import { zodResolver } from '@hookform/resolvers/zod';
+import postAddTestForm from '../../domain/usecase/addTestForm/postAddTestForm';
 
 // Utility function to convert column letters (like 'A', 'Z', 'AA') to numbers
 const letterToNumber = (str: string): number => {
@@ -56,9 +57,10 @@ export default function useAddTestFormForm() {
     addColumnForm.reset();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log(form.getValues());
-    // TODO: Handle form submission
+    const toast = await postAddTestForm(form);
+    console.log(toast);
   };
 
   return { form, addColumn, handleSubmit };
