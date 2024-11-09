@@ -41,7 +41,8 @@ export type AddTestFormFormReturned = UseFormReturn<AddTestFormFormType>;
 const letterToNumber = (str: string): number => {
   let result = 0;
   for (let i = 0; i < str.length; i++) {
-    result = result * 26 + (str.charCodeAt(i) - 'A'.charCodeAt(0) + 1);
+    result +=
+      26 ** (str.length - i - 1) * (str.charCodeAt(i) - 'A'.charCodeAt(0) + 1);
   }
   return result;
 };
