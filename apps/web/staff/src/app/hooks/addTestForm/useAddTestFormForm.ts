@@ -6,6 +6,7 @@ import {
 } from '../../domain/entity/addTestForm/addTestFormFormEntity';
 import { zodResolver } from '@hookform/resolvers/zod';
 import postAddTestForm from '../../domain/usecase/addTestForm/postAddTestForm';
+import { useToast } from '@ce-lab-mgmt/shared-ui';
 
 // Utility function to convert column letters (like 'A', 'Z', 'AA') to numbers
 const letterToNumber = (str: string): number => {
@@ -18,6 +19,8 @@ const letterToNumber = (str: string): number => {
 };
 
 export default function useAddTestFormForm() {
+  const { toast } = useToast();
+
   const form = useForm<AddTestFormFormType>({
     resolver: zodResolver(addTestFormFormSchema),
     defaultValues: {
@@ -59,8 +62,8 @@ export default function useAddTestFormForm() {
 
   const handleSubmit = async () => {
     console.log(form.getValues());
-    const toast = await postAddTestForm(form);
-    console.log(toast);
+    const result = await postAddTestForm(form);
+    toast({ ...result });
   };
 
   return { form, addColumn, handleSubmit };
