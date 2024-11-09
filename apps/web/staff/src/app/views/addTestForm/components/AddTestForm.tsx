@@ -142,11 +142,15 @@ export default function AddTestForm({
                     }
                     type="number"
                     placeholder={t('form.dataArea.row.startPlaceholder')}
-                    {...field}
+                    value={field.value ?? ''} // Handle case when value is undefined
+                    onChange={(e) =>
+                      field.onChange(parseInt(e.target.value, 10))
+                    }
                   />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="dataLastRow"
@@ -160,7 +164,10 @@ export default function AddTestForm({
                     }
                     type="number"
                     placeholder={t('form.dataArea.row.endPlaceholder')}
-                    {...field}
+                    value={field.value ?? ''} // Handle case when value is undefined
+                    onChange={(e) =>
+                      field.onChange(parseInt(e.target.value, 10))
+                    }
                   />
                 </FormItem>
               )}

@@ -1,45 +1,50 @@
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
-export const addTestFormFormSchema = z.object({
-  name: z.string().min(1),
-  templateFile: z
-    .custom<File | null>((file) => file === null || file instanceof File, {
-      message: 'A file is required.',
-    })
-    .refine(
-      (file) => file === null || (file && file.size <= 50 * 1024 * 1024),
-      {
-        message: 'File size must be less than 50 MB.',
-      }
-    )
-    .refine(
-      (file) =>
-        file === null ||
-        (file &&
-          (file.type ===
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-            file.type === 'application/vnd.ms-excel')),
-      {
-        message: 'Only Excel files are allowed.',
-      }
-    )
-    .refine((file) => file !== null, {
-      message: 'A file is required to submit.',
-    }),
-  dataSheetName: z.string().min(1),
-  dataFirstRow: z.number(),
-  dataLastRow: z.number(),
-  dataColumn: z
-    .array(
-      z.object({
-        label: z.string(),
-        dataType: z.string(),
-        dataFirstColumn: z.string(),
-        dataLastColumn: z.string(),
+export const addTestFormFormSchema = z
+  .object({
+    name: z.string().min(1),
+    templateFile: z
+      .custom<File | null>((file) => file === null || file instanceof File, {
+        message: 'A file is required.',
       })
-    )
-    .min(1),
-});
+      .refine(
+        (file) => file === null || (file && file.size <= 50 * 1024 * 1024),
+        {
+          message: 'File size must be less than 50 MB.',
+        }
+      )
+      .refine(
+        (file) =>
+          file === null ||
+          (file &&
+            (file.type ===
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+              file.type === 'application/vnd.ms-excel')),
+        {
+          message: 'Only Excel files are allowed.',
+        }
+      )
+      .refine((file) => file !== null, {
+        message: 'A file is required to submit.',
+      }),
+    dataSheetName: z.string().min(1),
+    dataFirstRow: z.number().min(1),
+    dataLastRow: z.number().min(1),
+    dataColumn: z
+      .array(
+        z.object({
+          label: z.string(),
+          dataType: z.string(),
+          dataFirstColumn: z.string(),
+          dataLastColumn: z.string(),
+        })
+      )
+      .min(1),
+  })
+  .refine((data) => data.dataLastRow > data.dataFirstRow, {
+    message: 'dataLastRow must be greater than dataFirstRow',
+    path: ['dataLastRow'],
+  });
 
 export type AddTestFormFormType = z.infer<typeof addTestFormFormSchema>;
 export type AddTestFormFormReturned = UseFormReturn<AddTestFormFormType>;
