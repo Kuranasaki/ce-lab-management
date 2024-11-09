@@ -5,6 +5,8 @@ import NxWelcome from './nx-welcome';
 
 import { Route, Routes, Link } from 'react-router-dom';
 
+import { Button } from '@ce-lab-mgmt/shared-ui';
+
 export function App() {
   return (
     <div>
@@ -25,6 +27,17 @@ export function App() {
             <Link to="/page-2">Page 2</Link>
           </li>
         </ul>
+      </div>
+      <div className="p-20 bg-red-600">
+        <Button
+          size={'lg'}
+          variant={'destructive'}
+          onClick={() => {
+            console.log('hello');
+          }}
+        >
+          hello
+        </Button>
       </div>
       <Routes>
         <Route

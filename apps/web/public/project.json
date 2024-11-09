@@ -3,7 +3,16 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/web/public/src",
   "projectType": "application",
-  "tags": ["scope:public", "type:ui"],
+  "tags": ["scope:public", "type:ui", "type:web"],
   "// targets": "to see all targets run: nx show project public-web --web",
-  "targets": {}
+  "targets": {
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "public-web:build"
+      },
+      "configurations": {}
+    }
+  }
 }
