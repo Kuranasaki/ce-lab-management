@@ -193,10 +193,10 @@ const columns: ColumnDef<TestListTableItemProps>[] = [
     cell: ({ row }) => <Cell>{row.original.unit}</Cell>,
   },
   {
-    accessorKey: 'priceperunit',
+    accessorKey: 'totalPrice',
     header: () => {
-      return <Header className="text-center" title="ราคาต่อหน่วย" />;
+      return <Header className="text-center" title="ราคา" />;
     },
-    cell: ({ row }) => <Cell>{row.original.formatPricePerUnit()}</Cell>,
+    cell: ({ row }) => <Cell>{row.original.formatAmount()}</Cell>,
   },
 ];
