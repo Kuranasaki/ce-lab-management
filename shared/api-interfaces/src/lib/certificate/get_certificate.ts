@@ -5,10 +5,7 @@ Request
 - GET /certificate/{testId}
 - Path Parameter: testId: string
 */
-export const GetCertificateResponseSchema = t.File({
-  contentType: 'application/pdf',
-  fileName: t.String().default('certificate_{testId}.pdf'),
-});
+export const GetCertificateResponseSchema = t.File();
 /*
 Response
 - Status: 200

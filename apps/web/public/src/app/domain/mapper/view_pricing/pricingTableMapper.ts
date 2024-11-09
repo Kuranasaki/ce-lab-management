@@ -5,11 +5,12 @@ import {
   PricingGroup,
   SubTest,
   Test,
+  PricingType,
 } from '../../entity/view_pricing/pricingTableItem';
 
 export default async function mapper(
   rawData: BaseResponse<PricingItem[]>
-): Promise<PricingGroup[] | ToastEntity> {
+): Promise<PricingType[] | ToastEntity> {
   if (!rawData) {
     return [];
   }
@@ -21,7 +22,7 @@ export default async function mapper(
     return ToastEntity.unknownError();
   }
 
-  const groupedData: PricingTableItem[] = rawData.data.map((priceItem) => {
+  const pricingItems: PricingTableItem[] = rawData.data.map((priceItem) => {
     return new PricingTableItem(
       priceItem.description,
       priceItem.id,
@@ -33,76 +34,97 @@ export default async function mapper(
 
   const transformApiResponse = (
     response: PricingTableItem[]
-  ): PricingGroup[] => {
-    const groupedData: { [category: string]: PricingGroup } = {};
+  ): PricingType[] => {
+    const groupedData: {
+      [type: string]: { [category: string]: PricingGroup };
+    } = {};
 
-    response.forEach((priceItem, idx) => {
-      const category = priceItem.tags?.category?.[0];
-      const testName = priceItem.tags?.subcategory?.[0] || null; // Use subcategory as the test name if it exists
-      const pricingInfo = priceItem.pricing?.[0] || {};
-      const price = pricingInfo.price || 0;
-      const unit = pricingInfo.perUnit?.unit || '';
-      const amount = pricingInfo.perUnit?.quantity || 0;
+    response.forEach((priceItem) => {
+      const type = priceItem.tags?.type;
+      const category = priceItem.tags?.category || 'Uncategorized';
+      const subcategory = priceItem.tags?.subcategory;
+      const testName = subcategory || priceItem.name; // Use subcategory as test name if available
 
-      // Initialize the category group if not already present
-      if (!groupedData[category]) {
-        groupedData[category] = {
+      const pricingInfo = priceItem.pricing;
+
+      // Initialize type and category groups if they don't already exist
+      if (!groupedData[type]) groupedData[type] = {};
+      if (!groupedData[type][category]) {
+        groupedData[type][category] = {
           category: category,
           tests: [],
         };
       }
 
-      // Create the test item using the subcategory as the test name
-      let isAddTest = false;
-      let test = groupedData[category].tests.find(
-        (t) => t.test_name === testName
-      );
+      const categoryGroup = groupedData[type][category];
+      let test = categoryGroup.tests.find((t) => t.test_name === testName);
 
+      // Add new test if it doesn’t exist
       if (!test) {
-        isAddTest = true;
         test = {
-          test_name: testName || priceItem.name,
-          price: price,
-          amount: amount,
-          unit: unit,
+          test_name: testName,
           note: priceItem.description || '',
         } as Test;
+        categoryGroup.tests.push(test);
       }
 
-      let subTest: SubTest | null = null;
-      if (priceItem.tags.subcategory.length > 0) {
-        subTest = {
+      // Add sub-test if subcategory exists
+      if (subcategory) {
+        const subTest: SubTest = {
           sub_test_name: priceItem.name,
-          price: price,
-          amount: amount,
-          unit: unit,
-        } as SubTest;
-      }
-
-      // Add the test to the corresponding category
-      if (subTest) {
+          note: priceItem.description,
+          prices: pricingInfo.map((price) => {
+            return {
+              price: price.price,
+              unit: price.perUnit.unit,
+              amount: price.perUnit.quantity,
+            };
+          }),
+        };
         test.sub_tests = test.sub_tests || [];
         test.sub_tests.push(subTest);
-        if (isAddTest) {
-          groupedData[category].tests.push(test);
-        } else {
-          const existingTestIndex = groupedData[category].tests.findIndex(
-            (t) => t.test_name === testName
-          );
-          if (existingTestIndex !== -1) {
-            groupedData[category].tests[existingTestIndex] = test;
-          }
-        }
       } else {
-        groupedData[category].tests.push(test);
+        test.prices = pricingInfo.map((price) => {
+          return {
+            price: price.price,
+            unit: price.perUnit.unit,
+            amount: price.perUnit.quantity,
+          };
+        });
       }
     });
 
+    const transformed = Object.keys(groupedData).map((type) => {
+      const categories: PricingGroup[] = Object.keys(groupedData[type]).map(
+        (category) => {
+          const group = groupedData[type][category];
+          return {
+            category,
+            note: group.note,
+            tests: group.tests.map((test) => ({
+              test_name: test.test_name,
+              prices: test.prices,
+              sub_tests: test.sub_tests?.map((subTest) => ({
+                sub_test_name: subTest.sub_test_name,
+                prices: subTest.prices,
+              })),
+              note: test.note,
+            })),
+          };
+        }
+      );
+
+      return {
+        type,
+        categories,
+      };
+    });
+
     // Convert the grouped data to an array of PricingGroup
-    return Object.values(groupedData);
+    return transformed;
   };
 
-  const transformedData = transformApiResponse(groupedData);
+  const transformedData = transformApiResponse(pricingItems);
 
   return transformedData;
 }

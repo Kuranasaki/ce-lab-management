@@ -12,23 +12,22 @@ import {
 } from '@ce-lab-mgmt/shared-ui';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Dialog } from '@radix-ui/react-dialog';
-import { TestListForm } from '../../../../hooks/request_reservation/useTestListForm';
 import AddEditItemDialog from './AddEditItemDialog';
 import { useEffect, useState } from 'react';
 import { useTestItemForm } from '../../../../hooks/request_reservation/useTestItemForm';
 import TestListTableProps from '../../../../domain/entity/view_reservation_detail/TestListTableProps';
 import TestListTableItemProps from '../../../../domain/entity/view_reservation_detail/TestListTableItemProps';
 import TestList from '../../../view_reservation_detail/components/TestList';
-import { ReservationType } from '../../../../data/models/Reservation';
+import { ReservationType } from '@ce-lab-mgmt/api-interfaces';
 import { PricingListProps } from '../../../../domain/entity/request_reservation/pricingListProps';
-import test from 'node:test';
+import { TestListFormReturned } from '../../../../domain/entity/request_reservation/reqReservRequestFormEntity';
 
 export default function Stage2({
   testListForm,
   pricingList,
   setStage,
 }: {
-  testListForm: TestListForm;
+  testListForm: TestListFormReturned;
   pricingList: PricingListProps;
   setStage: (stage: number) => void;
 }) {
@@ -155,42 +154,64 @@ export default function Stage2({
               <TestList
                 data={
                   new TestListTableProps(
-                    testListForm.getValues('testList').map(
-                      (item, index) =>
-                        new TestListTableItemProps(
-                          index.toString(),
-                          item.testName + ': ' + item.testSubName,
-                          pricingList.categoryTestList
-                            .get(testListForm.getValues('testType'))
-                            ?.testItems.get(item.testName)
-                            ?.find(
-                              (testItem) =>
-                                testItem.subName === item.testSubName
-                            )?.pricePerUnit || 0,
+                    testListForm.getValues('testList').map((item, index) => {
+                      const name =
+                        item.testName === 'อื่น ๆ'
+                          ? item.testSubName
+                          : item.testName + ': ' + item.testSubName;
 
-                          item.testAmount,
-                          pricingList.categoryTestList
-                            .get(testListForm.getValues('testType'))
-                            ?.testItems.get(item.testName)
-                            ?.find(
-                              (testItem) =>
-                                testItem.subName === item.testSubName
-                            )?.unit || '',
-                          item.testDetails,
-                          item.testNote
-                        )
-                    ),
-                    testListForm.getValues('testList').reduce(
-                      (acc, item) =>
-                        acc +
-                        (pricingList.categoryTestList
+                      const priceperunitItem = pricingList.categoryTestList
+                        .get(testListForm.getValues('testType'))
+                        ?.testItems.get(item.testName)
+                        ?.find(
+                          (testItem) => testItem.subName === item.testSubName
+                        );
+                      let priceperunit = 0;
+                      if (priceperunitItem !== undefined) {
+                        const idx =
+                          priceperunitItem.prices.length > 1
+                            ? priceperunitItem.prices.findIndex(
+                                (price) => price.amount === item.testAmount
+                              )
+                            : 0;
+                        priceperunit = priceperunitItem.prices[idx].price;
+                      }
+
+                      const unit =
+                        pricingList.categoryTestList
                           .get(testListForm.getValues('testType'))
                           ?.testItems.get(item.testName)
-                          ?.find((testItem) => testItem.id === item.testID)
-                          ?.pricePerUnit || 0) *
-                          item.testAmount,
-                      0
-                    )
+                          ?.find(
+                            (testItem) => testItem.subName === item.testSubName
+                          )?.prices[0].unit || '';
+
+                      return new TestListTableItemProps(
+                        index.toString(),
+                        name,
+                        priceperunit,
+                        item.testAmount,
+                        unit,
+                        item.testDetails,
+                        item.testNote
+                      );
+                    }),
+                    testListForm.getValues('testList').reduce((acc, item) => {
+                      const itemTemp = pricingList.categoryTestList
+                        .get(testListForm.getValues('testType'))
+                        ?.testItems.get(item.testName)
+                        ?.find((testItem) => testItem.id === item.testID);
+
+                      const totalPrice =
+                        (itemTemp
+                          ? itemTemp?.prices.length > 1
+                            ? itemTemp?.prices.find(
+                                (price) => price.amount === item.testAmount
+                              )?.price
+                            : itemTemp?.prices[0].price * item.testAmount
+                          : 0) || 0;
+
+                      return acc + totalPrice;
+                    }, 0)
                   )
                 }
                 handleEditTest={handleOpenEditDialog}
