@@ -353,3 +353,38 @@ export const StatusBar = ({ status }: { status: string }) => {
     </div>
   );
 };
+
+export const StatusColorBar = ({ text, variant }: { text: string, variant: string }) => {
+  let bgColor = '';
+  let textColor = '';
+
+  switch (variant) {
+      case 'warning':
+          bgColor = 'bg-warning-100';
+          textColor = 'text-warning-700';
+          break;
+      case 'primary':
+          bgColor = 'bg-primary-100';
+          textColor = 'text-primary-700';
+          break;
+      case 'success':
+          bgColor = 'bg-success-100';
+          textColor = 'text-success-500';
+          break;
+      case 'error':
+          bgColor = 'bg-error-100';
+          textColor = 'text-error-700';
+          break;
+      default:
+          bgColor = 'bg-gray-500';
+          textColor = 'text-slate-700';
+  }
+
+  return (
+      <div
+          className={`w-fit px-2 py-1 rounded-3xl text-sm pointer-events-none ${bgColor} ${textColor}`}
+      >
+          {text}
+      </div>
+  );
+};
