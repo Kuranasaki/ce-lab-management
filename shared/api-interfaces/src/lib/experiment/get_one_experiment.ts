@@ -1,4 +1,23 @@
 import { t } from 'elysia';
+interface GetExperimentResponse {
+  id: string; // Experiment ID
+  reservationID: string; // Reservation ID
+  testItemID: string; // Pointer to testItem in reservation
+  testName: string; // Test Name e.g. Tensile test of prestressed wire and prestressed strand: wire ø 7 mm
+  testAmount: number; // Test Amount
+  testDetails?: string; // Test Details added by customer
+  testNote?: string; // Test Note added by customer
+  assignedProfessorID?: string;
+  assignedProfessorName?: string;
+  assignedAt: Date;
+  testFormURL?: string;
+  markedAsDone: boolean;
+  markedAsDoneAt?: Date;
+  certificateURL?: string;
+  certificateUploadedAt?: Date;
+}
+
+export { GetExperimentResponse };
 
 // Get one experiment by id
 /*
