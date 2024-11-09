@@ -1,4 +1,4 @@
-import { Cell, GlobalTable, Header, Input, Tabs, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
+import { Cell, GlobalTable, Header, Input, StatusColorBar, Tabs, TabsList, TabsTrigger } from "@ce-lab-mgmt/shared-ui";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ColumnDef } from "@tanstack/react-table";
@@ -41,7 +41,7 @@ export default function ViewExperimentsPage() {
             header: ({ column }) => {
                 return <Header title="สถานะ" column={column} />;
             },
-            cell: ({ row }) => <Cell>{t(`view_experiments:${row.original.status}`)}</Cell>,
+            cell: ({ row }) => <Cell><StatusColorBar text={t(`view_experiments:${row.original.status}`)} variant={statusMap[row.original.status]}/></Cell>,
         },
     ];
 
@@ -77,3 +77,9 @@ export default function ViewExperimentsPage() {
         </div>
     )
 }
+
+const statusMap: { [key: string]: string } = {
+    waiting_for_test: 'warning',
+    waiting_for_certificate: 'primary',
+    completed: 'success',
+};
