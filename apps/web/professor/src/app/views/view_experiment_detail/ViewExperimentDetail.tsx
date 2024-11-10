@@ -51,7 +51,7 @@ export default function ViewExperimentDetailPage() {
         <div className="flex justify-between">
           <h4>{t('view_experiment_detail:experiment_result')}</h4>
           {experimentDetail?.status === 'waiting_for_test' && !experimentDetail?.testFormURL && (
-            <Button variant="default" size="sm">
+            <Button onClick={handleAddForm} variant="default" size="sm">
               <PlusIcon aria-label={t('view_experiment_detail:add_icon')} />
               {t('view_experiment_detail:add_new_experiment_form')}
             </Button>
@@ -63,8 +63,8 @@ export default function ViewExperimentDetailPage() {
             <>
               <div>EXCEL</div>
               <div className="flex justify-end gap-2">
-                <Button variant="destructive" size="sm">{t('view_experiment_detail:delete_test_result')}</Button>
-                <Button variant="accept" size="sm">{t('view_experiment_detail:submit_test_result')}</Button>
+                <Button disabled onClick={handleDeleteForm} variant="destructive" size="sm">{t('view_experiment_detail:delete_test_result')}</Button>
+                <Button onClick={handleSubmitForm} variant="accept" size="sm">{t('view_experiment_detail:submit_test_result')}</Button>
               </div>
             </>
           ) : (
@@ -131,4 +131,15 @@ const statusMap: {
     textColor: 'text-success-500',
   },
 };
+
+const handleAddForm = () => {
+  // Add form logic here
+};
+
+const handleDeleteForm = () => {
+
+}
+const handleSubmitForm= () => {
+
+}
 
