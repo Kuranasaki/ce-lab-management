@@ -237,6 +237,10 @@ const app = new Elysia()
         tags: [{ name: 'Pricing', description: 'Pricing endpoints' }],
       },
     })
-  );
+  )
+  .listen(3000)
+  .use(cors());
 
 export default app;
+
+export type ReservationServiceType = typeof app;
