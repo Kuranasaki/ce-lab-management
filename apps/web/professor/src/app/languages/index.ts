@@ -16,7 +16,7 @@ i18n
     // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
     // if you're using a language detector, do not define the lng option
 
-    ns: ['common', 'view_experiments'], // specify namespaces for each view
+    ns: ['common', 'view_experiments', 'view_experiment_detail'], // specify namespaces for each view
     defaultNS: 'common', // default namespace if not specified
 
     interpolation: {

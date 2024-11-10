@@ -7,4 +7,5 @@ export default {
   test_history: 'ประวัติการทดสอบ',
   setting: 'ตั้งค่า',
   signout: 'ออกจากระบบ',
+  loading: 'กำลังโหลด'
 };

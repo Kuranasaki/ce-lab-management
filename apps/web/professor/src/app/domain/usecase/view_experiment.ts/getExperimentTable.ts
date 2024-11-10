@@ -2,7 +2,7 @@ import getAllExperiment from "../../../data/repositories/view_experiment/getAllE
 import experimentTableMapper from "../../mapper/view_experiment/experimentTableMapper";
 
 export default async function getExperimentTable() {
-    const rawData = await getAllExperiment();
-    const mappedData = await experimentTableMapper(rawData);
+    // const rawData = await getAllExperiment();
+    const mappedData = await experimentTableMapper();
     return mappedData;
 }

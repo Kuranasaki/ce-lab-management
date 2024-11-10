@@ -13,10 +13,10 @@ export default function MainLayout({
   const location = useLocation();
 
   return (
-    <div className="flex flex-1 w-full">
+    <div className="flex flex-1 w-full min-h-screen">
       <NavBar />
 
-      <div className="flex flex-col w-full mt-16 p-12 gap-10">
+      <div className="flex flex-1 flex-col w-full mt-16 p-12 gap-10">
         <Breadcrumbs
           routes={location.pathname
             .slice(1)
@@ -29,7 +29,7 @@ export default function MainLayout({
             )}
         />
 
-        <div className="flex flex-col lg:px-40 xl:px-64 px-0 gap-8">
+        <div className="flex flex-1 flex-col lg:px-40 xl:px-64 px-0 gap-8">
           {showTitle && <h2 className="text-center">{title}</h2>}
           <Outlet />
         </div>

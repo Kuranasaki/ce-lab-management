@@ -78,7 +78,7 @@ export default function ViewExperimentsPage() {
     )
 }
 
-const statusMap: { [key: string]: string } = {
+export const statusMap: { [key: string]: string } = {
     waiting_for_test: 'warning',
     waiting_for_certificate: 'primary',
     completed: 'success',

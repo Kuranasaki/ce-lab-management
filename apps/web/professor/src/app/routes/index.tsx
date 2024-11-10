@@ -6,6 +6,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import GlobalLayout from '../layouts/GlobalLayout';
 import ProtectedLayout from '../layouts/ProtectedLayout';
 import ViewExperimentsPage from '../views/view_experiments/ViewExperiment';
+import ViewExperimentDetailPage from '../views/view_experiment_detail/ViewExperimentDetail';
 
 export default createBrowserRouter([
   {
@@ -49,7 +50,7 @@ export default createBrowserRouter([
                 children: [
                   {
                     path: '',
-                    element: <div>PAGE</div>,
+                    element: <ViewExperimentDetailPage/>,
                   },
                 ],
               },
