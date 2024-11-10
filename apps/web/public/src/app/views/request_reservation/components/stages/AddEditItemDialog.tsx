@@ -167,6 +167,16 @@ export default function AddEditItemDialog({
                         <Select
                           onValueChange={(e) => {
                             field.onChange(sanitizeNumberInput(e));
+                            testItemForm.setValue(
+                              'testTotalPrice',
+                              testSubDetails.prices.find(
+                                (p) => p.amount === sanitizeNumberInput(e)
+                              )?.price || 0
+                            );
+                            testItemForm.setValue(
+                              'testUnit',
+                              testSubDetails.prices[0].unit
+                            );
                           }}
                           value={field.value ? String(field.value) : ''}
                         >
@@ -196,9 +206,18 @@ export default function AddEditItemDialog({
                               : ''
                           }
                           placeholder="ระบุจำนวนหน่วย (บังคับ)"
-                          onChange={(e) =>
-                            field.onChange(sanitizeNumberInput(e.target.value))
-                          }
+                          onChange={(e) => {
+                            field.onChange(sanitizeNumberInput(e.target.value));
+                            testItemForm.setValue(
+                              'testTotalPrice',
+                              Number(sanitizeNumberInput(e.target.value)) *
+                                testSubDetails.prices[0].price
+                            );
+                            testItemForm.setValue(
+                              'testUnit',
+                              testSubDetails.prices[0].unit
+                            );
+                          }}
                           value={field.value ? String(field.value) : ''}
                         />
                       )}
@@ -224,7 +243,8 @@ export default function AddEditItemDialog({
             <Button
               variant="accept"
               type="submit"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 testItemForm.handleSubmit(onSubmit)();
               }}
             >

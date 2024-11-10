@@ -8,6 +8,8 @@ import {
   RequestReservationFormSchema,
   PricingDataSchema,
 } from '@ce-lab-mgmt/api-interfaces';
+import cors from '@elysiajs/cors';
+import swagger from '@elysiajs/swagger';
 
 // MongoDB connection
 const MONGO_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017';
@@ -65,17 +67,25 @@ class ReservationService {
     try {
       const database = this.db.db(MONGO_DB);
       const collection = database.collection('reservations');
+      console.log(data);
 
       // Calculate total price
       const totalPrice = await this.calculatePrice(data.testInfo);
 
       const reservation = {
         ...data,
+        testInfo: {
+          ...data.testInfo,
+          testList: data.testInfo.testList.map((test: any) => ({
+            ...test,
+            testID: new ObjectId(),
+          })),
+        },
         Status: 'pending',
         CreatedOn: new Date(),
         totalPrice,
       };
-
+      console.log(reservation);
       const result = await collection.insertOne(reservation);
 
       return new BaseResponse({
@@ -95,14 +105,28 @@ class ReservationService {
       const database = this.db.db(MONGO_DB);
       const collection = database.collection('reservations');
 
+      if (!ObjectId.isValid(id)) {
+        return new BaseResponse({ error: new Error(400) });
+      }
+
       const reservation = await collection.findOne({ _id: new ObjectId(id) });
 
       if (!reservation) {
         return new BaseResponse({ error: new Error(404) });
       }
 
-      return new BaseResponse({ data: reservation });
-    } catch (error) {
+      const formattedReservation = {
+        id: reservation._id.toString(),
+        orgInfo: reservation.orgInfo,
+        testInfo: reservation.testInfo,
+        Status: reservation.Status,
+        totalPrice: reservation.totalPrice,
+        CreatedOn: reservation.CreatedOn,
+      };
+
+      return new BaseResponse({ data: formattedReservation });
+    } catch (error: any) {
+      console.log(error.message);
       return new BaseResponse({ error: new Error(500) });
     }
   }
@@ -115,9 +139,23 @@ class ReservationService {
       const collection = database.collection('reservations');
 
       const reservations = await collection.find({}).toArray();
+      const formattedReservations = reservations.map((reservation) => ({
+        id: reservation._id.toString(),
+        orgInfo: reservation.orgInfo,
+        testInfo: {
+          ...reservation.testInfo,
+          testList: reservation.testInfo.testList.map((test: any) => ({
+            ...test,
+            testID: test.testID.toString(),
+          })),
+        },
+        Status: reservation.Status,
+        CreatedOn: reservation.CreatedOn,
+        totalPrice: reservation.totalPrice,
+      }));
 
-      console.log(reservations);
-      return new BaseResponse({ data: reservations });
+      console.log(formattedReservations);
+      return new BaseResponse({ data: formattedReservations });
     } catch (error) {
       return new BaseResponse({ error: new Error(500) });
     }
@@ -185,6 +223,24 @@ const app = new Elysia()
   })
   .delete('/reservations/:id', async ({ params: { id } }) => {
     return (await reservationService.deleteReservation(id)).toJSON();
-  });
+  })
+  .use(cors())
+  .use(
+    swagger({
+      provider: 'scalar',
+      path: '/swagger',
+      documentation: {
+        info: {
+          title: 'CE Lab API Documentation',
+          version: '1.0.0',
+        },
+        tags: [{ name: 'Pricing', description: 'Pricing endpoints' }],
+      },
+    })
+  )
+  .listen(3000)
+  .use(cors());
 
 export default app;
+
+export type ReservationServiceType = typeof app;

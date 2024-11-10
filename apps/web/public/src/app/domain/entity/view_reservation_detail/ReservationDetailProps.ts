@@ -27,7 +27,7 @@ export default class ReservationDetailProps {
   }
 
   formatDate(): string {
-    return this.date.toLocaleDateString('th-TH', {
+    return new Date(this.date).toLocaleDateString('th-TH', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

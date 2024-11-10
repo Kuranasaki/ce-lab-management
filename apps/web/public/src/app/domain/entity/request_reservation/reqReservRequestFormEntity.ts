@@ -36,6 +36,12 @@ export const testItemFormSchema = z.object({
     .string()
     .max(255, 'รายละเอียดต้องมีความยาวไม่เกิน 255 ตัวอักษร'),
   testNote: z.string().max(255, 'หมายเหตุต้องมีความยาวไม่เกิน 255 ตัวอักษร'),
+  testUnit: z.string().min(1),
+  testTotalPrice: z
+    .number({
+      required_error: 'กรุณาระบุราคารวม',
+    })
+    .min(1, 'ราคารวมต้องมากกว่า 0'),
 });
 export type TestItemFormType = z.infer<typeof testItemFormSchema>;
 export type TestItemFormReturned = UseFormReturn<TestItemFormType>;

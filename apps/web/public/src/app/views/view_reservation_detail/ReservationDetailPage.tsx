@@ -3,9 +3,16 @@ import ReservationDetail from './components/ReservationDetail';
 import { useReservationDetail } from '../../hooks/view_reservation_detail/useReservationDetail';
 import CustomerDetail from './components/CustomerDetail';
 import { ReservationStatus } from '@ce-lab-mgmt/api-interfaces';
-import { Cell, GlobalTable, Header, TableCell } from '@ce-lab-mgmt/shared-ui';
+import {
+  Cell,
+  FileCard,
+  GlobalTable,
+  Header,
+  TableCell,
+} from '@ce-lab-mgmt/shared-ui';
 import { ColumnDef } from '@tanstack/react-table';
 import TestListTableItemProps from '../../domain/entity/view_reservation_detail/TestListTableItemProps';
+import IMAGES from '../../../assets/images';
 
 export default function ReservationDetailPage() {
   const { id } = useParams();
@@ -68,23 +75,28 @@ export default function ReservationDetailPage() {
     {
       accessorKey: 'priceperunit',
       header: ({ column }) => {
-        return (
-          <Header
-            column={column}
-            title="ราคาต่อหน่วย"
-            className="text-center"
-          />
-        );
+        return <Header column={column} title="ราคา" className="text-center" />;
       },
       cell: ({ row }) => (
-        <Cell className="text-center">{row.original.formatPricePerUnit()}</Cell>
+        <Cell className="text-center">{row.original.formatAmount()}</Cell>
       ),
     },
   ];
 
-  if (!id) {
-    return;
-  }
+  const handleDownloadCertificate = () => {
+    const url =
+      'https://www.petrochem.sc.chula.ac.th/wp-content/uploads/2022/02/%E0%B8%88%E0%B8%9731-%E0%B8%84%E0%B8%B3%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%82%E0%B8%AD%E0%B8%A5%E0%B8%B2%E0%B8%AD%E0%B8%AD%E0%B8%81.pdf';
+
+    // Create a temporary link and trigger a download
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.download = 'document.pdf'; // Optional: specify the downloaded filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (!id) {
     return;
   }
@@ -102,21 +114,30 @@ export default function ReservationDetailPage() {
       <div className="flex flex-col gap-4">
         <h4>ข้อมูลคำขอรับบริการทดสอบ</h4>
         <ReservationDetail data={reservationDetail} />
-        {reservationDetail.status === ReservationStatus.Pending ? (
+        {reservationDetail.status === ReservationStatus.Pending && (
           <p className="text-error-500">
             *กรุณาติดต่อหน่วยทดสอบวัสดุ เพื่อจ่ายเงินและส่งมอบของ
           </p>
-        ) : (
-          ''
         )}
       </div>
+      {reservationDetail.status === ReservationStatus.Success && (
+        <div className="flex flex-col gap-4">
+          <h4>ไฟล์ผลการทดสอบ</h4>
+          <FileCard
+            isLoading={loading}
+            fileName={`cert-${id}.pdf`}
+            description={'1.28 MB'}
+            imgUrl={IMAGES.pdfIcon}
+            handleDownload={handleDownloadCertificate}
+          />
+        </div>
+      )}
       <div className="flex flex-col gap-4">
         <h4>รายการทดสอบ</h4>
         <GlobalTable
           columns={columns}
           data={testList.items}
           loading={loading}
-          editable
           renderFooterCell={() => (
             <TableCell
               colSpan={columns.length + 1}

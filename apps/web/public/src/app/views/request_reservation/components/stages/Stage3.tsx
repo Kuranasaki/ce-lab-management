@@ -100,10 +100,10 @@ export default function Stage3({
                   index.toString(),
                   name,
                   priceperunit,
-                  item.testAmount,
+                  item.testUnit,
                   unit,
                   item.testDetails,
-                  item.testNote
+                  item.testTotalPrice
                 );
               }),
               testListForm.getValues('testList').reduce((acc, item) => {

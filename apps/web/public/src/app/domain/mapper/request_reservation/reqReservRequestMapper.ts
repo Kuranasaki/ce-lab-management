@@ -33,6 +33,7 @@ export default function reqReservRequestMapper({
         testAmount: test.testAmount,
         testDetails: test.testDetails.length > 0 ? test.testDetails : undefined,
         testNote: test.testNote.length > 0 ? test.testNote : undefined,
+        testTotalPrice: test.testTotalPrice,
       })),
     },
   };
