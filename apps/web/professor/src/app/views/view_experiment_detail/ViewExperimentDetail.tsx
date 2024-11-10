@@ -21,7 +21,14 @@ export default function ViewExperimentDetailPage() {
   const experimentDetailBox = [
     { title: t('view_experiment_detail:experiment_id'), value: experimentDetail?.id },
     { title: t('view_experiment_detail:assigned_date'), value: experimentDetail?.formatAssignedAt() },
-    { title: t('view_experiment_detail:status'), value: t(`view_experiments:${experimentDetail?.status}`) },
+    { 
+      title: t('view_experiment_detail:status'), 
+      value: (
+        <p className={experimentDetail?.status ? statusMap[experimentDetail.status]?.textColor : ''}> 
+          {t(`view_experiments:${experimentDetail?.status}`)}
+        </p>
+      ) 
+    },    
     { title: t('view_experiment_detail:test_name'), value: experimentDetail?.testName },
     { title: t('view_experiment_detail:test_amount'), value: experimentDetail?.testAmount },
     { title: t('view_experiment_detail:test_details'), value: experimentDetail?.testDetails },
@@ -109,32 +116,19 @@ export default function ViewExperimentDetailPage() {
 }
 
 
-// const statusMap: {
-//     [key in ReservationStatus]: {
-//       text: string;
-//       bgColor: string;
-//       textColor: string;
-//     };
-//   } = {
-//     [ReservationStatus.Pending]: {
-//       text: 'รออนุมัติ',
-//       bgColor: 'bg-warning-100',
-//       textColor: 'text-warning-700',
-//     },
-//     [ReservationStatus.Processing]: {
-//       text: 'กำลังทดสอบ',
-//       bgColor: 'bg-primary-100',
-//       textColor: 'text-primary-700',
-//     },
-//     [ReservationStatus.Success]: {
-//       text: 'สำเร็จ',
-//       bgColor: 'bg-success-100',
-//       textColor: 'text-success-500',
-//     },
-//     [ReservationStatus.Canceled]: {
-//       text: 'ยกเลิก',
-//       bgColor: 'bg-error-100',
-//       textColor: 'text-error-700',
-//     },
-//   };
+const statusMap: {
+  [key: string]: {
+    textColor: string;
+  };
+} = {
+  waiting_for_test: {
+    textColor: 'text-warning-700',
+  },
+  waiting_for_certificate: {
+    textColor: 'text-primary-700',
+  },
+  completed: {
+    textColor: 'text-success-500',
+  },
+};
 
