@@ -15,14 +15,18 @@ export class Certificate {
   }
 
   getDescription(): string {
-    if (this.fileSize < 1024) {
-      return `${this.fileSize} B`;
-    } else if (this.fileSize < 1024 * 1024) {
-      return `${(this.fileSize / 1024).toFixed(2)} KB`;
-    } else if (this.fileSize < 1024 * 1024 * 1024) {
-      return `${(this.fileSize / (1024 * 1024)).toFixed(2)} MB`;
-    } else {
-      return `${(this.fileSize / (1024 * 1024 * 1024)).toFixed(2)} GB`;
-    }
+    const units = ['B', 'KB', 'MB', 'GB'] as const;
+    const unitSize = 1024;
+
+    if (this.fileSize === 0) return '0 B';
+    if (this.fileSize < 0) throw new Error('File size cannot be negative');
+
+    const exponent = Math.min(
+      Math.floor(Math.log(this.fileSize) / Math.log(unitSize)),
+      units.length - 1
+    );
+
+    const size = this.fileSize / Math.pow(unitSize, exponent);
+    return `${size.toFixed(exponent === 0 ? 0 : 2)} ${units[exponent]}`;
   }
 }

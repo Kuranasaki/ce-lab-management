@@ -8,8 +8,6 @@ export default async function getAllPricing(): Promise<
   try {
     const response = await pricingApi.pricing.index.get();
     return response.data;
-
-    // return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
       return new BaseResponse({ error: { code: error.response.data.status } });
