@@ -31,9 +31,8 @@ export default function reqReservRequestMapper({
       testList: testListForm.getValues('testList').map((test) => ({
         testID: test.testID,
         testAmount: test.testAmount,
-        testDetails: test.testDetails.length > 0 ? test.testDetails : undefined,
-        testNote: test.testNote.length > 0 ? test.testNote : undefined,
-        testTotalPrice: test.testTotalPrice,
+        testDetails: test.testDetails.length > 0 ? test.testDetails : null,
+        testNote: test.testNote.length > 0 ? test.testNote : null,
       })),
     },
   };

@@ -1,6 +1,6 @@
 export interface RequestReservationForm {
   orgInfo: OrganizationInfo;
-  testInfo: TestInfo;
+  testInfo: RequestTestInfo;
 }
 
 export interface OrganizationInfo {
@@ -12,17 +12,34 @@ export interface OrganizationInfo {
   orgFax?: string;
 }
 
+export interface RequestTestInfo {
+  testType: string;
+  testList: RequestTestItem[];
+}
+
 export interface TestInfo {
   testType: string;
   testList: TestItem[];
 }
 
-export interface TestItem {
+export interface RequestTestItem {
   testID: string;
   testAmount: number;
-  testDetails?: string;
-  testNote?: string;
+  testDetails: string | null;
+  testNote: string | null;
+}
+
+export interface TestItem {
+  testItemID: string;
+  testName: string;
+  testAmount: number;
+  testUnit: string;
+  testDetails: string | null;
+  testNote: string | null;
   testTotalPrice: number;
+  assignedProfessorName: string | null;
+  markedAsDone: boolean | null;
+  certificateUploadedAt: Date | null;
 }
 
 export interface RequestReservationResponse {
@@ -30,6 +47,13 @@ export interface RequestReservationResponse {
 }
 
 import { t } from 'elysia';
+
+export const RequestTestItemSchema = t.Object({
+  testID: t.String(),
+  testAmount: t.Number(),
+  testDetails: t.Nullable(t.String()),
+  testNote: t.Nullable(t.String()),
+});
 
 export const TestItemSchema = t.Object({
   testItemID: t.String(),
@@ -46,6 +70,10 @@ export const TestItemSchema = t.Object({
   certificateUploadedAt: t.Nullable(t.Date()),
 });
 
+export const RequestTestInfoSchema = t.Object({
+  testType: t.String(),
+  testList: t.Array(RequestTestItemSchema),
+});
 export const TestInfoSchema = t.Object({
   testType: t.String(),
   testList: t.Array(TestItemSchema),
@@ -62,5 +90,5 @@ export const OrganizationInfoSchema = t.Object({
 
 export const RequestReservationFormSchema = t.Object({
   orgInfo: OrganizationInfoSchema,
-  testInfo: TestInfoSchema,
+  testInfo: RequestTestInfoSchema,
 });
