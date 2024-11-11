@@ -1,6 +1,6 @@
-import { TAnySchema, TSchema } from '@sinclair/typebox';
-import { t, Static } from 'elysia';
+import { t, Static, TSchema } from 'elysia';
 import {PaginationParamsSchema} from '@ce-lab-mgmt/core-utils'
+import { ReservationSchema } from './reservation';
 
 export function apiInterfaces(): string {
   return 'api-interfaces';
@@ -72,6 +72,7 @@ export type BaseResponse<T = any> = {
   }
 }
 
+
 export const BaseResponseSchemaFn = <T extends TSchema>(dataSchema: T) => t.Object({
   success: t.Boolean(),
   data: t.Optional(dataSchema),
@@ -80,3 +81,7 @@ export const BaseResponseSchemaFn = <T extends TSchema>(dataSchema: T) => t.Obje
     pagination: t.Optional(PaginationMetaSchema)
   }))
 })
+
+// example
+// const UserRespSche = BaseResponseSchemaFn(PaginationMetaSchema)
+// type IdontUseEdenSoEatThis = Static<typeof UserRespSche>
