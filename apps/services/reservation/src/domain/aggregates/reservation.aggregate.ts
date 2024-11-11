@@ -55,7 +55,7 @@ export class Reservation extends AggregateRoot {
         orgData: orgInfo,
         testList: testInfo,
         totalPrice: 0,
-        status: 'pending',
+        status: ReservationStatus.Pending,
         createdAt: now.toISOString(),
         updatedAt: now.toISOString()
       };
@@ -83,7 +83,7 @@ export class Reservation extends AggregateRoot {
     customerId: string;
     orgData: OrganizationInfo;
     testList: TestList
-    status: 'pending' | 'approved' | 'rejected' | 'cancelled';
+    status: ReservationStatus;
     notes: string;
     totalPrice: number;
     createdAt: string;
@@ -109,7 +109,7 @@ export class Reservation extends AggregateRoot {
         throw new ReservationError('Can only approve pending reservations');
       }
 
-      this.props.status = 'approved';
+      this.props.status = ReservationStatus.Processing;
       this.props.updatedAt = new Date().toISOString();
 
       this.addEvent({
@@ -131,7 +131,7 @@ export class Reservation extends AggregateRoot {
       throw new ReservationError('Can only reject pending reservations')
     }
 
-    this.props.status = 'rejected'
+    this.props.status = ReservationStatus.Canceled
     this.props.updatedAt = new Date().toISOString()
     this.incrementVersion()
 
@@ -148,8 +148,8 @@ export class Reservation extends AggregateRoot {
   }
 
   public updateNotes(notes: string): void {
-    if (this.props.status === 'cancelled' || this.props.status === 'rejected') {
-      throw new ReservationError('Cannot update cancelled or rejected reservations')
+    if (this.props.status !== ReservationStatus.Pending ) {
+      throw new ReservationError('Can only update pending reservations')
     }
 
     this.props.notes = notes

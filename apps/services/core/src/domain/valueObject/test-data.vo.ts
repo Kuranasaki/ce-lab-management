@@ -1,22 +1,21 @@
 import { Guard } from '@ce-lab-mgmt/core-utils'
-import { Type, Static } from '@sinclair/typebox'
-import { ValueObject } from '../../../../../../shared/domain/src/lib/base-valueObject'
-import { Result } from '../../../../../../shared/domain/src/lib/result'
+import { t, Static } from 'elysia'
+import { ValueObject, Result } from '@ce-lab-mgmt/domain'
 
 const TestDataProperties = {
-  rawData: Type.Record(Type.String(), Type.Union([
-    Type.String(),
-    Type.Number(),
-    Type.Boolean()
+  rawData: t.Record(t.String(), t.Union([
+    t.String(),
+    t.Number(),
+    t.Boolean()
   ])),
-  measuredAt: Type.String({ format: 'date-time' }),
-  equipment: Type.Optional(Type.Object({
-    id: Type.String(),
-    name: Type.String()
+  measuredAt: t.String({ format: 'date-time' }),
+  equipment: t.Optional(t.Object({
+    id: t.String(),
+    name: t.String()
   }))
 } as const
 
-export const TestDataSchema = Type.Object(TestDataProperties)
+export const TestDataSchema = t.Object(TestDataProperties)
 export type TestDataProps = Static<typeof TestDataSchema>
 
 export class TestData extends ValueObject<typeof TestDataProperties> {

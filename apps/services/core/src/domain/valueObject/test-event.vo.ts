@@ -1,6 +1,6 @@
 import { Type, Static } from '@sinclair/typebox'
-import { DomainEvent, EntityId } from '@lab/shared/domain'
-import { IdGenerator } from '@lab/shared/utils/helpers/id.generator'
+import { DomainEvent, EntityId } from '@ce-lab-mgmt/domain'
+import { IdGenerator } from '@ce-lab-mgmt/core-utils'
 
 export const TestStartedEventSchema = Type.Object({
   testId: Type.String(),
@@ -13,14 +13,14 @@ export type TestStartedEvent = Static<typeof TestStartedEventSchema>
 export class TestStartedDomainEvent implements DomainEvent {
   public readonly eventId: string
   public readonly eventType: string = 'TEST_STARTED'
-  public readonly timestamp: Date
+  public readonly timestamp: string
 
   constructor(
     public readonly aggregateId: EntityId,
     public readonly data: TestStartedEvent
   ) {
     this.eventId = IdGenerator.generate()
-    this.timestamp = new Date()
+    this.timestamp = new Date().toISOString()
   }
 }
 
@@ -40,13 +40,13 @@ export type TestCompletedEvent = Static<typeof TestCompletedEventSchema>
 export class TestCompletedDomainEvent implements DomainEvent {
   public readonly eventId: string
   public readonly eventType: string = 'TEST_COMPLETED'
-  public readonly timestamp: Date
+  public readonly timestamp: string
 
   constructor(
     public readonly aggregateId: EntityId,
     public readonly data: TestCompletedEvent
   ) {
     this.eventId = IdGenerator.generate()
-    this.timestamp = new Date()
+    this.timestamp = new Date().toISOString()
   }
 }

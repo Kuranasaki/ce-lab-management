@@ -6,9 +6,7 @@ import {
 } from '@ce-lab-mgmt/infrastructure';
 import { ReservationService } from '../../domain/services/reservation.service';
 import {
-  CreateReservationSchema,
   UpdateReservationSchema,
-  ReservationQuerySchema,
 } from './reservation.schema';
 import { NotFoundError } from '@ce-lab-mgmt/domain';
 import {
@@ -18,6 +16,7 @@ import {
   GetAllReservationSchema,
   GetReservationResponseSchema,
   RequestReservationFormSchema,
+  ReservationQuerySchema,
 } from '@ce-lab-mgmt/api-interfaces';
 
 export class ReservationController extends BaseController {

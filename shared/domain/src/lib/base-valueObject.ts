@@ -1,5 +1,6 @@
 import { ValidationError } from './domain.errors'
 import { Static, TObject, TProperties, Type } from '@sinclair/typebox'
+
 import { TypeCheck, TypeCompiler } from '@sinclair/typebox/compiler'
 
 export abstract class ValueObject<T extends TProperties> {

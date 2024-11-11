@@ -18,7 +18,7 @@ export class Guard {
   private static readonly positiveNumberValidator = TypeCompiler.Compile(Guard.positiveNumberSchema)
   private static readonly dateStringValidator = TypeCompiler.Compile(Guard.dateStringSchema)
 
-  static validate<T>(value: unknown, schema: ReturnType<typeof t>): T {
+  static validate<T>(value: unknown, schema: TSchema): T {
     const typebox = schema as unknown as TSchema
     const validator = TypeCompiler.Compile(typebox)
 
@@ -61,7 +61,7 @@ export class Guard {
     return Guard.dateStringValidator.Check(date)
   }
 
-  static isValidObject<T>(value: unknown, schema: ReturnType<typeof t>): value is T {
+  static isValidObject<T>(value: unknown, schema: TSchema): value is T {
     const typebox = schema as unknown as TSchema
     const validator = TypeCompiler.Compile(typebox)
     return validator.Check(value)
