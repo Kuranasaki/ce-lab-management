@@ -45,6 +45,7 @@ export type TestList = Static<typeof TestListSchema>
 
 
 export enum ReservationStatus {
+
   Pending = 'pending',
   Processing = 'processing',
   Success = 'success',
