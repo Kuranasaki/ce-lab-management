@@ -1,0 +1,41 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/alexmuradov/nginx-firebase-auth
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+secretName: "firebase-secret"
+keyJson: |
+  {
+    "type": "service_account",
+    "project_id": "fucking-nkpt",
+    "private_key_id": "e84b3f24fc9f9a1aa3a1daa2fd9bfd57dd9073ac",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDqO8JmMwgnNufp\nlX5eP56WHrl9hh9i49E4THF2SB+6SEhHTo+kw5GqKKcwOt538xGkIZb8QCrbIBG1\nQKy4xNqbWx6XosZ4pPArJFpEYKD07R7147GvJe53vHXTr62QiBf9XjOy/xXgzSFw\n+Uef9fe1enVWrMwfwCAipIYGspRmNwJQJ1BD56RSk4oxg2F5S6mUYBpr18RkBjms\nZHZPIfd2zLFY0dWE/Vnek5FksCGghpKAeDn8saaVSvi0DQy2yJrNRInunhuWwmx+\nT+tqMTbtC3P+vMdY1IZoWzZIgPJEwPRcpPIuLoXKKBIw/vLCG48w+JApKnCWl6xX\naGiMbL43AgMBAAECggEAG7stfcoG6hWfCVGQn3nqvZ0vmsPZTWzpZT/vovBRCU3r\neL29VeVthna/rH8bvZnCeescJAs4x66ZShs5F7r+oqv8CDnWQ4xLfuAT68qA4956\n7uOhMrpL7FMcpA5FfzoNlQqlFkkK/w1qKyToLPEC/bJc2AEnPY8Sfud5kqtr1Fnu\n6EVi16AeE5lGrkItdY/LbgOggtt81ngBdUQl7Ys3RwFGJATdXrqYrAvLqHLAoDZD\nIgXCfBCxEQsRUj9kh4YfjMPZjxrEQ/vzNTmESi4IWR2DFpzOAW1m6TXm9RolQkpA\nW4uPr0BGeV6kj6chkDbRc8JD3d5+t+7GWLn8h8H7aQKBgQDxsXasJC5DfasDf9Mn\nHuzAsL70X1o5nUq415VmpmW7+PXjcxZAnS28Vh9SeLYkSah/P2tL/++j41wqKnP+\nM/3er2IzYYGNaz/ZPqSx4zSq0Qzk7GIji/8o37m8sT8Q+Di//rtu0Em7KwD7rwED\nuI5i0IG++i0VhY9NEY85ihQL7QKBgQD4GUC4z4zYpFzSEU88LSCu9UeFDixSMXCk\ndK1vFnfoZ9Bdm/24wBZfx7iWBIsgpN5tQI8j1teNHQbY65D7A6UNpgEDAxZOqjMe\nk4xspRluvWfFFCOmy4AQmsiZqStuqeNYb5l+yWwb1NzreVMd8Xx9Srr+tfS5lH9O\nXQg5eggWMwKBgGCvdmLMonk7R3NB6k1HELzQt8L4dhaANskU7N5AiIgWwv63Jlq4\nxfgGl8cdJPgFQ1OMIjcn7kyoglEX5Ij3cYJotKcLRZE2KzeT2LyUwJfowvi9G1FP\nCsbmIN48JZd7RPCBTae5yRUH0f/c9VHwvX0IHi8w02I9qKLS+HGzK+vNAoGAH8Hz\nw/RlXhHkA8vNbbGFHoAtMH349Gh5t8Nrs+2XWbt4M5NVLgIAmzAQk7tvJ7WS9z8t\nU3Qb0WdmyfuValw0E4QtWvpZL6aftolCj2Gu2LsL/nEugxpHgVie1vSNp7O9c0ON\nzWnxGbrssIOuPQX9XnhjaVlXQy4cAabs95aEVHsCgYAY4BK9gVLT2RAqs80Xl5Ez\nGZ8rpxQaBr7FjDAnjuUdzYtxEEfmXRqlyV2IJhjeNdCNRqWuEaLRoCfEJQPt1EwG\nCr7/Hbq2UMbU5zp6YDhuLyKgCqnnX090ovvZxgSuFChEksszP1kjdFu8PshF+sC9\n++TJMqY0zIZvKBDYsO1C/g==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-61yl0@fucking-nkpt.iam.gserviceaccount.com",
+    "client_id": "112146007933550728048",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-61yl0%40fucking-nkpt.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
+db_url: "postgresql://postgres.gviorlxxngnmcvrzevxu:sUwpoAKW9HNNb73U@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+
+service:
+  name: auth-service
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations: {}
+  hosts:
+    - host: example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+firebase_creds: "/tmp/key.json"
+secretMountPath: "/tmp"
