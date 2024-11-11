@@ -1,21 +1,70 @@
-import { t } from 'elysia'
-import { TestItemSchema } from './request_reservation'
+import { Static, t } from 'elysia';
 
-export const OrgDataSchema = t.Object({
+const TestItemSchema = t.Object({
+  testID: t.String(),
+  testItemID: t.String(),
+  testName: t.String(),
+  testAmount: t.Number(),
+  testPricePerUnit: t.Number(),
+  testUnit: t.String(),
+  testDetails: t.Nullable(t.String()),
+  testNote: t.Nullable(t.String()),
+
+  // Experiment data
+  assignedProfessorName: t.Nullable(t.String()),
+  markedAsDone: t.Nullable(t.Boolean()), // Null If not apprpoved yet (no experiment)
+  certificateUploadedAt: t.Nullable(t.Date()),
+});
+
+export const TestInfoSchema = t.Object({
+  testType: t.String(),
+  testList: t.Array(TestItemSchema),
+});
+
+export const OrganizationInfoSchema = t.Object({
   orgName: t.String(),
-  orgProjectName: t.String(),
+  orgProjectName: t.Optional(t.String()),
   orgAddress: t.String(),
-  orgPhone: t.String(),
   orgEmail: t.String(),
-  orgFax: t.String(),
-})
+  orgPhone: t.String(),
+  orgFax: t.Optional(t.String()),
+});
 
 export const TestListSchema = t.Object({
-  testType: t.String(),
+  testt: t.String(),
   testItems: t.Array(TestItemSchema),
+});
+
+export type OrganizationInfo = Static<typeof OrganizationInfoSchema>;
+
+export type TestInfo = Static<typeof TestInfoSchema>;
+
+export type TestItem = Static<typeof TestItemSchema>;
+
+export type TestList = Static<typeof TestListSchema>
+
+export const ReservationStatusSchema = t.Union([
+  t.Literal('pending'),
+  t.Literal('approved'),
+  t.Literal('rejected'),
+  t.Literal('cancelled')
+])
+
+export type ReservationStatus = Static<typeof ReservationStatusSchema>;
+
+export const ReservationSchema = t.Object({
+  id: t.String({format:'uuid'}),
+  customerId: t.String({format:'uuid'}),
+  orgData: OrganizationInfoSchema,
+  testList: TestListSchema,
+  notes: t.Optional(t.String()),
+  status: ReservationStatusSchema,
+  totalPrice: t.Number({default: 0}),
+  createdAt: t.String({ format: 'date-time' }),
+  updatedAt: t.String({ format: 'date-time' })
 })
 
-export const RequestReservationSchema = t.Object({
-  orgData: OrgDataSchema,
-  testList: TestListSchema,
-})
+export type Reservation = Static<typeof ReservationSchema>;
+
+
+

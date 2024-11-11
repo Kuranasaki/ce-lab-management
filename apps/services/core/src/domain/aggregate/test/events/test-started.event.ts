@@ -4,7 +4,7 @@ import { DomainEvent, EntityId } from "@ce-lab-mgmt/domain";
 export class TestStartedEvent implements DomainEvent {
   public readonly eventId: string;
   public readonly eventType: string = 'TestStarted';
-  public readonly timestamp: Date;
+  public readonly timestamp: string;
 
   constructor(
     public readonly aggregateId: EntityId,
@@ -14,6 +14,6 @@ export class TestStartedEvent implements DomainEvent {
     }
   ) {
     this.eventId = IdGenerator.generate();
-    this.timestamp = new Date();
+    this.timestamp = (new Date()).toISOString();
   }
 }

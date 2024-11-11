@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Guard } from './guard'
-import { Type } from '@sinclair/typebox'
+import { t as Type } from 'elysia'
 
 export class IdGenerator {
   static generate(): string {

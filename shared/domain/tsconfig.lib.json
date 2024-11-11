@@ -5,6 +5,6 @@
     "declaration": true,
     "types": ["node", "vite/client"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "../../apps/services/core/src/domain/valueObject/test-event.vo.ts", "../../apps/services/core/src/domain/valueObject/test-data.vo.ts"],
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]
 }

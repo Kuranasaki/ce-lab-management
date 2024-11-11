@@ -1,4 +1,4 @@
-import { Type } from '@sinclair/typebox'
+import { t as Type } from 'elysia'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
 import { ValidationError } from '@ce-lab-mgmt/core-utils'
 import { EntityId, EntityIdSchema } from './base-type'

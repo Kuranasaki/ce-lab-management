@@ -1,1 +1,1 @@
-export * from './domain.errors'
+// export * from '../../../domain/src/lib/domain.errors'

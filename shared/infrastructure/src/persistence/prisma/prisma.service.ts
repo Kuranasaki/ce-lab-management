@@ -6,9 +6,15 @@ export class PrismaService {
   static getInstance(): PrismaClient {
     if (!PrismaService.instance) {
       PrismaService.instance = new PrismaClient({
-        log: ['error', 'warn'],
+        log: ['error', 'warn']
       });
     }
     return PrismaService.instance;
+  }
+
+  static async disconnect(): Promise<void> {
+    if (PrismaService.instance) {
+      await PrismaService.instance.$disconnect();
+    }
   }
 }

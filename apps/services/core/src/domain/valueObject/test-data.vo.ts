@@ -1,29 +1,51 @@
-import { Guard } from "@ce-lab-mgmt/core-utils";
-import { ValueObject } from "@ce-lab-mgmt/domain";
+import { Guard } from '@ce-lab-mgmt/core-utils'
+import { Type, Static } from '@sinclair/typebox'
+import { ValueObject } from '../../../../../../shared/domain/src/lib/base-valueObject'
+import { Result } from '../../../../../../shared/domain/src/lib/result'
 
-interface TestDataProps extends Record<string, unknown> {
-  parameters: Record<string, any>;
-  metadata?: Record<string, any>;
-  timestamp: Date;
-}
+const TestDataProperties = {
+  rawData: Type.Record(Type.String(), Type.Union([
+    Type.String(),
+    Type.Number(),
+    Type.Boolean()
+  ])),
+  measuredAt: Type.String({ format: 'date-time' }),
+  equipment: Type.Optional(Type.Object({
+    id: Type.String(),
+    name: Type.String()
+  }))
+} as const
 
-export class TestData extends ValueObject<TestDataProps> {
-  static create(props: TestDataProps): TestData {
-    Guard.againstNullOrUndefined(props.parameters, 'parameters');
-    Guard.againstNullOrUndefined(props.timestamp, 'timestamp');
+export const TestDataSchema = Type.Object(TestDataProperties)
+export type TestDataProps = Static<typeof TestDataSchema>
 
-    return new TestData(props);
+export class TestData extends ValueObject<typeof TestDataProperties> {
+  protected getSchema() {
+    return TestDataSchema
   }
 
-  get parameters(): Record<string, any> {
-    return { ...this.props.parameters };
+  private constructor(props: TestDataProps) {
+    super(props)
   }
 
-  get metadata(): Record<string, any> | undefined {
-    return this.props.metadata ? { ...this.props.metadata } : undefined;
+  public static create(props: TestDataProps) {
+    try {
+      Guard.validate(props, TestDataSchema)
+      return Result.ok(new TestData(props))
+    } catch (error) {
+      return Result.fail(error as Error)
+    }
   }
 
-  get timestamp(): Date {
-    return new Date(this.props.timestamp);
+  get rawData() {
+    return this.props.rawData
+  }
+
+  get measuredAt() {
+    return new Date(this.props.measuredAt)
+  }
+
+  get equipment() {
+    return this.props.equipment
   }
 }

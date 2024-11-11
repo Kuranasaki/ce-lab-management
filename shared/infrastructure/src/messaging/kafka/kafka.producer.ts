@@ -7,8 +7,17 @@ export class KafkaProducer {
 
   constructor(
     private readonly config: KafkaConfig,
-    private readonly logger: Logger
-  ) {}
+    private readonly logger?: Logger
+  ) {
+    // if (!this.logger) {
+    //   this.logger = {
+    //     info: console.log,
+    //     error: console.error,
+    //     warn: console.warn,
+    //     debug: console.debug
+    //   }
+    // }
+  }
 
   async connect(): Promise<Result<void>> {
     try {
@@ -49,7 +58,7 @@ export class KafkaProducer {
       }
 
       await this.producer.send(record)
-      this.logger.info('Event published successfully', { 
+      this?.logger?.info('Event published successfully', { 
         topic, 
         eventType: event.eventType,
         aggregateId: event.aggregateId
@@ -57,7 +66,7 @@ export class KafkaProducer {
       
       return Result.ok()
     } catch (error) {
-      this.logger.error('Failed to publish event', {
+      this?.logger?.error('Failed to publish event', {
         topic,
         eventType: event.eventType,
         error: error as Error
@@ -80,11 +89,11 @@ export class KafkaProducer {
       }
 
       await this.producer.send(record)
-      this.logger.info('Message published successfully', { topic })
+      this?.logger?.info('Message published successfully', { topic })
       
       return Result.ok()
     } catch (error) {
-      this.logger.error('Failed to publish message', {
+      this?.logger?.error('Failed to publish message', {
         topic,
         error: error as Error
       })

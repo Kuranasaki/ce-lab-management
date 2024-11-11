@@ -1,4 +1,4 @@
-import { ValidationError } from "@ce-lab-mgmt/core-utils"
+import { ValidationError } from "./domain.errors"
 import { Entity } from "./base-entity"
 import { TypeCompiler } from '@sinclair/typebox/compiler'
 import { EntityId, AggregateRootSchema, DomainEventSchema, DomainEvent } from "./base-type"

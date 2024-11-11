@@ -5,7 +5,7 @@ import { TestData } from "../../../valueObject/test-data.vo";
 export class TestCompletedEvent implements DomainEvent {
   public readonly eventId: string;
   public readonly eventType: string = 'TestCompleted';
-  public readonly timestamp: Date;
+  public readonly timestamp: string;
 
   constructor(
     public readonly aggregateId: EntityId,
@@ -17,6 +17,6 @@ export class TestCompletedEvent implements DomainEvent {
     }
   ) {
     this.eventId = IdGenerator.generate();
-    this.timestamp = new Date();
+    this.timestamp = (new Date()).toISOString();
   }
 }

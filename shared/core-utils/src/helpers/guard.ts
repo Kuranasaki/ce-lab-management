@@ -1,31 +1,34 @@
-import { Type, TSchema, Static } from '@sinclair/typebox'
-import { TypeCompiler } from '@sinclair/typebox/compiler'
+import { t } from 'elysia'
+import { TypeCheck, TypeCompiler } from '@sinclair/typebox/compiler'
 import { ValidationError } from '../errors'
+import { TSchema } from '@sinclair/typebox'
 
 export class Guard {
-  private static readonly emailSchema = Type.String({ format: 'email' })
+  // Define schemas using Elysia's t
+  private static readonly emailSchema = t.String({ format: 'email' }) as unknown as TSchema
+  private static readonly uuidSchema = t.String({ format: 'uuid' }) as unknown as TSchema
+  private static readonly nonEmptyStringSchema = t.String({ minLength: 1 }) as unknown as TSchema
+  private static readonly positiveNumberSchema = t.Number({ minimum: 0 }) as unknown as TSchema
+  private static readonly dateStringSchema = t.String({ format: 'date-time' }) as unknown as TSchema
+
+  // Compile validators once
   private static readonly emailValidator = TypeCompiler.Compile(Guard.emailSchema)
-
-  private static readonly uuidSchema = Type.String({ format: 'uuid' })
   private static readonly uuidValidator = TypeCompiler.Compile(Guard.uuidSchema)
-
-  private static readonly nonEmptyStringSchema = Type.String({ minLength: 1 })
   private static readonly nonEmptyStringValidator = TypeCompiler.Compile(Guard.nonEmptyStringSchema)
-
-  private static readonly positiveNumberSchema = Type.Number({ minimum: 0 })
   private static readonly positiveNumberValidator = TypeCompiler.Compile(Guard.positiveNumberSchema)
-
-  private static readonly dateStringSchema = Type.String({ format: 'date-time' })
   private static readonly dateStringValidator = TypeCompiler.Compile(Guard.dateStringSchema)
 
-  static validate<T extends TSchema>(value: unknown, schema: T): Static<T> {
-    const validator = TypeCompiler.Compile(schema)
+  static validate<T>(value: unknown, schema: ReturnType<typeof t>): T {
+    const typebox = schema as unknown as TSchema
+    const validator = TypeCompiler.Compile(typebox)
+
     if (!validator.Check(value)) {
       throw new ValidationError(
-        `Validation failed for ${schema.description || 'value'}: ${JSON.stringify(validator.Errors(value))}`
+        `Validation failed for ${typebox.description || 'value'}: ${JSON.stringify(validator.Errors(value))}`
       )
     }
-    return value as Static<T>
+
+    return value as T
   }
 
   static againstNullOrUndefined(value: unknown, name: string): void {
@@ -58,8 +61,9 @@ export class Guard {
     return Guard.dateStringValidator.Check(date)
   }
 
-  static isValidObject<T extends TSchema>(value: unknown, schema: T): value is Static<T> {
-    const validator = TypeCompiler.Compile(schema)
+  static isValidObject<T>(value: unknown, schema: ReturnType<typeof t>): value is T {
+    const typebox = schema as unknown as TSchema
+    const validator = TypeCompiler.Compile(typebox)
     return validator.Check(value)
   }
 }

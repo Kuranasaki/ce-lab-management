@@ -1,4 +1,5 @@
 import { t } from 'elysia';
+import { ReservationStatusSchema } from './reservation';
 
 /*
 Request: 
@@ -14,10 +15,5 @@ Response:
 */
 export const RejectReservationResponseSchema = t.Object({
   id: t.String(),
-  Status: t.Enum({
-    Pending: 'pending',
-    Processing: 'processing',
-    Success: 'success',
-    Canceled: 'canceled',
-  }),
+  Status: ReservationStatusSchema,
 });
