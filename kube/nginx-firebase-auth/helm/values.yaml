@@ -1,7 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/alexmuradov/nginx-firebase-auth
+  # repository: ghcr.io/alexmuradov/nginx-firebase-auth
+  repository: kuranasaki/nginx-firebase-auth
   tag: "latest"
   pullPolicy: IfNotPresent
 
