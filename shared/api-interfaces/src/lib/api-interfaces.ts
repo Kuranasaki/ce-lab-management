@@ -63,7 +63,14 @@ export const BaseResponseSchema = t.Object({
   }))
 })
 
-export type BaseResponse = Static<typeof BaseResponseSchema>
+export type BaseResponse<T = any> = {
+  success: boolean
+  data?: T
+  error?: Static<typeof ApiErrorSchema>
+  meta?: {
+    pagination?: Static<typeof PaginationMetaSchema>
+  }
+}
 
 export const BaseResponseSchemaFn = <T extends TSchema>(dataSchema: T) => t.Object({
   success: t.Boolean(),
