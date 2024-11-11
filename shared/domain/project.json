@@ -1,7 +1,7 @@
 {
   "name": "domain",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "domain/src",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/domain/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,10 +9,10 @@
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/domain",
-        "main": "domain/src/index.ts",
-        "tsConfig": "domain/tsconfig.lib.json",
-        "assets": ["domain/*.md"]
+        "outputPath": "dist/shared/domain",
+        "main": "shared/domain/src/index.ts",
+        "tsConfig": "shared/domain/tsconfig.lib.json",
+        "assets": ["shared/domain/*.md"]
       }
     }
   }

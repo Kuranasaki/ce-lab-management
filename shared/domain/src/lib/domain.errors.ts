@@ -1,4 +1,4 @@
-import { Type, Static } from '@sinclair/typebox'
+import { t as Type, Static } from 'elysia'
 
 export const ErrorSchema = Type.Object({
   name: Type.String(),

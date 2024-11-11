@@ -1,7 +1,7 @@
-import { t } from 'elysia'
-import { TypeCheck, TypeCompiler } from '@sinclair/typebox/compiler'
-import { ValidationError } from '../errors'
+import { ValidationError } from '@ce-lab-mgmt/domain'
 import { TSchema } from '@sinclair/typebox'
+import { TypeCompiler } from '@sinclair/typebox/compiler'
+import { t } from 'elysia'
 
 export class Guard {
   // Define schemas using Elysia's t

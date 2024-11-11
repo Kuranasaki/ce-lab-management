@@ -1,6 +1,6 @@
 import { t as Type } from 'elysia'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
-import { ValidationError } from '@ce-lab-mgmt/core-utils'
+import { ValidationError } from './domain.errors'
 import { EntityId, EntityIdSchema } from './base-type'
 
 export abstract class Entity<T extends EntityId = EntityId> {

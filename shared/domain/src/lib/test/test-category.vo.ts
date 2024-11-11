@@ -1,10 +1,8 @@
-import { TObject, TProperties, Type, Static } from '@sinclair/typebox'
-import { Result } from '../result'
-import { ValidationError } from '@ce-lab-mgmt/core-utils'
-import { create } from 'domain'
-import { get } from 'http'
-import { EntityIdSchema, EntityId } from '../base-type'
+import { Static, TObject, Type } from '@sinclair/typebox'
+import { EntityId, EntityIdSchema } from '../base-type'
 import { ValueObject } from '../base-valueObject'
+import { ValidationError } from '../domain.errors'
+import { Result } from '../result'
 
 const TestCategoryProperties = {
   id: EntityIdSchema,
