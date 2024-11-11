@@ -43,14 +43,15 @@ export type TestItem = Static<typeof TestItemSchema>;
 
 export type TestList = Static<typeof TestListSchema>
 
-export const ReservationStatusSchema = t.Union([
-  t.Literal('pending'),
-  t.Literal('approved'),
-  t.Literal('rejected'),
-  t.Literal('cancelled')
-])
 
-export type ReservationStatus = Static<typeof ReservationStatusSchema>;
+enum ReservationStatus {
+  Pending = 'pending',
+  Processing = 'processing',
+  Success = 'success',
+  Canceled = 'canceled',
+}
+
+export const ReservationStatusSchema = t.Enum(ReservationStatus);
 
 export const ReservationSchema = t.Object({
   id: t.String({format:'uuid'}),
