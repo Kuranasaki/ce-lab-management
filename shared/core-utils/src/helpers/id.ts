@@ -1,7 +1,16 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
+import { Guard } from './guard'
+import { Type } from '@sinclair/typebox'
 
 export class IdGenerator {
   static generate(): string {
-    return uuidv4();
+    const id = uuidv4()
+    // Validate the generated UUID just to be safe
+    Guard.validate(id, Type.String({ format: 'uuid' }))
+    return id
+  }
+
+  static isValid(id: string): boolean {
+    return Guard.isValidUuid(id)
   }
 }
