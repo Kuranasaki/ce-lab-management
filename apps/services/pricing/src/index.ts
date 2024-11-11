@@ -23,6 +23,8 @@ const app = new Elysia()
   .use(PricingController)
   .listen(3000);
 
+export type PricingServiceType = typeof app;
+
 console.log(
   `🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`
 );

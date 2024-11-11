@@ -16,7 +16,6 @@ export function Breadcrumbs({ routes = [] }: { routes: string[] }) {
   let breadcrumbPage: ReactElement | null = null;
 
   for (let i = 0; i < routes.length; i++) {
-    console.log(routes);
     const route = routes[i];
     const href: string = fullHref
       ? `${fullHref}/${getPathName(route as PathKeyType)}`

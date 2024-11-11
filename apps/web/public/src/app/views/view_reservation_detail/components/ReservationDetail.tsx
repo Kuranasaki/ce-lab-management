@@ -4,16 +4,45 @@ import {
   ReservationType,
 } from '@ce-lab-mgmt/api-interfaces';
 import ReservationDetailProps from '../../../domain/entity/view_reservation_detail/ReservationDetailProps';
-import { DetailBox } from '@ce-lab-mgmt/shared-ui';
+import {
+  Button,
+  DetailBox,
+  ToastEntity,
+  useToast,
+} from '@ce-lab-mgmt/shared-ui';
+import { Copy } from 'lucide-react';
 
 export default function ReservationDetail({
   data,
 }: {
   data: ReservationDetailProps;
 }) {
+  const { toast } = useToast();
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast(new ToastEntity('คัดลอกหมายเลขคำขอ สำเร็จ', '', 'success'));
+  };
+
   if (data != null) {
     const reservation = [
-      { title: 'หมายเลขคำขอ:', value: data.id || null },
+      {
+        title: 'หมายเลขคำขอ:',
+        value: data.id && (
+          <div className="flex items-center">
+            <p className="mr-2">{data.id}</p>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                copyToClipboard(data.id || '');
+              }}
+            >
+              <Copy />
+            </Button>
+          </div>
+        ),
+      },
       { title: 'วันที่ส่งคำขอ:', value: data.formatDate() },
       {
         title: 'ประเภทการทดสอบ:',

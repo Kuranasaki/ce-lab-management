@@ -21,6 +21,7 @@
       "@ce-lab-mgmt/infrastructure": ["shared/infrastructure/src/index.ts"],
       "@ce-lab-mgmt/shared-ui": ["shared/shared-ui/src/index.ts"],
       "@ce-lab-mgmt/trpc-api": ["shared/trpc-api/src/index.ts"],
+      "@ce-lab-mgmt/services/*": ["apps/services/*/src/index"]
     },
     "types": ["bun-types"]
   },

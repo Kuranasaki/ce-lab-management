@@ -25,7 +25,6 @@ export default function ViewReservationPage() {
         return <Header title="วันที่จอง" column={column} />;
       },
       cell: ({ row }) => {
-        console.log(row);
         const reservationItem = row.original;
         const formattedDate = reservationItem.formatDate();
 
@@ -95,6 +94,7 @@ export default function ViewReservationPage() {
           filterValue={activeTab}
           emptyDataText="ไม่มีรายการทดสอบในขณะนี้"
           enablePagination
+          clickForGetDetail
         />
       </Tabs>
     </div>

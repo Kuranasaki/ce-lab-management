@@ -1,4 +1,7 @@
-import { BaseResponse, GetAllReservationResponse } from '@ce-lab-mgmt/api-interfaces';
+import {
+  BaseResponse,
+  GetAllReservationResponse,
+} from '@ce-lab-mgmt/api-interfaces';
 import { ToastEntity } from '@ce-lab-mgmt/shared-ui';
 import ReservationTableItemProps from '../../entity/view_reservation/reservationTableItemProps';
 
@@ -16,9 +19,9 @@ export default async function reservationTableMapper(
   const reservations: ReservationTableItemProps[] = rawData.data.map(
     (reservation) => {
       return new ReservationTableItemProps(
-        reservation.reservationID,
+        reservation.id,
         new Date(reservation.CreatedOn),
-        reservation.testType,
+        reservation.testInfo.testType,
         reservation.Status,
         reservation.totalPrice
       );
