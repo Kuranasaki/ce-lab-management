@@ -199,6 +199,7 @@ const app = new Elysia()
       console.error('Error during shutdown:', error);
     }
   })
+  .use(cors())
   .listen(process.env.PORT || 3000);
 
 console.log(

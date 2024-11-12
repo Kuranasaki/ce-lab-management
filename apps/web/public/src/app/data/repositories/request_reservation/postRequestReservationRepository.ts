@@ -4,22 +4,35 @@ import {
   RequestReservationResponse,
 } from '@ce-lab-mgmt/api-interfaces';
 import { AxiosError } from 'axios';
-import { sendToQueue } from '../../adapter/stomp';
 import { reservationApi } from '../../adapter/axios';
+import { AuthClass } from '../../../hooks/tokenClass';
 
 // CHANGE TO REST API ON PRODUCTION
 export default async function postRequestReservationRepository(
   data: RequestReservationForm
 ): Promise<BaseResponse<RequestReservationResponse>> {
   try {
+    const token = AuthClass.getToken();
+    const userId = AuthClass.getUserId();
     console.log(data);
-    const rabbitResult = await sendToQueue('reservation_requests', data);
-    // const response = await reservationApi.api.v1.reservations.index.get()
+    // const response = await sendToQueue('reservation_requests', data);
+    const response = await reservationApi.api.v1.reservations.index.post(
+      {
+        orgInfo: data.orgInfo,
+        testInfo: data.testInfo,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    if (rabbitResult.code !== 200) {
+    if (response.data.code !== 200) {
       return {
         error: {
-          code: rabbitResult.code,
+          code: response.data.code,
           message: 'Failed to send to queue',
         },
         success: false,

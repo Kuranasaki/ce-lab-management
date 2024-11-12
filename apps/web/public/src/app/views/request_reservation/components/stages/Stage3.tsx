@@ -99,9 +99,9 @@ export default function Stage3({
                 return new TestListTableItemProps(
                   index.toString(),
                   name,
-                  priceperunit,
+                  item.testAmount,
                   item.testUnit,
-                  unit,
+                  item.testDetails,
                   item.testDetails,
                   item.testTotalPrice
                 );

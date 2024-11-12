@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
+import { AuthClass } from './tokenClass';
 
 interface AuthContextType {
   user: User | null;
@@ -38,9 +39,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setUser(user);
       setLoading(false);
+      const token = (await user?.getIdToken()) || '';
+      AuthClass.login(token, user?.uid || '');
     });
 
     return unsubscribe;
@@ -52,7 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error('Error signing in with Google', error);
-      throw error
+      throw error;
     }
   };
 
@@ -65,10 +68,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     }
   };
 
-  const registerUser = async (
-    email: string,
-    password: string,
-  ) => {
+  const registerUser = async (email: string, password: string) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,

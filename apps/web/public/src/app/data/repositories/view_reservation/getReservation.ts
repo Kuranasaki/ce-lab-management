@@ -6,9 +6,10 @@ export default async function getReservation(
   id: string
 ): Promise<BaseResponse<Reservation>> {
   try {
-    const response = await reservationApi.index.get({
+    const response = await reservationApi.api.v1.reservations({ id }).get({
       query: {
-        id: id,
+        limit: 1,
+        page: 1,
       },
     });
     return response.data;
