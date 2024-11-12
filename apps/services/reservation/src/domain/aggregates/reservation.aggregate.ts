@@ -9,6 +9,7 @@ import {
 import { IdGenerator } from '@ce-lab-mgmt/core-utils';
 import { aggregation, Result, DomainError } from '@ce-lab-mgmt/domain';
 import { Static } from 'elysia';
+import { getPricingByID } from '../repository/pricing.repository';
 
 const { AggregateRoot } = aggregation;
 
@@ -43,25 +44,41 @@ export class Reservation extends AggregateRoot {
   }
 
   // Factory method for creating new reservations
-  public static create(
+  public static async create(
     customerId: string,
     orgInfo: OrganizationInfo,
     testInfo: TestInfo
-  ): Result<Reservation> {
+  ): Promise<Result<Reservation>> {
     try {
       const now = new Date();
 
-      // // Validate requested date is in the future
-      // if (testInfo.testList.some((t)=> t.) < now) {
-      //   throw new ReservationError('Requested date must be in the future');
-      // }
+      const prices = await Promise.all(
+        testInfo.testList.map(async (test) => {
+          const testID = test.testID;
+          const pricing = await getPricingByID(testID);
+
+          if (pricing.pricing.length === 1) {
+            return pricing.pricing[0].price * test.testAmount;
+          } else if (pricing.pricing.length > 1) {
+            for (const price of pricing.pricing) {
+              if (price.perUnit.quantity === test.testAmount) {
+                return price.price;
+              }
+            }
+          }
+
+          return 0;
+        })
+      );
+
+      const totalPrice = prices.reduce((acc, price) => acc + price, 0);
 
       const props: ReservationProps = {
         id: IdGenerator.generate(),
         customerId,
         orgData: orgInfo,
         testInfo: testInfo,
-        totalPrice: 0,
+        totalPrice: totalPrice,
         status: ReservationStatus.Pending,
         createdAt: now.toISOString(),
         updatedAt: now.toISOString(),

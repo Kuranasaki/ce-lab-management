@@ -5,7 +5,10 @@ import { KafkaProducer } from '@ce-lab-mgmt/infrastructure';
 import { NotFoundError } from 'elysia';
 import { PrismaUnitOfWork } from 'shared/infrastructure/src/persistence';
 import { UpdateReservationDTO } from '../../app/http/reservation.schema';
-import { RequestReservationForm, ReservationStatus } from '@ce-lab-mgmt/api-interfaces';
+import {
+  RequestReservationForm,
+  ReservationStatus,
+} from '@ce-lab-mgmt/api-interfaces';
 
 interface CreateReservationParams {
   customerId: string;
@@ -36,12 +39,14 @@ export class ReservationService {
 
   // Query Methods
 
-  async getReservations(params: GetReservationsParams): Promise<Result<{
-    items: Reservation[];
-    total: number;
-    // page: number;
-    // limit: number;
-  }>> {
+  async getReservations(params: GetReservationsParams): Promise<
+    Result<{
+      items: Reservation[];
+      total: number;
+      // page: number;
+      // limit: number;
+    }>
+  > {
     try {
       const now = new Date();
       const result = await this.reservationRepo.findByCustomerWithFilters(
@@ -63,26 +68,30 @@ export class ReservationService {
         items: result.value.items,
         total: result.value.total,
         page: params.page,
-        limit: params.limit
+        limit: params.limit,
       });
     } catch (error) {
       return Result.fail(error as Error);
     }
   }
 
-  async getAllReservations(params: Omit<GetReservationsParams, 'customerId'>): Promise<Result<{
-    items: Reservation[];
-    total: number;
-    page: number;
-    limit: number;
-  }>> {
+  async getAllReservations(
+    params: Omit<GetReservationsParams, 'customerId'>
+  ): Promise<
+    Result<{
+      items: Reservation[];
+      total: number;
+      page: number;
+      limit: number;
+    }>
+  > {
     try {
       const result = await this.reservationRepo.findAll({
         page: params.page,
         limit: params.limit,
         status: params.status,
         fromDate: params.fromDate,
-        toDate: params.toDate
+        toDate: params.toDate,
       });
 
       if (result.isFailure) {
@@ -93,14 +102,17 @@ export class ReservationService {
         items: result.value.items,
         total: result.value.total,
         page: params.page,
-        limit: params.limit
+        limit: params.limit,
       });
     } catch (error) {
       return Result.fail(error as Error);
     }
   }
 
-  async getReservation(id: string, userId?: string): Promise<Result<Reservation>> {
+  async getReservation(
+    id: string,
+    userId?: string
+  ): Promise<Result<Reservation>> {
     try {
       const result = await this.reservationRepo.findById(id);
       if (result.isFailure) {
@@ -109,12 +121,14 @@ export class ReservationService {
 
       const reservation = result.value;
       if (!reservation) {
-        return Result.fail(new NotFoundError('Reservation '+ id));
+        return Result.fail(new NotFoundError('Reservation ' + id));
       }
 
       // Check authorization
       if (userId && reservation.customerId !== userId) {
-        return Result.fail(new UnauthorizedError('Not authorized to view this reservation'));
+        return Result.fail(
+          new UnauthorizedError('Not authorized to view this reservation')
+        );
       }
 
       return Result.ok(reservation);
@@ -125,11 +139,13 @@ export class ReservationService {
 
   // Command Methods
 
-  async createReservation(ctx: {uid: string},params: RequestReservationForm): Promise<Result<Reservation>> {
+  async createReservation(
+    ctx: { uid: string },
+    params: RequestReservationForm
+  ): Promise<Result<Reservation>> {
     return this.unitOfWork.$transaction(async () => {
       try {
         // Validate parameters
-        
 
         // Check for overlapping reservations
         // const overlapResult = await this.reservationRepo.findOverlappingReservations(
@@ -147,10 +163,10 @@ export class ReservationService {
         // }
 
         // Create reservation aggregate
-        const reservationResult = Reservation.create(
+        const reservationResult = await Reservation.create(
           ctx.uid,
           params.orgInfo,
-          params.testInfo,
+          params.testInfo
           // params.notes
         );
 
@@ -159,7 +175,9 @@ export class ReservationService {
         }
 
         // Save to database
-        const savedResult = await this.reservationRepo.save(reservationResult.value);
+        const savedResult = await this.reservationRepo.save(
+          reservationResult.value
+        );
         if (savedResult.isFailure) {
           return savedResult;
         }
@@ -169,7 +187,7 @@ export class ReservationService {
           await this.kafkaProducer.publishEvent('reservation-events', event);
         }
 
-        return savedResult
+        return savedResult;
       } catch (error) {
         return Result.fail(error as Error);
       }
@@ -182,21 +200,20 @@ export class ReservationService {
     data: UpdateReservationDTO
   ) {
     return this.unitOfWork.$transaction(async () => {
-      const reservation = await this.getReservation(id, userId)
-      
-      reservation.value.updateNotes(data.notes)
-      
-      const saved = await this.reservationRepo.save(reservation.value)
-      
+      const reservation = await this.getReservation(id, userId);
+
+      reservation.value.updateNotes(data.notes);
+
+      const saved = await this.reservationRepo.save(reservation.value);
+
       // Publish events
       for (const event of saved.value.events) {
-        await this.kafkaProducer.publishEvent('reservation-events', event)
+        await this.kafkaProducer.publishEvent('reservation-events', event);
       }
 
-      return saved
-    })
+      return saved;
+    });
   }
-  
 
   async approveReservation(id: string): Promise<Result<void>> {
     return this.unitOfWork.$transaction(async () => {
@@ -209,7 +226,7 @@ export class ReservationService {
 
         const reservation = reservationResult.value;
         if (!reservation) {
-          return Result.fail(new NotFoundError('Reservation '+ id));
+          return Result.fail(new NotFoundError('Reservation ' + id));
         }
 
         // Approve reservation
@@ -238,18 +255,18 @@ export class ReservationService {
 
   async rejectReservation(id: string) {
     return this.unitOfWork.$transaction(async () => {
-      const reservation = await this.getReservation(id)
-      
-      reservation.value.reject()
-      
-      const saved = await this.reservationRepo.save(reservation.value)
-      
+      const reservation = await this.getReservation(id);
+
+      reservation.value.reject();
+
+      const saved = await this.reservationRepo.save(reservation.value);
+
       // Publish events
       for (const event of saved.value.events) {
-        await this.kafkaProducer.publishEvent('reservation-events', event)
+        await this.kafkaProducer.publishEvent('reservation-events', event);
       }
 
-      return saved
-    })
+      return saved;
+    });
   }
 }
