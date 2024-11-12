@@ -1,7 +1,7 @@
 {
   "name": "infrastructure",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "infrastructure/src",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/infrastructure/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -11,8 +11,8 @@
       "options": {
         "outputPath": "dist/infrastructure",
         "main": "infrastructure/src/index.ts",
-        "tsConfig": "infrastructure/tsconfig.lib.json",
-        "assets": ["infrastructure/*.md"]
+        "tsConfig": "shared/infrastructure/tsconfig.lib.json",
+        "assets": ["shared/infrastructure/*.md"]
       }
     }
   }

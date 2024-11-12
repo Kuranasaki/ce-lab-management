@@ -177,6 +177,12 @@ export default function AddEditItemDialog({
                               'testUnit',
                               testSubDetails.prices[0].unit
                             );
+                            testItemForm.setValue(
+                              'testPricePerUnit',
+                              testSubDetails.prices.find(
+                                (p) => p.amount === sanitizeNumberInput(e)
+                              )?.price || 0
+                            );
                           }}
                           value={field.value ? String(field.value) : ''}
                         >
@@ -216,6 +222,10 @@ export default function AddEditItemDialog({
                             testItemForm.setValue(
                               'testUnit',
                               testSubDetails.prices[0].unit
+                            );
+                            testItemForm.setValue(
+                              'testPricePerUnit',
+                              testSubDetails.prices[0].price
                             );
                           }}
                           value={field.value ? String(field.value) : ''}

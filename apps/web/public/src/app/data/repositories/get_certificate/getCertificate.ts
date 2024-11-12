@@ -38,7 +38,7 @@ export default async function getCertificate(
       };
     }
     return {
-      error: { code: '500', message: 'Internal Server Error' },
+      error: { code: 500, message: 'Internal Server Error' },
       success: false,
     };
   }

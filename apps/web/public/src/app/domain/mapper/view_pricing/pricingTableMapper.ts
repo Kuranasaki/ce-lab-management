@@ -15,7 +15,7 @@ export default async function mapper(
     return [];
   }
   if (rawData.error) {
-    return ToastEntity.fromCode(rawData.error.code);
+    return ToastEntity.fromCode(rawData.error.code ?? 500);
   }
 
   if (!rawData.data) {

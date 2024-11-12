@@ -4,6 +4,7 @@ import getCertificate from '../../domain/usecase/get_certificate/getCertificate'
 import { Certificate } from '../../domain/entity/get_certificate/certificateEntity';
 
 export function useCertificate(id: string) {
+  if (id === '') return { data: null, loading: false };
   const [data, setData] = useState<Certificate>();
   const [loading, setLoading] = useState<boolean>(false);
 

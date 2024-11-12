@@ -11,6 +11,7 @@ export default function reqReservRequestMapper({
   orgForm: OrgInfoFormReturned;
   testListForm: TestListFormReturned;
 }): RequestReservationForm {
+  const ad = testListForm.getValues('testList');
   return {
     orgInfo: {
       orgName: orgForm.getValues('orgName'),
@@ -28,12 +29,19 @@ export default function reqReservRequestMapper({
     },
     testInfo: {
       testType: testListForm.getValues('testType'),
-      testList: testListForm.getValues('testList').map((test) => ({
+      testList: testListForm.getValues('testList').map((test, idx) => ({
         testID: test.testID,
         testAmount: test.testAmount,
-        testDetails: test.testDetails.length > 0 ? test.testDetails : undefined,
-        testNote: test.testNote.length > 0 ? test.testNote : undefined,
+        testDetails: test.testDetails.length > 0 ? test.testDetails : null,
+        testNote: test.testNote.length > 0 ? test.testNote : null,
         testTotalPrice: test.testTotalPrice,
+        assignedProfessorName: null,
+        markedAsDone: null,
+        certificateUploadedAt: null,
+        testItemID: idx.toString(),
+        testName: test.testName,
+        testPricePerUnit: test.testPricePerUnit,
+        testUnit: test.testUnit,
       })),
     },
   };

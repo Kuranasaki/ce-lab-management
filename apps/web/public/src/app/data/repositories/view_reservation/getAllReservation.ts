@@ -19,14 +19,14 @@ export default async function getAllReservation(): Promise<
     if (error instanceof AxiosError && error.response) {
       return {
         error: {
-          code: error.response.data.status,
+          code: error.response.data.code,
           message: error.response.data.message,
         },
         success: false,
       };
     }
     return {
-      error: { code: '500', message: 'Internal Server Error' },
+      error: { code: 500, message: 'Internal Server Error' },
       success: false,
     };
   }

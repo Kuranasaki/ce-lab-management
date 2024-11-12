@@ -23,7 +23,7 @@ export default async function getReservation(
       };
     }
     return {
-      error: { code: '500', message: 'Internal Server Error' },
+      error: { code: 500, message: 'Internal Server Error' },
       success: false,
     };
   }

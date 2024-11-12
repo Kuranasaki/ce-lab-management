@@ -9,7 +9,7 @@ export default async function mapper(
   rawData: BaseResponse<GetCertificateResponse>
 ): Promise<Certificate | ToastEntity> {
   if (rawData.error) {
-    return ToastEntity.fromCode(rawData.error.code);
+    return ToastEntity.fromCode(rawData.error.code ?? 500);
   }
   if (!rawData.data) {
     return ToastEntity.unknownError();

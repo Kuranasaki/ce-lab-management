@@ -182,9 +182,11 @@ export abstract class BaseController {
 
 // Example auth middleware factory
 export const createAuthMiddleware = (roles: string[] = []) => {
-  return async ({ headers, set }: any) => {
+  return async ({ userData, headers, set }: any) => {
     const userId = headers['x-user-id'];
     const userRoles = headers['x-user-roles']?.split(',') || [];
+    userData.uid = userId;
+    userData.roles = userRoles;
     if (!userId) {
       set.status = 401;
       return {

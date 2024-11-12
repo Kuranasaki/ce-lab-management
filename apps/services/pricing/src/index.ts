@@ -21,7 +21,7 @@ const app = new Elysia()
   )
   .use(cors())
   .use(PricingController)
-  .listen(3000);
+  .listen(3001);
 
 export type PricingServiceType = typeof app;
 

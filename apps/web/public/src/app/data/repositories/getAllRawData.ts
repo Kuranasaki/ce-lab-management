@@ -25,8 +25,11 @@ export default async function getAllRawData(): Promise<
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      return new BaseResponse({ error: error.response.data.error });
+      return { error: error.response.data.error, success: false };
     }
-    return new BaseResponse({ error: { code: 500 } });
+    return {
+      error: { code: 500, message: 'Internal Server Error' },
+      success: false,
+    };
   }
 }
