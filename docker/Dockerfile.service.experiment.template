@@ -1,0 +1,46 @@
+FROM oven/bun
+ARG SERVICE_NAME
+WORKDIR /app
+
+# Install OpenSSL
+# RUN apt-get update -y && apt-get install -y openssl
+
+# Cache packages
+COPY package.json package.json
+COPY bun.lockb bun.lockb
+COPY tsconfig.base.json tsconfig.base.json
+
+# COPY /apps/services/${SERVICE_NAME}/package.json ./apps/services/${SERVICE_NAME}/package.json
+
+RUN bun install --production
+
+COPY prisma prisma
+COPY /apps/services/${SERVICE_NAME} ./apps/services/${SERVICE_NAME}
+COPY /shared ./shared
+RUN ls -la
+RUN bunx prisma generate
+
+# WORKDIR /app/apps/services/${SERVICE_NAME}
+ENV NODE_ENV=production
+# RUN ls -la
+# RUN bun build \
+# 	--compile \
+# 	--minify-whitespace \
+# 	--minify-syntax \
+# 	--target bun \
+# 	--outfile server \
+# 	./src/index.ts
+
+# FROM gcr.io/distroless/base
+# ARG SERVICE_NAME
+# WORKDIR /app
+
+# COPY --from=build /app/apps/services/${SERVICE_NAME}/server server
+
+# ENV NODE_ENV=production
+
+# CMD ["./server"]
+
+CMD ["bun","./apps/services/pricing/src/index.ts"]
+
+EXPOSE 3000

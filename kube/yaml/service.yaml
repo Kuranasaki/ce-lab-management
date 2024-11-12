@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cuce-web-service
+  labels:
+    app: cuce-app-web
+spec:
+  selector:
+    app: cuce-app-web
+  ports:
+    - protocol: TCP
+      port: 4200
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cuce-reservation-svc-service
+  labels:
+    app: cuce-app-reservation-svc
+spec:
+  selector:
+    app: cuce-app-reservation-svc
+  ports:
+    - protocol: TCP
+      port: 3000
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cuce-experiment-svc-service
+  labels:
+    app: cuce-app-experiment-svc
+spec:
+  selector:
+    app: cuce-app-experiment-svc
+  ports:
+    - protocol: TCP
+      port: 3000
+  type: ClusterIP

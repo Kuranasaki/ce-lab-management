@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cuce-app-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cuce-app-web
+  template:
+    metadata:
+      labels:
+        app: cuce-app-web
+    spec:
+      containers:
+        - name: cuce-web
+          image: saimkrua/cuce-web:latest
+          ports:
+            - containerPort: 4200
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cuce-app-reservation-svc
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cuce-app-reservation-svc
+  template:
+    metadata:
+      labels:
+        app: cuce-app-reservation-svc
+    spec:
+      containers:
+        - name: cuce-reservation-svc
+          image: saimkrua/cuce-reservation-svc:latest
+          env:
+            - name: MONGODB_URI
+              value: 'mongodb+srv://punyaphatsura:4rGn0tjjQfA3EPam@whatifproject.blg0e.mongodb.net/celab'
+            - name: MONGO_DB
+              value: 'celab'
+            - name: POSTGRES_URL
+              value: 'postgresql://postgres.gviorlxxngnmcvrzevxu:sUwpoAKW9HNNb73U@aws-0-ap-southeast-1.pooler.supabase.com'
+            - name: POSTGRES_DIRECT_URL
+              value: 'postgresql://postgres.gviorlxxngnmcvrzevxu:sUwpoAKW9HNNb73U@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
+            - name: API_ENDPOINT
+              value: http://reservation.cucel.k8s.orb.local
+          ports:
+            - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cuce-app-experiment-svc
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cuce-app-experiment-svc
+  template:
+    metadata:
+      labels:
+        app: cuce-app-experiment-svc
+    spec:
+      containers:
+        - name: cuce-experiment-svc
+          image: saimkrua/cuce-experiment-svc:latest
+          env:
+            - name: MONGODB_URI
+              value: 'mongodb+srv://punyaphatsura:4rGn0tjjQfA3EPam@whatifproject.blg0e.mongodb.net/celab'
+            - name: MONGO_DB
+              value: 'celab'
+            - name: POSTGRES_URL
+              value: 'postgresql://postgres.gviorlxxngnmcvrzevxu:sUwpoAKW9HNNb73U@aws-0-ap-southeast-1.pooler.supabase.com'
+            - name: POSTGRES_DIRECT_URL
+              value: 'postgresql://postgres.gviorlxxngnmcvrzevxu:sUwpoAKW9HNNb73U@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
+            - name: API_ENDPOINT
+              value: http://experiment.cucel.k8s.orb.local
+          ports:
+            - containerPort: 3000
+        # - name: cuce-laboratory-svc
+        #   image:
+        #   env:
+        #     - name: MONGODB_URI
+        #       value: "mongodb+srv://punyaphatsura:4rGn0tjjQfA3EPam@whatifproject.blg0e.mongodb.net/celab"
+        #     - name: MONGO_DB
+        #       value: "celab"
+        #     - name: POSTGRES_URL
+        #       value: "postgresql://postgres.gviorlxxngnmcvrzevxu:sUwpoAKW9HNNb73U@aws-0-ap-southeast-1.pooler.supabase.com"
+        #     - name: POSTGRES_DIRECT_URL
+        #       value: "postgresql://postgres.gviorlxxngnmcvrzevxu:sUwpoAKW9HNNb73U@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+        #   ports:
+        #     - containerPort: 3000
