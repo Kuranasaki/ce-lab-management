@@ -22,6 +22,7 @@ export class KafkaConsumer {
       }
 
       this.consumer = consumerResult.value
+      console.log('Kafka Consumer connected')
       return Result.ok()
     } catch (error) {
       return Result.fail(error as Error)

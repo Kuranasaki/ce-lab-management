@@ -5,6 +5,7 @@ import {
   Result,
   KafkaTopic,
   ReservationApprovedEvent,
+  ReservationCreatedEvent,
 } from '@ce-lab-mgmt/domain';
 import { ExperimentOrderService } from '../../domain/services/order.service';
 import { Logger } from 'kafkajs';
@@ -37,6 +38,15 @@ export class ReservationEventHandler {
       // Only subscribe to the events we need from reservation service
       this.consumer.subscribeToEvent<
         KafkaTopic.Reservation,
+        ReservationCreatedEvent
+      >(
+        KafkaTopic.Reservation,
+        'ReservationCreated',
+        this.handleReservationCreated.bind(this)
+      );
+
+      this.consumer.subscribeToEvent<
+        KafkaTopic.Reservation,
         ReservationApprovedEvent
       >(
         KafkaTopic.Reservation,
@@ -54,6 +64,43 @@ export class ReservationEventHandler {
     } catch (error) {
       this.logger.error('Failed to start reservation event handler', { error });
       return Result.fail(error as Error);
+    }
+  }
+  private async handleReservationCreated(
+    event: ReservationCreatedEvent
+  ): Promise<void> {
+    try {
+      this.logger.info('Processing ReservationCreated event', {
+        reservationId: event.data.reservationId,
+      });
+
+      // Create an experiment for each test item in the reservation
+      const results = await Promise.all(
+        event.data.testItems.map((testItem) =>
+          this.createExperimentForTestItem(event.data.reservationId, testItem)
+        )
+      );
+
+      // Check for any failures
+      const failures = results.filter((result) => result.isFailure);
+      if (failures.length > 0) {
+        this.logger.error('Some experiments failed to create', {
+          reservationId: event.data.reservationId,
+          failures: failures.map((f) => f.error.message),
+        });
+      }
+
+      this.logger.info('Completed processing ReservationCreated event', {
+        reservationId: event.data.reservationId,
+        createdExperiments: results.length - failures.length,
+        failedExperiments: failures.length,
+      });
+    } catch (error) {
+      this.logger.error('Failed to handle ReservationCreated event', {
+        error,
+        reservationId: event.data.reservationId,
+        eventId: event.eventId,
+      });
     }
   }
 

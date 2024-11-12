@@ -26,6 +26,7 @@ export class KafkaProducer {
       }
 
       this.producer = producerResult.value
+      console.log('Kafka Producer connected')
       return Result.ok()
     } catch (error) {
       return Result.fail(error as Error)

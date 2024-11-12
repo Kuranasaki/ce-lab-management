@@ -1,74 +1,18 @@
-## kafka-values.yaml
-global:
-  storageClass: "standard"  # Adjust according to your cluster's storage class
 
 kafka:
-  heapOpts: "-Xmx1024m -Xms1024m"
-  persistence:
-    enabled: true
-    size: 10Gi
-    
-  # External access configuration
-  externalAccess:
-    enabled: true
-    service:
-      type: LoadBalancer
-      ports:
-        external: 9094
-    autoDiscovery:
-      enabled: true
-      
-  # Configure listeners for both internal and external access
-  listeners:
-    - name: internal
-      port: 9092
-      protocol: PLAINTEXT
-      type: internal
-    - name: external
-      port: 9094
-      protocol: PLAINTEXT
-      type: loadbalancer
-      
-  # Configure number of replicas (brokers)
-  replicaCount: 3
-  
-  # Configure resource limits
-  resources:
-    requests:
-      memory: "2Gi"
-      cpu: "500m"
-    limits:
-      memory: "4Gi"
-      cpu: "2000m"
-      
-  # Configure metrics for monitoring
-  metrics:
-    kafka:
-      enabled: true
-    jmx:
-      enabled: true
-      
-  # Configure Zookeeper
-  zookeeper:
-    enabled: true
-    replicaCount: 3
-    persistence:
-      enabled: true
-      size: 8Gi
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: "250m"
-      limits:
-        memory: "2Gi"
-        cpu: "500m"
 
   # Security configuration (basic)
   auth:
-    clientProtocol: plaintext  # Can be changed to 'sasl_plaintext' or 'sasl_ssl' for security
-    interBrokerProtocol: plaintext
-    
-  # Network policy
-  networkPolicy:
     enabled: true
-    allowExternal: true
+    clientProtocol: sasl_plaintext  # Can be changed to 'sasl_plaintext' or 'sasl_ssl' for security
+    interBrokerProtocol: sasl
+    sasl:
+      mechanism: plain
+      jaas:
+        clientUsers:
+          - "user1"
+          - "user2"
+        clientPasswords:
+          - "password1"
+          - "password2"
+        interBrokerUser: "admin"

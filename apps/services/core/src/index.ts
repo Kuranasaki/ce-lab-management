@@ -9,7 +9,14 @@ import { KafkaConfig } from 'kafkajs';
 async function createKafkaProducer(): Promise<[KafkaProducer, KafkaConsumer]> {
   const kafkaConfig: KafkaConfig = {
     clientId: 'celab-service',
-    brokers: process.env.KAFKA_BROKERS?.split(',') || ['localhost:9092']
+    brokers: process.env.KAFKA_BROKERS?.split(',') || ['localhost:9092'],
+    // ssl: f,
+    ssl: false,
+    sasl: {
+      mechanism: 'scram-sha-256',
+      username: 'user1',
+      password: 'NJ80NmlGz1'
+    }
   }
 
   const producer = new KafkaProducer(kafkaConfig, console);
@@ -41,22 +48,22 @@ async function bootstrap() {
     const [kafkaProducer, kafkaConsumer] = await createKafkaProducer();
 
     // Initialize service
-    // const experimentService = new ExperimentOrderService(
-    //   experimentRepository,
-    //   kafkaProducer,
-    //   console
-    // );
+    const experimentService = new ExperimentOrderService(
+      experimentRepository,
+      kafkaProducer,
+      console
+    );
 
     // // Initialize event handler
-    // const reservationEventHandler = new ReservationEventHandler(
-    //   experimentService,
-    //   kafkaConsumer,
-    //   logger
-    // );
-    // const eventHandlerResult = await reservationEventHandler.start();
-    // if (eventHandlerResult.isFailure) {
-    //   throw eventHandlerResult.error;
-    // }
+    const reservationEventHandler = new ReservationEventHandler(
+      experimentService,
+      kafkaConsumer,
+      logger
+    );
+    const eventHandlerResult = await reservationEventHandler.start();
+    if (eventHandlerResult.isFailure) {
+      throw eventHandlerResult.error;
+    }
 
     // Initialize HTTP server
     const app = new Elysia()

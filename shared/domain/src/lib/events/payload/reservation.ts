@@ -23,8 +23,12 @@ export interface ReservationApprovedEvent extends BaseEvent<KafkaTopic.Reservati
   data: ReservationApprovedPayload;
 }
 
+export interface ReservationCreatedEvent extends BaseEvent<KafkaTopic.Reservation, 'ReservationCreated'> {
+  data: ReservationApprovedPayload;
+}
+
 export interface ReservationRejectedEvent extends BaseEvent<KafkaTopic.Reservation, 'ReservationRejected'> {
   data: ReservationRejectedPayload;
 }
 
-export type ReservationEvent = ReservationApprovedEvent | ReservationRejectedEvent;
+export type ReservationEvent = ReservationApprovedEvent | ReservationRejectedEvent | ReservationCreatedEvent;

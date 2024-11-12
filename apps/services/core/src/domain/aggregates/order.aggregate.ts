@@ -24,20 +24,20 @@ export class ExperimentOrder extends AggregateRoot {
     return new ExperimentOrder(props);
   }
 
-  public assignProfessor(professorId: string): Result<void> {
-    this.props.assignedProfessorID = professorId;
-    this.props.status = ExperimentStatus.ASSIGNED;
+  // public assignProfessor(professorId: string): Result<void> {
+  //   this.props.assignedProfessorID = professorId;
+  //   this.props.status = ExperimentStatus.ASSIGNED;
 
-    this.addEvent({
-      eventId: IdGenerator.generate(),
-      eventType: 'ProfessorAssigned',
-      aggregateId: this.id,
-      timestamp: new Date().toISOString(),
-      data: { professorId, experimentId: this.id },
-    });
+  //   this.addEvent({
+  //     eventId: IdGenerator.generate(),
+  //     eventType: 'ProfessorAssigned',
+  //     aggregateId: this.id,
+  //     timestamp: new Date().toISOString(),
+  //     data: { professorId, experimentId: this.id },
+  //   });
 
-    return Result.ok();
-  }
+  //   return Result.ok();
+  // }
 
   get self(): TExperimentOrder {
     return this.props;
