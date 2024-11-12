@@ -15,6 +15,9 @@ COPY tsconfig.base.json ./
 RUN bun i
 
 COPY . .
+
+RUN bun prisma generate --schema ./prisma/schema.prisma
+
 RUN bunx nx run-many --target=build --projects=tag:type:web
 
 FROM nginx:alpine AS web
