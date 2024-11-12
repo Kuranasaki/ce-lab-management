@@ -1,4 +1,4 @@
-import { KafkaTopic, ReservationEvent, Result, ResultEvent } from "@ce-lab-mgmt/domain"
+import { EventForTopic, KafkaTopic, ReservationEvent, Result, ResultEvent } from "@ce-lab-mgmt/domain"
 import { Producer, KafkaConfig, Logger, Message, ProducerRecord } from "kafkajs"
 import { KafkaConnection } from "./kafka.connection"
 // Generic event type
@@ -10,19 +10,12 @@ export interface BaseEvent<T extends KafkaTopic, E extends string> {
   data: unknown;
 }
 
-// Map topic to its event type
-export type TopicEvent<T extends KafkaTopic> = 
-  T extends KafkaTopic.Reservation ? ReservationEvent :
-  // T extends KafkaTopic.Experiment ? ExperimentEvent :
-  T extends KafkaTopic.Result ? ResultEvent :
-  never;
-
 export class KafkaProducer {
   private producer: Producer | undefined
 
   constructor(
     private readonly config: KafkaConfig,
-    private readonly logger?: Logger
+    private readonly logger?: Logger | Console
   ) {}
 
   async connect(): Promise<Result<void>> {
@@ -41,7 +34,7 @@ export class KafkaProducer {
 
   async publishEvent<T extends KafkaTopic>(
     topic: T,
-    event: TopicEvent<T>
+    event: EventForTopic<T>
   ): Promise<Result<void>> {
     try {
       if (!this.producer) {

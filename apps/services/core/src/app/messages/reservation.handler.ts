@@ -1,43 +1,30 @@
+// apps/laboratory-testing/src/application/events/reservation-event.handler.ts
 import { KafkaConsumer } from '@ce-lab-mgmt/infrastructure';
 import { KafkaConfig } from 'kafkajs';
+import {
+  Result,
+  KafkaTopic,
+  ReservationApprovedEvent,
+} from '@ce-lab-mgmt/domain';
 import { ExperimentOrderService } from '../../domain/services/order.service';
-import { KafkaTopic, Result } from '@ce-lab-mgmt/domain';
+import { Logger } from 'kafkajs';
 
-interface ReservationApprovedEvent {
-  eventType: 'ReservationApproved';
-  aggregateId: string; // reservationId
-  timestamp: string;
-  data: {
-    reservationId: string;
-    customerId: string;
-    testItems: Array<{
-      id: string;
-      testName: string;
-      amount: number;
-      details?: string;
-      note?: string;
-    }>;
-  };
-}
-
-export class ExperimentEventHandlerService {
+export class ReservationEventHandler {
   private readonly consumer: KafkaConsumer;
 
   constructor(
     private readonly experimentService: ExperimentOrderService,
-  ) {
-    // Initialize Kafka consumer
-    const kafkaConfig: KafkaConfig = {
-      clientId: 'laboratory-testing-service',
-      brokers: process.env.KAFKA_BROKERS?.split(',') ?? ['localhost:9092']
-    };
 
-    // Using console logger for now since we don't have the logger injected
-    this.consumer = new KafkaConsumer(
-      kafkaConfig,
-      'laboratory-testing-group',
-      console
-    );
+    consumer: KafkaConsumer,
+    private readonly logger: Logger | Console
+  ) {
+    // const kafkaConfig: KafkaConfig = {
+    //   clientId: 'laboratory-testing-service',
+    //   brokers: process.env.KAFKA_BROKERS?.split(',') ?? ['localhost:9092']
+    // };
+
+    // this.consumer = new KafkaConsumer(kafkaConfig, 'laboratory-testing-group', logger);
+    this.consumer = consumer;
   }
 
   async start(): Promise<Result<void>> {
@@ -47,8 +34,11 @@ export class ExperimentEventHandlerService {
         return Result.fail(connectResult.error);
       }
 
-      // Subscribe to reservation events
-      this.consumer.subscribeToEvent(
+      // Only subscribe to the events we need from reservation service
+      this.consumer.subscribeToEvent<
+        KafkaTopic.Reservation,
+        ReservationApprovedEvent
+      >(
         KafkaTopic.Reservation,
         'ReservationApproved',
         this.handleReservationApproved.bind(this)
@@ -59,45 +49,48 @@ export class ExperimentEventHandlerService {
         return Result.fail(startResult.error);
       }
 
-      console.info('Started consuming reservation events');
+      this.logger.info('Started consuming reservation events');
       return Result.ok();
     } catch (error) {
-      console.error('Failed to start event handler', { error });
+      this.logger.error('Failed to start reservation event handler', { error });
       return Result.fail(error as Error);
     }
   }
 
-  private async handleReservationApproved(event: ReservationApprovedEvent): Promise<void> {
+  private async handleReservationApproved(
+    event: ReservationApprovedEvent
+  ): Promise<void> {
     try {
-      console.info('Handling ReservationApproved event', {
-        reservationId: event.data.reservationId
+      this.logger.info('Processing ReservationApproved event', {
+        reservationId: event.data.reservationId,
       });
 
       // Create an experiment for each test item in the reservation
       const results = await Promise.all(
-        event.data.testItems.map(testItem =>
+        event.data.testItems.map((testItem) =>
           this.createExperimentForTestItem(event.data.reservationId, testItem)
         )
       );
 
       // Check for any failures
-      const failures = results.filter(result => result.isFailure);
+      const failures = results.filter((result) => result.isFailure);
       if (failures.length > 0) {
-        console.error('Some experiments failed to create', {
+        this.logger.error('Some experiments failed to create', {
           reservationId: event.data.reservationId,
-          failures: failures.map(f => f.error.message)
+          failures: failures.map((f) => f.error.message),
         });
       }
 
-      console.info('Successfully processed ReservationApproved event', {
+      this.logger.info('Completed processing ReservationApproved event', {
         reservationId: event.data.reservationId,
         createdExperiments: results.length - failures.length,
-        failedExperiments: failures.length
+        failedExperiments: failures.length,
       });
     } catch (error) {
-      console.error('Failed to handle ReservationApproved event', {
+      this.logger.error('Failed to handle ReservationApproved event', {
         error,
-        reservationId: event.data.reservationId
+        reservationId: event.data.reservationId,
+        eventId: event.eventId,
       });
     }
   }
@@ -119,7 +112,7 @@ export class ExperimentEventHandlerService {
         testName: testItem.testName,
         testAmount: testItem.amount,
         testDetails: testItem.details ?? null,
-        testNote: testItem.note ?? null
+        testNote: testItem.note ?? null,
       });
 
       if (result.isFailure) {
@@ -128,10 +121,10 @@ export class ExperimentEventHandlerService {
 
       return Result.ok();
     } catch (error) {
-      console.error('Failed to create experiment for test item', {
+      this.logger.error('Failed to create experiment for test item', {
         error,
         reservationId,
-        testItemId: testItem.id
+        testItemId: testItem.id,
       });
       return Result.fail(error as Error);
     }

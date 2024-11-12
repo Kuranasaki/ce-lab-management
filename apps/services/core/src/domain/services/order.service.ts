@@ -1,8 +1,8 @@
-import { TExperimentOrder, ExperimentStatus } from "@ce-lab-mgmt/api-interfaces";
-import { IdGenerator, Guard } from "@ce-lab-mgmt/core-utils";
+import { ExperimentStatus, TExperimentOrder } from "@ce-lab-mgmt/api-interfaces";
+import { Guard, IdGenerator } from "@ce-lab-mgmt/core-utils";
 import { KafkaTopic, Result } from "@ce-lab-mgmt/domain";
 import { KafkaProducer } from "@ce-lab-mgmt/infrastructure";
-import { Kafka, Logger } from "kafkajs";
+import { Logger } from "kafkajs";
 import { ExperimentOrder } from "../aggregates/order.aggregate";
 import { ExperimentOrderRepository } from "../repositories/order.repository";
 
@@ -10,7 +10,7 @@ export class ExperimentOrderService {
   constructor(
     private readonly repository: ExperimentOrderRepository,
     private readonly kafkaProducer: KafkaProducer,
-    private readonly logger: Logger
+    private readonly logger: Logger | Console
   ) {}
 
   async createExperiment(
@@ -35,14 +35,6 @@ export class ExperimentOrderService {
       if (savedExperiment.isFailure) {
         throw savedExperiment.error;
       }
-
-      await this.kafkaProducer.publishEvent<KafkaTopic.Experiment>(KafkaTopic.Experiment, {
-        eventId: IdGenerator.generate(),
-        eventType: 'ReservationApproved' ,
-        aggregateId: experiment.id,
-        timestamp: new Date().toISOString(),
-        data: experiment.self
-      });
 
       return Result.ok(savedExperiment.value);
     } catch (error) {
@@ -78,15 +70,14 @@ export class ExperimentOrderService {
         throw updatedExperiment.error;
       }
 
-      await this.kafkaProducer.publishEvent('experiment-events', {
+      await this.kafkaProducer.publishEvent(KafkaTopic.Experiment, {
         eventId: IdGenerator.generate(),
         eventType: 'ProfessorAssigned',
         aggregateId: experimentId,
         timestamp: new Date().toISOString(),
         data: {
           experimentId,
-          professorId,
-          professorName
+          professorId
         }
       });
 
@@ -109,13 +100,13 @@ export class ExperimentOrderService {
         throw result.error;
       }
 
-      await this.kafkaProducer.publishEvent('experiment-events', {
-        eventId: IdGenerator.generate(),
-        eventType: 'ExperimentStatusUpdated',
-        aggregateId: experimentId,
-        timestamp: new Date().toISOString(),
-        data: { experimentId, status }
-      });
+      // await this.kafkaProducer.publishEvent('experiment-events', {
+      //   eventId: IdGenerator.generate(),
+      //   eventType: 'ExperimentStatusUpdated',
+      //   aggregateId: experimentId,
+      //   timestamp: new Date().toISOString(),
+      //   data: { experimentId, status }
+      // });
 
       return Result.ok();
     } catch (error) {
@@ -155,13 +146,13 @@ export class ExperimentOrderService {
         throw result.error;
       }
 
-      await this.kafkaProducer.publishEvent('experiment-events', {
-        eventId: IdGenerator.generate(),
-        eventType: 'TestFormUploaded',
-        aggregateId: experimentId,
-        timestamp: new Date().toISOString(),
-        data: { experimentId, formUrl }
-      });
+      // await this.kafkaProducer.publishEvent('experiment-events', {
+      //   eventId: IdGenerator.generate(),
+      //   eventType: 'TestFormUploaded',
+      //   aggregateId: experimentId,
+      //   timestamp: new Date().toISOString(),
+      //   data: { experimentId, formUrl }
+      // });
 
       return Result.ok();
     } catch (error) {
@@ -183,13 +174,13 @@ export class ExperimentOrderService {
         throw result.error;
       }
 
-      await this.kafkaProducer.publishEvent('experiment-events', {
-        eventId: IdGenerator.generate(),
-        eventType: 'CertificateUploaded',
-        aggregateId: experimentId,
-        timestamp: new Date().toISOString(),
-        data: { experimentId, certificateUrl }
-      });
+      // await this.kafkaProducer.publishEvent('experiment-events', {
+      //   eventId: IdGenerator.generate(),
+      //   eventType: 'CertificateUploaded',
+      //   aggregateId: experimentId,
+      //   timestamp: new Date().toISOString(),
+      //   data: { experimentId, certificateUrl }
+      // });
 
       return Result.ok();
     } catch (error) {
@@ -207,13 +198,13 @@ export class ExperimentOrderService {
         throw result.error;
       }
 
-      await this.kafkaProducer.publishEvent('experiment-events', {
-        eventId: IdGenerator.generate(),
-        eventType: 'ExperimentCompleted',
-        aggregateId: experimentId,
-        timestamp: new Date().toISOString(),
-        data: { experimentId }
-      });
+      // await this.kafkaProducer.publishEvent('experiment-events', {
+      //   eventId: IdGenerator.generate(),
+      //   eventType: 'ExperimentCompleted',
+      //   aggregateId: experimentId,
+      //   timestamp: new Date().toISOString(),
+      //   data: { experimentId }
+      // });
 
       return Result.ok();
     } catch (error) {
