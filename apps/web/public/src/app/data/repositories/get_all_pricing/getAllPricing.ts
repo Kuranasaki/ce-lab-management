@@ -10,8 +10,17 @@ export default async function getAllPricing(): Promise<
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      return new BaseResponse({ error: { code: error.response.data.status } });
+      return {
+        error: {
+          code: error.response.data.status,
+          message: error.response.data.message,
+        },
+        success: false,
+      };
     }
-    return new BaseResponse({ error: { code: 500 } });
+    return {
+      error: { code: '500', message: 'Internal Server Error' },
+      success: false,
+    };
   }
 }

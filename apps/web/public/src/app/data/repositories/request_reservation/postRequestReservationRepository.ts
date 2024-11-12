@@ -15,16 +15,29 @@ export default async function postRequestReservationRepository(
     const rabbitResult = await sendToQueue('reservation_requests', data);
 
     if (rabbitResult.code !== 200) {
-      return new BaseResponse({
-        error: { code: rabbitResult.code },
-      });
+      return {
+        error: {
+          code: rabbitResult.code.toString(),
+          message: 'Failed to send to queue',
+        },
+        success: false,
+      };
     }
 
-    return new BaseResponse({ data: { code: 200 } });
+    return { data: { code: 200 }, success: true };
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      return new BaseResponse({ error: error.response.data.error });
+      return {
+        error: {
+          code: error.response.data.status,
+          message: error.response.data.message,
+        },
+        success: false,
+      };
     }
-    return new BaseResponse({ error: { code: 500 } });
+    return {
+      error: { code: '500', message: 'Internal Server Error' },
+      success: false,
+    };
   }
 }

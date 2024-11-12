@@ -1,8 +1,7 @@
-
 import {
   OrganizationInfo,
   ReservationStatus,
-  TestList
+  TestList,
 } from '@ce-lab-mgmt/api-interfaces';
 import { IdGenerator } from '@ce-lab-mgmt/core-utils';
 import { Result } from '@ce-lab-mgmt/domain';
@@ -548,8 +547,8 @@ export class ReservationRepository extends PrismaRepository<
     };
 
     const testInfo: TestList = {
-      testt: model.testList[0]?.testType ?? '', // You might want to adjust this based on your domain logic
-      testItems: model.testList.map((test) => ({
+      testType: model.testList[0]?.testType ?? '', // You might want to adjust this based on your domain logic
+      testList: model.testList.map((test) => ({
         testID: test.testID,
         testItemID: test.testItemID,
         testName: test.testName,
@@ -596,9 +595,9 @@ export class ReservationRepository extends PrismaRepository<
         orgPhone: entity.orgData.orgPhone,
         orgFax: entity.orgData.orgFax ?? null,
       },
-      testList: entity.testList.testItems.map((test) => ({
+      testList: entity.testList.testList.map((test) => ({
         id: IdGenerator.generate(), // Generate new ID for each test
-        testType: entity.testList.testt,
+        testType: entity.testList.testType,
         testID: test.testID,
         testItemID: test.testItemID,
         testName: test.testName,

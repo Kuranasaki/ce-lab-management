@@ -1,15 +1,12 @@
-import {
-  BaseResponse,
-  GetReservationResponse,
-} from '@ce-lab-mgmt/api-interfaces';
+import { BaseResponse, Reservation } from '@ce-lab-mgmt/api-interfaces';
 import { api, reservationApi } from '../../adapter/axios';
 import { AxiosError } from 'axios';
 
 export default async function getReservation(
   id: string
-): Promise<BaseResponse<GetReservationResponse>> {
+): Promise<BaseResponse<Reservation>> {
   try {
-    const response = await reservationApi.reservations.get({
+    const response = await reservationApi.index.get({
       query: {
         id: id,
       },
@@ -17,8 +14,17 @@ export default async function getReservation(
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      return new BaseResponse({ error: { code: error.response.data.status } });
+      return {
+        error: {
+          code: error.response.data.status,
+          message: error.response.data.message,
+        },
+        success: false,
+      };
     }
-    return new BaseResponse({ error: { code: 500 } });
+    return {
+      error: { code: '500', message: 'Internal Server Error' },
+      success: false,
+    };
   }
 }
