@@ -2,31 +2,31 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "imp/try-image-ci-again" ]
+    branches: ['peem/try-ci']
 
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository
-    - uses: actions/checkout@v4
+      # Checkout the repository
+      - uses: actions/checkout@v4
 
-    # Log in to Docker Hub
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # Build and Push cuce-public-web with SERVICE_NAME argument
-    - name: Build and Push cuce-web
-      run: |
-        docker build . --file ./docker/Dockerfile.web.template --tag ${{ secrets.DOCKER_USERNAME }}/cuce-web:$(date +%s)
-        docker push ${{ secrets.DOCKER_USERNAME }}/cuce-web:$(date +%s)
+      # Build and Push cuce-public-web with SERVICE_NAME argument
+      - name: Build and Push cuce-web
+        run: |
+          docker build . --file ./docker/Dockerfile.web.template --tag ${{ secrets.DOCKER_USERNAME }}/cuce-web:$(date +%s)
+          docker push ${{ secrets.DOCKER_USERNAME }}/cuce-web:$(date +%s)
 
-    # Build and Push cuce-experiment-svc with ARG SERVICE_NAME
-    - name: Build and Push cuce-experiment-svc
-      run: |
-        docker build . --file ./docker/Dockerfile.service.template --build-arg SERVICE_NAME=pricing --tag ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:$(date +%s)
-        docker push ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:$(date +%s)
+      # Build and Push cuce-experiment-svc with ARG SERVICE_NAME
+      - name: Build and Push cuce-experiment-svc
+        run: |
+          docker build . --file ./docker/Dockerfile.service.template --build-arg SERVICE_NAME=pricing --tag ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:$(date +%s)
+          docker push ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:$(date +%s)
