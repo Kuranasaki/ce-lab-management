@@ -9,7 +9,8 @@ spec:
     app: cuce-app-web
   ports:
     - protocol: TCP
-      port: 4200
+      port: 80
+      targetPort: 80
   type: ClusterIP
 
 ---
@@ -25,6 +26,7 @@ spec:
   ports:
     - protocol: TCP
       port: 3000
+      targetPort: 3000
   type: ClusterIP
 
 ---
@@ -40,4 +42,5 @@ spec:
   ports:
     - protocol: TCP
       port: 3000
+      targetPort: 3000
   type: ClusterIP

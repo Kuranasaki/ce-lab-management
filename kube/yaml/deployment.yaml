@@ -12,11 +12,13 @@ spec:
       labels:
         app: cuce-app-web
     spec:
+      imagePullSecrets:
+      - name: imp-docker-secret
       containers:
         - name: cuce-web
           image: saimkrua/cuce-web:latest
           ports:
-            - containerPort: 4200
+            - containerPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -32,6 +34,8 @@ spec:
       labels:
         app: cuce-app-reservation-svc
     spec:
+      imagePullSecrets:
+      - name: imp-docker-secret
       containers:
         - name: cuce-reservation-svc
           image: saimkrua/cuce-reservation-svc:latest
@@ -63,6 +67,8 @@ spec:
       labels:
         app: cuce-app-experiment-svc
     spec:
+      imagePullSecrets:
+      - name: imp-docker-secret
       containers:
         - name: cuce-experiment-svc
           image: saimkrua/cuce-experiment-svc:latest

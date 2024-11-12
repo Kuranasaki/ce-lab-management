@@ -7,6 +7,7 @@ metadata:
     # nginx.ingress.kubernetes.io/auth-url: 'http://nginx-fb-auth-helm.default.service.cluster.local:8080/auth'
     # nginx.ingress.kubernetes.io/auth-signin: 'http://cucel.k8s.orb.local/auth/signin'
 spec:
+  ingressClassName: nginx
   rules:
     - host: cucel.k8s.orb.local
       http:
@@ -17,7 +18,7 @@ spec:
               service:
                 name: cuce-web-service
                 port:
-                  number: 4200
+                  number: 80
     - host: reservation.cucel.k8s.orb.local
       http:
         paths:
