@@ -42,6 +42,11 @@ export const testItemFormSchema = z.object({
       required_error: 'กรุณาระบุราคารวม',
     })
     .min(1, 'ราคารวมต้องมากกว่า 0'),
+  testPricePerUnit: z
+    .number({
+      required_error: 'กรุณาระบุราคา',
+    })
+    .min(1, 'ราคาต้องมากกว่า 0'),
 });
 export type TestItemFormType = z.infer<typeof testItemFormSchema>;
 export type TestItemFormReturned = UseFormReturn<TestItemFormType>;

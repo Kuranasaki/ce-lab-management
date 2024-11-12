@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { Entity, EntityId, Result } from '@ce-lab-mgmt/domain';
-import { NotFoundError } from '@ce-lab-mgmt/core-utils';
 import { PrismaService } from './prisma.service';
 
 export abstract class PrismaRepository<
@@ -52,7 +51,8 @@ export abstract class PrismaRepository<
       await this.deleteModel(id);
       return Result.ok(true);
     } catch (error) {
-      if ((error as any).code === 'P2025') { // Prisma not found error
+      if ((error as any).code === 'P2025') {
+        // Prisma not found error
         return Result.ok(false);
       }
       return Result.fail(error as Error);
@@ -75,9 +75,12 @@ export abstract class PrismaRepository<
    * Abstract methods to be implemented by concrete repositories
    */
   protected abstract findModel(id: EntityId): Promise<TModel | null>;
-  protected abstract saveModel(id: EntityId, data: Omit<TModel, 'id'>): Promise<TModel>;
+  protected abstract saveModel(
+    id: EntityId,
+    data: Omit<TModel, 'id'>
+  ): Promise<TModel>;
   protected abstract deleteModel(id: EntityId): Promise<boolean>;
-  
+
   protected async existsModel(id: EntityId): Promise<boolean> {
     const model = await this.findModel(id);
     return model !== null;

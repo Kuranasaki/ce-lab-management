@@ -30,9 +30,13 @@ export const OrganizationInfoSchema = t.Object({
   orgFax: t.Optional(t.String()),
 });
 
+// /***
+//  *  @deprecated
+//  *
+//  **/
 export const TestListSchema = t.Object({
-  testt: t.String(),
-  testItems: t.Array(TestItemSchema),
+  testType: t.String(),
+  testList: t.Array(TestItemSchema),
 });
 
 export type OrganizationInfo = Static<typeof OrganizationInfoSchema>;
@@ -41,32 +45,33 @@ export type TestInfo = Static<typeof TestInfoSchema>;
 
 export type TestItem = Static<typeof TestItemSchema>;
 
-export type TestList = Static<typeof TestListSchema>
-
+export type TestList = Static<typeof TestListSchema>;
 
 export enum ReservationStatus {
-
   Pending = 'pending',
   Processing = 'processing',
   Success = 'success',
   Canceled = 'canceled',
 }
 
+export enum ReservationType {
+  One = '1',
+  Two = '2',
+  Three = '3',
+}
+
 export const ReservationStatusSchema = t.Enum(ReservationStatus);
 
 export const ReservationSchema = t.Object({
-  id: t.String({format:'uuid'}),
-  customerId: t.String({format:'uuid'}),
+  id: t.String({ format: 'uuid' }),
+  customerId: t.String(),
   orgData: OrganizationInfoSchema,
-  testList: TestListSchema,
+  testInfo: TestInfoSchema,
   notes: t.Optional(t.String()),
   status: ReservationStatusSchema,
-  totalPrice: t.Number({default: 0}),
+  totalPrice: t.Number({ default: 0 }),
   createdAt: t.String({ format: 'date-time' }),
-  updatedAt: t.String({ format: 'date-time' })
-})
+  updatedAt: t.String({ format: 'date-time' }),
+});
 
 export type Reservation = Static<typeof ReservationSchema>;
-
-
-

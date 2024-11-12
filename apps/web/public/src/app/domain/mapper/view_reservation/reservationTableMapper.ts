@@ -9,7 +9,7 @@ export default async function reservationTableMapper(
   rawData: BaseResponse<GetAllReservationResponse>
 ): Promise<ReservationTableItemProps[] | ToastEntity> {
   if (rawData.error) {
-    return ToastEntity.fromCode(rawData.error.code);
+    return ToastEntity.fromCode(rawData.error.code ?? 500);
   }
 
   if (!rawData.data) {
@@ -20,9 +20,9 @@ export default async function reservationTableMapper(
     (reservation) => {
       return new ReservationTableItemProps(
         reservation.id,
-        new Date(reservation.CreatedOn),
+        new Date(reservation.createdAt),
         reservation.testInfo.testType,
-        reservation.Status,
+        reservation.status,
         reservation.totalPrice
       );
     }

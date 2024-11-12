@@ -187,7 +187,7 @@ export default function Stage2({
 
                       return new TestListTableItemProps(
                         index.toString(),
-                        item.testName,
+                        name,
                         item.testAmount,
                         item.testUnit,
                         item.testDetails,

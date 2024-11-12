@@ -1,9 +1,9 @@
-import { t } from 'elysia';
+import { Static, t } from 'elysia';
 import {
   OrganizationInfoSchema,
   ReservationSchema,
   ReservationStatusSchema,
-  TestInfoSchema
+  TestInfoSchema,
 } from './reservation';
 
 export const GetReservationResponseSchema = t.Object({
@@ -14,6 +14,10 @@ export const GetReservationResponseSchema = t.Object({
   totalPrice: t.Number(),
   createdOn: t.String({ format: 'date-time' }),
 });
+
+export type GetReservationResponse = Static<
+  typeof GetReservationResponseSchema
+>;
 
 const GetReservationSchema = ReservationSchema;
 export { GetReservationSchema };

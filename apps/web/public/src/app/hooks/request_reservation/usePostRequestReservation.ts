@@ -26,9 +26,9 @@ export default function usePostRequestReservation() {
     });
     setLoading(false);
 
-    // if (result.variant === 'success') {
-    //   navigate('/reservation');
-    // }
+    if (result.variant === 'success') {
+      navigate('/reservation');
+    }
 
     toast({
       ...result,

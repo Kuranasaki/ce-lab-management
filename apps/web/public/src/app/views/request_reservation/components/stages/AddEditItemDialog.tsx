@@ -82,6 +82,7 @@ export default function AddEditItemDialog({
                       onValueChange={(value) => {
                         field.onChange(value);
                         testItemForm.setValue('testSubName', ''); // Reset subName on testName change
+                        testItemForm.setValue('testName', value);
                       }}
                       value={field.value}
                     >
@@ -121,6 +122,7 @@ export default function AddEditItemDialog({
                               ?.testItems.get(selectedTestName)
                               ?.find((item) => item.subName === e)?.id || ''
                           );
+                          testItemForm.setValue('testSubName', e);
                         }}
                         value={field.value}
                       >
@@ -177,6 +179,13 @@ export default function AddEditItemDialog({
                               'testUnit',
                               testSubDetails.prices[0].unit
                             );
+                            testItemForm.setValue(
+                              'testPricePerUnit',
+                              testSubDetails.prices.find(
+                                (p) => p.amount === sanitizeNumberInput(e)
+                              )?.price || 0
+                            );
+                            testItemForm.setValue('testAmount', parseInt(e));
                           }}
                           value={field.value ? String(field.value) : ''}
                         >
@@ -217,6 +226,15 @@ export default function AddEditItemDialog({
                               'testUnit',
                               testSubDetails.prices[0].unit
                             );
+                            testItemForm.setValue(
+                              'testPricePerUnit',
+                              testSubDetails.prices[0].price
+                            );
+
+                            testItemForm.setValue(
+                              'testAmount',
+                              parseInt(e.target.value)
+                            );
                           }}
                           value={field.value ? String(field.value) : ''}
                         />
@@ -246,6 +264,7 @@ export default function AddEditItemDialog({
               onClick={(e) => {
                 e.preventDefault();
                 testItemForm.handleSubmit(onSubmit)();
+                console.log('submitting', testItemForm.getValues());
               }}
             >
               {isAdd ? 'เพิ่มรายการ' : 'บันทึกการเปลี่ยนแปลง'}

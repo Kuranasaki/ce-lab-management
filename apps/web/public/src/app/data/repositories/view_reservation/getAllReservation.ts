@@ -9,7 +9,12 @@ export default async function getAllReservation(): Promise<
   BaseResponse<GetAllReservationResponse>
 > {
   try {
-    const response = await reservationApi.reservations.get();
+    const response = await reservationApi.api.v1.reservations.index.get({
+      query: {
+        limit: 20,
+        page: 1,
+      },
+    });
     // const response = await api.get<BaseResponse<GetAllReservationResponse>>(
     //   '/reservations'
     // );
@@ -17,8 +22,17 @@ export default async function getAllReservation(): Promise<
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      return new BaseResponse({ error: { code: error.response.data.status } });
+      return {
+        error: {
+          code: error.response.data.code,
+          message: error.response.data.message,
+        },
+        success: false,
+      };
     }
-    return new BaseResponse({ error: { code: 500 } });
+    return {
+      error: { code: 500, message: 'Internal Server Error' },
+      success: false,
+    };
   }
 }

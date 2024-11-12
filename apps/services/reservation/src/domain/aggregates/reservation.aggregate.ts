@@ -1,4 +1,11 @@
-import { OrganizationInfo, ReservationSchema, ReservationStatus, TestList, Reservation as  TReservation } from '@ce-lab-mgmt/api-interfaces';
+import {
+  OrganizationInfo,
+  ReservationSchema,
+  ReservationStatus,
+  TestInfo,
+  Reservation as TReservation,
+  TestList,
+} from '@ce-lab-mgmt/api-interfaces';
 import { IdGenerator } from '@ce-lab-mgmt/core-utils';
 import { aggregation, Result, DomainError } from '@ce-lab-mgmt/domain';
 import { Static } from 'elysia';
@@ -39,11 +46,11 @@ export class Reservation extends AggregateRoot {
   public static create(
     customerId: string,
     orgInfo: OrganizationInfo,
-    testInfo: TestList
+    testInfo: TestInfo
   ): Result<Reservation> {
     try {
       const now = new Date();
-      
+
       // // Validate requested date is in the future
       // if (testInfo.testList.some((t)=> t.) < now) {
       //   throw new ReservationError('Requested date must be in the future');
@@ -53,22 +60,22 @@ export class Reservation extends AggregateRoot {
         id: IdGenerator.generate(),
         customerId,
         orgData: orgInfo,
-        testList: testInfo,
+        testInfo: testInfo,
         totalPrice: 0,
         status: ReservationStatus.Pending,
         createdAt: now.toISOString(),
-        updatedAt: now.toISOString()
+        updatedAt: now.toISOString(),
       };
 
       const reservation = new Reservation(props);
-      
+
       // Add domain event
       reservation.addEvent({
         eventId: IdGenerator.generate(),
         eventType: 'ReservationCreated',
         aggregateId: reservation.id,
         timestamp: now.toISOString(),
-        data: props
+        data: props,
       });
 
       return Result.ok(reservation);
@@ -78,11 +85,11 @@ export class Reservation extends AggregateRoot {
   }
 
   // For reconstructing from persistence
-  public static reconstitute(props: { 
+  public static reconstitute(props: {
     id: string;
     customerId: string;
     orgData: OrganizationInfo;
-    testList: TestList
+    testInfo: TestInfo;
     status: ReservationStatus;
     notes: string;
     totalPrice: number;
@@ -93,12 +100,12 @@ export class Reservation extends AggregateRoot {
       id: props.id,
       customerId: props.customerId,
       orgData: props.orgData,
-      testList: props.testList,
+      testInfo: props.testInfo,
       status: props.status,
       totalPrice: props.totalPrice,
       notes: props.notes,
       createdAt: props.createdAt,
-      updatedAt: props.updatedAt
+      updatedAt: props.updatedAt,
     });
   }
 
@@ -117,7 +124,7 @@ export class Reservation extends AggregateRoot {
         eventType: 'ReservationApproved',
         aggregateId: this.id,
         timestamp: new Date().toISOString(),
-        data: this.props
+        data: this.props,
       });
 
       return Result.ok();
@@ -128,12 +135,12 @@ export class Reservation extends AggregateRoot {
 
   public reject(): void {
     if (this.props.status !== 'pending') {
-      throw new ReservationError('Can only reject pending reservations')
+      throw new ReservationError('Can only reject pending reservations');
     }
 
-    this.props.status = ReservationStatus.Canceled
-    this.props.updatedAt = new Date().toISOString()
-    this.incrementVersion()
+    this.props.status = ReservationStatus.Canceled;
+    this.props.updatedAt = new Date().toISOString();
+    this.incrementVersion();
 
     this.addEvent({
       eventId: IdGenerator.generate(),
@@ -142,19 +149,19 @@ export class Reservation extends AggregateRoot {
       timestamp: new Date().toISOString(),
       data: {
         // id: this.id,
-        ...this.props
-      }
-    })
+        ...this.props,
+      },
+    });
   }
 
   public updateNotes(notes: string): void {
-    if (this.props.status !== ReservationStatus.Pending ) {
-      throw new ReservationError('Can only update pending reservations')
+    if (this.props.status !== ReservationStatus.Pending) {
+      throw new ReservationError('Can only update pending reservations');
     }
 
-    this.props.notes = notes
-    this.props.updatedAt = new Date().toISOString()
-    this.incrementVersion()
+    this.props.notes = notes;
+    this.props.updatedAt = new Date().toISOString();
+    this.incrementVersion();
 
     this.addEvent({
       eventId: IdGenerator.generate(),
@@ -163,9 +170,9 @@ export class Reservation extends AggregateRoot {
       timestamp: new Date().toISOString(),
       data: {
         // id: this.id,
-        ...this.props
-      }
-    })
+        ...this.props,
+      },
+    });
   }
 
   get self(): TReservation {
@@ -173,25 +180,25 @@ export class Reservation extends AggregateRoot {
       id: this.id,
       customerId: this.customerId,
       orgData: this.orgData,
-      testList: this.testList,
+      testInfo: this.testList,
       totalPrice: this.totalPrice,
       notes: this.notes,
       status: this.status,
       createdAt: this.createdAt,
-      updatedAt: this.props.updatedAt
-    }
+      updatedAt: this.props.updatedAt,
+    };
   }
 
   get totalPrice(): number {
-    return this.props.totalPrice
-  } 
+    return this.props.totalPrice;
+  }
   // Getters
   get customerId(): string {
     return this.props.customerId;
   }
 
   get notes(): string | undefined {
-    return this.props.notes
+    return this.props.notes;
   }
 
   get orgData(): OrganizationInfo {
@@ -203,7 +210,7 @@ export class Reservation extends AggregateRoot {
   }
 
   get testList(): TestList {
-    return this.props.testList
+    return this.props.testInfo;
   }
 
   get createdAt(): string {
