@@ -11,7 +11,7 @@ export class KafkaConsumer {
   constructor(
     private readonly config: KafkaConfig,
     private readonly groupId: string,
-    private readonly logger: Logger
+    private readonly logger: Logger | Console
   ) {}
 
   async connect(): Promise<Result<void>> {

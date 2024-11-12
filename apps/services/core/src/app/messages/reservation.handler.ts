@@ -1,7 +1,7 @@
 import { KafkaConsumer } from '@ce-lab-mgmt/infrastructure';
 import { KafkaConfig } from 'kafkajs';
 import { ExperimentOrderService } from '../../domain/services/order.service';
-import { Result } from '@ce-lab-mgmt/domain';
+import { KafkaTopic, Result } from '@ce-lab-mgmt/domain';
 
 interface ReservationApprovedEvent {
   eventType: 'ReservationApproved';
@@ -49,6 +49,7 @@ export class ExperimentEventHandlerService {
 
       // Subscribe to reservation events
       this.consumer.subscribeToEvent(
+        KafkaTopic.Reservation,
         'ReservationApproved',
         this.handleReservationApproved.bind(this)
       );
