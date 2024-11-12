@@ -13,11 +13,15 @@ import {
 import { ColumnDef } from '@tanstack/react-table';
 import TestListTableItemProps from '../../domain/entity/view_reservation_detail/TestListTableItemProps';
 import IMAGES from '../../../assets/images';
+import { useCertificate } from '../../hooks/get_certificate/useCertificate';
 
 export default function ReservationDetailPage() {
   const { id } = useParams();
   const { customer, reservationDetail, testList, loading } =
     useReservationDetail(id || '');
+  const { data: certificate, loading: certificateLoading } = useCertificate(
+    id || ''
+  );
 
   const columns: ColumnDef<TestListTableItemProps>[] = [
     {
@@ -84,9 +88,7 @@ export default function ReservationDetailPage() {
   ];
 
   const handleDownloadCertificate = () => {
-    const url =
-      'https://www.petrochem.sc.chula.ac.th/wp-content/uploads/2022/02/%E0%B8%88%E0%B8%9731-%E0%B8%84%E0%B8%B3%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%82%E0%B8%AD%E0%B8%A5%E0%B8%B2%E0%B8%AD%E0%B8%AD%E0%B8%81.pdf';
-
+    const url = certificate?.url || '';
     // Create a temporary link and trigger a download
     const link = document.createElement('a');
     link.href = url;

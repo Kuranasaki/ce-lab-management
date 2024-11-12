@@ -14,7 +14,7 @@ export default async function getCertificate(
     // );
     // return response.data;
 
-    return new BaseResponse({
+    return {
       data: {
         createdOn: new Date(),
         id: '123',
@@ -23,13 +23,23 @@ export default async function getCertificate(
         mimeType: 'application/pdf',
         url: 'https://www.petrochem.sc.chula.ac.th/wp-content/uploads/2022/02/%E0%B8%88%E0%B8%9731-%E0%B8%84%E0%B8%B3%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%87%E0%B8%82%E0%B8%AD%E0%B8%A5%E0%B8%B2%E0%B8%AD%E0%B8%AD%E0%B8%81.pdf',
       },
-    });
+      success: true,
+    };
 
     // return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      return new BaseResponse({ error: { code: error.response.data.status } });
+      return {
+        error: {
+          code: error.response.data.status,
+          message: error.response.data.message,
+        },
+        success: false,
+      };
     }
-    return new BaseResponse({ error: { code: 500 } });
+    return {
+      error: { code: 500, message: 'Internal Server Error' },
+      success: false,
+    };
   }
 }
