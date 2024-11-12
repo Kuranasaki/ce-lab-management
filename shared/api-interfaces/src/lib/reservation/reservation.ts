@@ -21,6 +21,14 @@ export const TestInfoSchema = t.Object({
   testList: t.Array(TestItemSchema),
 });
 
+export enum ReservationType {
+  One = '1',
+  Two = '2',
+  Three = '3',
+}
+
+export const ReservationTypeSchema = t.Enum(ReservationType);
+
 export const OrganizationInfoSchema = t.Object({
   orgName: t.String(),
   orgProjectName: t.Optional(t.String()),
