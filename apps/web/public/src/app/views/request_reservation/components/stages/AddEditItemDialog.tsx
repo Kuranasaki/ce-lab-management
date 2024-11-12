@@ -183,6 +183,10 @@ export default function AddEditItemDialog({
                                 (p) => p.amount === sanitizeNumberInput(e)
                               )?.price || 0
                             );
+                            testItemForm.setValue(
+                              'testPricePerUnit',
+                              parseInt(e)
+                            );
                           }}
                           value={field.value ? String(field.value) : ''}
                         >
@@ -227,6 +231,11 @@ export default function AddEditItemDialog({
                               'testPricePerUnit',
                               testSubDetails.prices[0].price
                             );
+
+                            testItemForm.setValue(
+                              'testAmount',
+                              parseInt(e.target.value)
+                            );
                           }}
                           value={field.value ? String(field.value) : ''}
                         />
@@ -256,6 +265,7 @@ export default function AddEditItemDialog({
               onClick={(e) => {
                 e.preventDefault();
                 testItemForm.handleSubmit(onSubmit)();
+                console.log('submitting', testItemForm.getValues());
               }}
             >
               {isAdd ? 'เพิ่มรายการ' : 'บันทึกการเปลี่ยนแปลง'}

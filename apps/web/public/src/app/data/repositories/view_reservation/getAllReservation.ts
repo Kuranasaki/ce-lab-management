@@ -9,7 +9,12 @@ export default async function getAllReservation(): Promise<
   BaseResponse<GetAllReservationResponse>
 > {
   try {
-    const response = await reservationApi.index.get();
+    const response = await reservationApi.api.v1.reservations.index.get({
+      query: {
+        limit: 20,
+        page: 1,
+      },
+    });
     // const response = await api.get<BaseResponse<GetAllReservationResponse>>(
     //   '/reservations'
     // );
