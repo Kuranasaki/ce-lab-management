@@ -1,15 +1,16 @@
 import { Elysia } from 'elysia';
-import { KafkaConsumer, KafkaProducer } from '@ce-lab-mgmt/infrastructure';
+import { KafkaConsumer, KafkaProducer, MongoService } from '@ce-lab-mgmt/infrastructure';
 // import { ExperimentOrderController } from './experiment-order.controller';
 import { ExperimentOrderService } from './domain/services/order.service';
 import { ExperimentOrderRepository } from './domain/repositories/order.repository';
 import { ReservationEventHandler } from './app/messages/reservation.handler';
+import { KafkaConfig } from 'kafkajs';
 
 async function createKafkaProducer(): Promise<[KafkaProducer, KafkaConsumer]> {
-  const kafkaConfig = {
-    clientId: 'laboratory-testing-service',
-    brokers: process.env.KAFKA_BROKERS?.split(',') ?? ['localhost:9092'],
-  };
+  const kafkaConfig: KafkaConfig = {
+    clientId: 'celab-service',
+    brokers: process.env.KAFKA_BROKERS?.split(',') || ['localhost:9092']
+  }
 
   const producer = new KafkaProducer(kafkaConfig, console);
   const consumer = new KafkaConsumer(
@@ -17,12 +18,14 @@ async function createKafkaProducer(): Promise<[KafkaProducer, KafkaConsumer]> {
     'laboratory-testing-group',
     console
   );
-  const result = await producer.connect();
+  const result = await Promise.all([producer.connect(), consumer.connect()]);
 
-  if (result.isFailure) {
-    throw result.error;
-  }
-
+  result.forEach((r) => {
+    if (r.isFailure) {
+      throw r.error;
+    }
+  })
+  // return [producer, null];
   return [producer, consumer];
 }
 
@@ -31,27 +34,29 @@ async function bootstrap() {
     // Initialize Logger
     const logger = console;
 
+    await MongoService.connect(process.env.MONGODB_URI ?? '', process.env.MONGO_DB ?? '');
+
     // Initialize infrastructure
     const experimentRepository = new ExperimentOrderRepository();
     const [kafkaProducer, kafkaConsumer] = await createKafkaProducer();
 
     // Initialize service
-    const experimentService = new ExperimentOrderService(
-      experimentRepository,
-      kafkaProducer,
-      console
-    );
+    // const experimentService = new ExperimentOrderService(
+    //   experimentRepository,
+    //   kafkaProducer,
+    //   console
+    // );
 
-    // Initialize event handler
-    const reservationEventHandler = new ReservationEventHandler(
-      experimentService,
-      kafkaConsumer,
-      logger
-    );
-    const eventHandlerResult = await reservationEventHandler.start();
-    if (eventHandlerResult.isFailure) {
-      throw eventHandlerResult.error;
-    }
+    // // Initialize event handler
+    // const reservationEventHandler = new ReservationEventHandler(
+    //   experimentService,
+    //   kafkaConsumer,
+    //   logger
+    // );
+    // const eventHandlerResult = await reservationEventHandler.start();
+    // if (eventHandlerResult.isFailure) {
+    //   throw eventHandlerResult.error;
+    // }
 
     // Initialize HTTP server
     const app = new Elysia()
@@ -71,7 +76,7 @@ async function bootstrap() {
       await app.stop();
 
       // Stop event handler
-      await reservationEventHandler.stop();
+      // await reservationEventHandler.stop();
 
       // Disconnect Kafka producer
       await kafkaProducer.disconnect();
