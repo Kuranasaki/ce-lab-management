@@ -66,19 +66,21 @@ export class Reservation extends AggregateRoot {
               }
             }
           }
-
           return 0;
         })
-      );
+      ).catch((err) => {
+        console.log(err);
+        return [];
+      });
 
-      const totalPrice = prices.reduce((acc, price) => acc + price, 0);
+      const totalPrice = prices.reduce((acc, price) => acc + price, 50);
 
       const props: ReservationProps = {
         id: IdGenerator.generate(),
         customerId,
         orgData: orgInfo,
         testInfo: testInfo,
-        totalPrice: totalPrice,
+        totalPrice,
         status: ReservationStatus.Pending,
         createdAt: now.toISOString(),
         updatedAt: now.toISOString(),

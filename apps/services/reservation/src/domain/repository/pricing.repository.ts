@@ -4,7 +4,7 @@ import { PricingTRPCRouter } from '@ce-lab-mgmt/trpc-api';
 const client = createTRPCProxyClient<PricingTRPCRouter>({
   links: [
     httpBatchLink({
-      url: 'localhost:3001',
+      url: 'http://localhost:3001/trpc',
     }),
   ],
 });

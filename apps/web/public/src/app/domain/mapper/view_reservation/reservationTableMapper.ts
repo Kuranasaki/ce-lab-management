@@ -23,7 +23,8 @@ export default async function reservationTableMapper(
         new Date(reservation.createdAt),
         reservation.testInfo.testType,
         reservation.status,
-        reservation.totalPrice
+        reservation.totalPrice,
+        reservation.testInfo
       );
     }
   );

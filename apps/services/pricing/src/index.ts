@@ -23,7 +23,7 @@ const app = new Elysia()
   )
   .use(cors())
   .use(PricingController)
-  .use(trpc(pricingTrpcRouter))
+  // .use(trpc(pricingTrpcRouter, { endpoint: '/trpc' }))
   .listen(3001);
 
 export type PricingServiceType = typeof app;
