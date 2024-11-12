@@ -77,7 +77,7 @@ export default function ReservationDetailPage() {
       ),
     },
     {
-      accessorKey: 'priceperunit',
+      accessorKey: 'totalPrice',
       header: ({ column }) => {
         return <Header column={column} title="ราคา" className="text-center" />;
       },
@@ -148,9 +148,17 @@ export default function ReservationDetailPage() {
               <div className="flex gap-4 justify-end">
                 <p className="font-bold">ราคารวม</p>
                 <p>
-                  {testList.totalPrice.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })}{' '}
+                  {testList.totalPrice > 0
+                    ? testList.totalPrice.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                      })
+                    : testList.items
+                        .reduce((acc, item) => {
+                          return acc + item.totalPrice;
+                        }, 0)
+                        .toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                        })}{' '}
                   บาท
                 </p>
               </div>

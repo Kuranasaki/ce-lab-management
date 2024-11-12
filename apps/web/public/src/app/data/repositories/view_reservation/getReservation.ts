@@ -1,10 +1,13 @@
-import { BaseResponse, Reservation } from '@ce-lab-mgmt/api-interfaces';
-import { api, reservationApi } from '../../adapter/axios';
+import {
+  BaseResponse,
+  GetReservationResponse,
+} from '@ce-lab-mgmt/api-interfaces';
+import { reservationApi } from '../../adapter/axios';
 import { AxiosError } from 'axios';
 
 export default async function getReservation(
   id: string
-): Promise<BaseResponse<Reservation>> {
+): Promise<BaseResponse<GetReservationResponse>> {
   try {
     const response = await reservationApi.api.v1.reservations({ id }).get({
       query: {

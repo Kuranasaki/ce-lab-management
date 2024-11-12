@@ -29,7 +29,7 @@ export default async function postRequestReservationRepository(
       }
     );
 
-    if (response.data.code !== 200) {
+    if (!response.data.success) {
       return {
         error: {
           code: response.data.code,

@@ -82,6 +82,7 @@ export default function AddEditItemDialog({
                       onValueChange={(value) => {
                         field.onChange(value);
                         testItemForm.setValue('testSubName', ''); // Reset subName on testName change
+                        testItemForm.setValue('testName', value);
                       }}
                       value={field.value}
                     >
@@ -121,6 +122,7 @@ export default function AddEditItemDialog({
                               ?.testItems.get(selectedTestName)
                               ?.find((item) => item.subName === e)?.id || ''
                           );
+                          testItemForm.setValue('testSubName', e);
                         }}
                         value={field.value}
                       >
@@ -183,10 +185,7 @@ export default function AddEditItemDialog({
                                 (p) => p.amount === sanitizeNumberInput(e)
                               )?.price || 0
                             );
-                            testItemForm.setValue(
-                              'testPricePerUnit',
-                              parseInt(e)
-                            );
+                            testItemForm.setValue('testAmount', parseInt(e));
                           }}
                           value={field.value ? String(field.value) : ''}
                         >

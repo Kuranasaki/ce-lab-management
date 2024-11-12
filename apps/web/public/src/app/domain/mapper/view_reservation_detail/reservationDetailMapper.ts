@@ -20,7 +20,7 @@ export default async function reservationDetailMapper(
   | ToastEntity
 > {
   if (rawData.error) {
-    return ToastEntity.fromCode(rawData.error.code);
+    return ToastEntity.fromCode(rawData.error.code || 500);
   }
 
   if (!rawData.data) {
@@ -39,9 +39,9 @@ export default async function reservationDetailMapper(
       orgInfo.orgFax
     ),
     reservationDetail: new ReservationDetailProps({
-      id: rawData.data.id,
-      date: rawData.data.CreatedOn,
-      status: rawData.data.Status,
+      id: rawData.data.reservationID,
+      date: new Date(rawData.data.createdOn),
+      status: rawData.data.status,
       type: testInfo.testType as ReservationType,
     }),
     testList: new TestListTableProps(
@@ -54,7 +54,9 @@ export default async function reservationDetailMapper(
             test.testUnit,
             test.testDetails || null,
             test.testNote || null,
-            test.testTotalPrice
+            test.testUnit !== 'นาที'
+              ? test.testPricePerUnit * test.testAmount
+              : test.testPricePerUnit
           )
       ),
       rawData.data.totalPrice

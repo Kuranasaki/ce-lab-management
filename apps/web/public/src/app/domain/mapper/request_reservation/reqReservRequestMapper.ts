@@ -11,7 +11,6 @@ export default function reqReservRequestMapper({
   orgForm: OrgInfoFormReturned;
   testListForm: TestListFormReturned;
 }): RequestReservationForm {
-  const ad = testListForm.getValues('testList');
   return {
     orgInfo: {
       orgName: orgForm.getValues('orgName'),
@@ -39,7 +38,10 @@ export default function reqReservRequestMapper({
         markedAsDone: null,
         certificateUploadedAt: null,
         testItemID: idx.toString(),
-        testName: test.testName,
+        testName:
+          test.testName === 'อื่น ๆ'
+            ? test.testSubName
+            : `${test.testName}: ${test.testSubName}`,
         testPricePerUnit: test.testPricePerUnit,
         testUnit: test.testUnit,
       })),

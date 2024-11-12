@@ -64,7 +64,7 @@ export const ReservationStatusSchema = t.Enum(ReservationStatus);
 
 export const ReservationSchema = t.Object({
   id: t.String({ format: 'uuid' }),
-  customerId: t.String({ format: 'uuid' }),
+  customerId: t.String(),
   orgData: OrganizationInfoSchema,
   testInfo: TestInfoSchema,
   notes: t.Optional(t.String()),
