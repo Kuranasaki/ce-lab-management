@@ -11,9 +11,12 @@ COPY tsconfig.base.json tsconfig.base.json
 
 RUN bun install
 
+COPY /prisma ./prisma
 COPY /apps/services/${SERVICE_NAME} ./apps/services/${SERVICE_NAME}
 COPY /shared ./shared
 RUN ls -la
+RUN bun prisma generate --schema ./prisma/schema.prisma
+
 WORKDIR /app/apps/services/${SERVICE_NAME}
 ENV NODE_ENV=production
 RUN ls -la
