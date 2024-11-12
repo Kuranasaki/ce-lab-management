@@ -1,6 +1,6 @@
 import { Elysia, Static, t } from 'elysia';
-import MongoPricingItemModel, { PricingModel } from '../model/pricing';
-import { PricingItemSchema as PricingItemElysiaSchema } from '@ce-lab-mgmt/api-interfaces';
+import MongoPricingItemModel, { PricingModel, PricingItemSchema as PricingItemElysiaSchema  } from '../model/pricing';
+// import { PricingItemSchema as PricingItemElysiaSchema } from '@ce-lab-mgmt/api-interfaces';
 
 export const PricingController = new Elysia({ prefix: '/pricing' })
   .use(PricingModel)

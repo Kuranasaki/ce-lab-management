@@ -1,7 +1,9 @@
-import { GetExperimentResponse, GetOneExperimentResponseSchema } from '@ce-lab-mgmt/api-interfaces';
+import { TExperimentOrder } from './experiment';
+import { GetOneExperimentResponseSchema } from './get_one_experiment';
 import { t } from 'elysia';
 
-type GetAllExperimantResponse = GetExperimentResponse[];
+
+type GetAllExperimantResponse = TExperimentOrder[];
 
 export { GetAllExperimantResponse }
 
@@ -20,6 +22,7 @@ Response
 export const GetAllExperimentRequestParamsSchema = t.Object({
   reservationID: t.Optional(t.String()),
 });
+
 
 export const GetAllExperimentResponseSchema = t.Array(
   GetOneExperimentResponseSchema

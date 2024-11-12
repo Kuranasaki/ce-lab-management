@@ -114,18 +114,24 @@ func getUserRoles(ctx context.Context, userID string) ([]string, error) {
 }
 
 func VerifySession(r *http.Request) (*UserInfo) {
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		log.Printf("session cookies are not provided - %v", err)
+	// cookie, err := r.Cookie("session")
+	// if err != nil {
+	// 	log.Printf("session cookies are not provided - %v", err)
+	// 	return nil
+	// }
+
+	// token, err := appCtx.firebaseAuth.VerifySessionCookieAndCheckRevoked(r.Context(), cookie.Value)
+	authHeader:= r.Header.Get("Authorization")
+	splitToken := strings.Split(authHeader, "Bearer ")
+	if len(splitToken) != 2 {
+		log.Printf("Bearer token not in proper format")
 		return nil
 	}
-
-	token, err := appCtx.firebaseAuth.VerifySessionCookieAndCheckRevoked(r.Context(), cookie.Value)
+	token, err := appCtx.firebaseAuth.VerifyIDToken(r.Context(), splitToken[1])
 	if err != nil {
-		log.Printf("Failed to verify session cookie: %v", err)
+		log.Printf("Failed to verify ID token: %v", err)
 		return nil
 	}
-
 	// Get user roles from PostgreSQL
 	roles, err := getUserRoles(r.Context(), token.UID)
 	if err != nil {

@@ -1,13 +1,13 @@
 import { ValidationError } from './domain.errors'
-import { Static, TObject, TProperties, Type } from '@sinclair/typebox'
+import { Static, TObject, TProperties, TSchema, Type } from '@sinclair/typebox'
 
 import { TypeCheck, TypeCompiler } from '@sinclair/typebox/compiler'
 
-export abstract class ValueObject<T extends TProperties> {
-  protected abstract getSchema(): TObject<T>
-  private validator?: TypeCheck<TObject<T>>
+export abstract class ValueObject<T extends TSchema> {
+  protected abstract getSchema(): T
+  private validator?: TypeCheck<T>
 
-  protected constructor(protected readonly props: Static<TObject<T>>) {
+  protected constructor(protected readonly props: Static<T>) {
     const schema = this.getSchema()
     if (!schema) {
       throw new Error('Schema must be returned from getSchema()')

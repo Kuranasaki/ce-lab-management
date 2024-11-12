@@ -1,20 +1,17 @@
-import { DomainEvent, Result } from "@ce-lab-mgmt/domain"
-import { EachMessagePayload, Consumer, KafkaConfig, Logger } from "kafkajs"
+import { BaseEvent, EventForTopic, KafkaTopic, Result } from "@ce-lab-mgmt/domain"
+import { Consumer, KafkaConfig, Logger } from "kafkajs"
 import { KafkaConnection } from "./kafka.connection"
 
-
-export type MessageHandler = (payload: EachMessagePayload) => Promise<void>
-export type EventHandler = (event: DomainEvent) => Promise<void>
+type EventHandler<E> = (event: E) => Promise<void>
 
 export class KafkaConsumer {
   private consumer: Consumer | undefined
-  private readonly handlers: Map<string, MessageHandler> = new Map()
-  private readonly eventHandlers: Map<string, EventHandler> = new Map()
+  private readonly eventHandlers = new Map<string, Map<string, EventHandler<any>>>()
 
   constructor(
     private readonly config: KafkaConfig,
     private readonly groupId: string,
-    private readonly logger: Logger
+    private readonly logger: Logger | Console
   ) {}
 
   async connect(): Promise<Result<void>> {
@@ -31,20 +28,22 @@ export class KafkaConsumer {
     }
   }
 
-  subscribe(
-    topic: string, 
-    handler: MessageHandler,
-    options?: { fromBeginning?: boolean }
+  subscribeToEvent<T extends KafkaTopic, E extends EventForTopic<T>>(
+    topic: T, 
+    eventType: E['eventType'],
+    handler: EventHandler<E>
   ): void {
     if (!this.consumer) {
       throw new Error('Consumer is not connected')
     }
-    this.handlers.set(topic, handler)
-    this.consumer.subscribe({ topic, fromBeginning: options?.fromBeginning })
-  }
 
-  subscribeToEvent(eventType: string, handler: EventHandler): void {
-    this.eventHandlers.set(eventType, handler)
+    if (!this.eventHandlers.has(topic)) {
+      this.eventHandlers.set(topic, new Map())
+      this.consumer.subscribe({ topic })
+    }
+
+    const topicHandlers = this.eventHandlers.get(topic)!
+    topicHandlers.set(eventType, handler)
   }
 
   async startConsuming(): Promise<Result<void>> {
@@ -52,34 +51,33 @@ export class KafkaConsumer {
       if (!this.consumer) {
         throw new Error('Consumer is not connected')
       }
+
       await this.consumer.run({
         eachMessage: async (payload) => {
           try {
             const { topic, message } = payload
-            const handler = this.handlers.get(topic)
-
-            if (handler) {
-              await handler(payload)
-            } else {
-              // Try to handle as domain event
-              const eventStr = message.value?.toString()
-              if (eventStr) {
-                const event = JSON.parse(eventStr) as DomainEvent
-                const eventHandler = this.eventHandlers.get(event.eventType)
-                
-                if (eventHandler) {
-                  await eventHandler(event)
+            const eventStr = message.value?.toString()
+            
+            if (eventStr) {
+              const event = JSON.parse(eventStr) as BaseEvent<any, string>
+              const topicHandlers = this.eventHandlers.get(topic)
+              
+              if (topicHandlers) {
+                const handler = topicHandlers.get(event.eventType)
+                if (handler) {
+                  await handler(event)
+                  this.logger.info('Event processed successfully', { 
+                    topic, 
+                    eventType: event.eventType 
+                  })
                 }
               }
             }
-
-            this.logger.info('Message processed successfully', { topic })
           } catch (error) {
             this.logger.error('Error processing message', {
               topic: payload.topic,
               error: error as Error
             })
-            // Don't rethrow to prevent consumer from crashing
           }
         }
       })

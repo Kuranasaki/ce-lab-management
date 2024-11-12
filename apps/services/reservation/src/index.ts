@@ -12,7 +12,7 @@ import { ReservationService } from './domain/services/reservation.service'
 
 // Initialize Kafka config
 const kafkaConfig: KafkaConfig = {
-  clientId: 'reservation-service',
+  clientId: 'celab-service',
   brokers: process.env.KAFKA_BROKERS?.split(',') || ['localhost:9092']
 }
 

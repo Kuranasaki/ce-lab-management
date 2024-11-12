@@ -1,0 +1,30 @@
+{
+  "name": "result_svc",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/services/result/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx-bun/nx:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "entrypoints": ["apps/services/result/src/index.ts"],
+        "outputPath": "dist/result-svc/src/index.ts",
+        "bun": false,
+        "smol": false
+      }
+    },
+    "serve": {
+      "executor": "@nx-bun/nx:run",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "result_svc:build",
+        "watch": true,
+        "hot": true,
+        "bun": true,
+        "smol": false
+      }
+    }
+  },
+  "tags": []
+}

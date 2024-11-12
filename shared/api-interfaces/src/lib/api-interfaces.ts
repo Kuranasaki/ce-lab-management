@@ -1,5 +1,5 @@
 import { t, Static, TSchema } from 'elysia';
-import {PaginationParamsSchema} from '@ce-lab-mgmt/core-utils'
+import { PaginationParamsSchema } from '@ce-lab-mgmt/core-utils';
 import { ReservationSchema } from './reservation';
 
 export function apiInterfaces(): string {
@@ -44,43 +44,43 @@ export class Error {
 
 export const ApiErrorSchema = t.Object({
   message: t.String(),
-  code: t.Optional(t.String())
-})
+  code: t.Optional(t.String()),
+});
 
 export const PaginationMetaSchema = t.Object({
   total: t.Number(),
   page: t.Number(),
   limit: t.Number(),
-  totalPages: t.Number()
-})
+  totalPages: t.Number(),
+});
 
 export const BaseResponseSchema = t.Object({
   success: t.Boolean(),
   data: t.Optional(t.Any()),
   error: t.Optional(ApiErrorSchema),
-  meta: t.Optional(t.Object({
-    pagination: t.Optional(PaginationMetaSchema)
-  }))
-})
+  meta: t.Optional(
+    t.Object({
+      pagination: t.Optional(PaginationMetaSchema),
+    })
+  ),
+});
 
-export type BaseResponse<T = any> = {
-  success: boolean
-  data?: T
-  error?: Static<typeof ApiErrorSchema>
-  meta?: {
-    pagination?: Static<typeof PaginationMetaSchema>
-  }
+export interface BaseResponse<T = Static<TSchema>>
+  extends Static<typeof BaseResponseSchema> {
+  data?: T;
 }
 
-
-export const BaseResponseSchemaFn = <T extends TSchema>(dataSchema: T) => t.Object({
-  success: t.Boolean(),
-  data: t.Optional(dataSchema),
-  error: t.Optional(ApiErrorSchema),
-  meta: t.Optional(t.Object({
-    pagination: t.Optional(PaginationMetaSchema)
-  }))
-})
+export const BaseResponseSchemaFn = <T extends TSchema>(dataSchema: T) =>
+  t.Object({
+    success: t.Boolean(),
+    data: t.Optional(dataSchema),
+    error: t.Optional(ApiErrorSchema),
+    meta: t.Optional(
+      t.Object({
+        pagination: t.Optional(PaginationMetaSchema),
+      })
+    ),
+  });
 
 // example
 // const UserRespSche = BaseResponseSchemaFn(PaginationMetaSchema)
