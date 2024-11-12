@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "imp/gitlabci-kube" ]
+    branches: [ "imp/try-image-ci-again" ]
 
 jobs:
   build_and_push:
