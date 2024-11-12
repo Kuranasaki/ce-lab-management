@@ -1,7 +1,7 @@
 import { ExperimentOrderSchema } from './experiment';
 
-export { TExperimentOrder as GetExperimentResponse } from './experiment'
- 
+export type { TExperimentOrder as GetExperimentResponse } from './experiment'
+
 // Get one experiment by id
 /*
 Request
