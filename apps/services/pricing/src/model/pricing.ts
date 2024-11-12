@@ -1,31 +1,18 @@
 import { Document, Schema, model } from 'mongoose';
 import { t, Elysia } from 'elysia';
 import {
-  PricingUnit,
-  Pricing,
-  PricingItem,
-  PricingItemSchema as PricingItemElysiaSchema,
-  MongoPricingItemModel,
-  PricingItemDocument,
+  ExperimentItemSchema,
   TagsSchema,
   PricingSchema,
 } from '@ce-lab-mgmt/api-interfaces';
 
-// export { PricingItemDocument as IPricing };
-
-const body = t.Object({
-  name: t.String(),
-  tags: TagsSchema,
-  pricing: t.Array(PricingSchema),
-  description: t.String(),
-});
-
+const body = t.Omit(t.Object(ExperimentItemSchema), ['id']);
 export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
   'prices.success': t.Object({
-    data: t.Array(PricingItemElysiaSchema),
+    data: t.Array(ExperimentItemSchema),
   }),
   'price.success': t.Object({
-    data: PricingItemElysiaSchema,
+    data: ExperimentItemSchema,
   }),
   'price.notFound': t.Object({
     error: t.Object({ code: t.Number() }),
@@ -36,5 +23,3 @@ export const PricingModel = new Elysia({ name: 'Model.Experiment' }).model({
   'price.requestBody': body,
   'price.requestBodyArray': t.Array(body),
 });
-
-export default MongoPricingItemModel;

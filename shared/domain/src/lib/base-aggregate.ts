@@ -1,7 +1,9 @@
 import { ValidationError } from "./domain.errors"
 import { Entity } from "./base-entity"
 import { TypeCompiler } from '@sinclair/typebox/compiler'
-import { EntityId, AggregateRootSchema, DomainEventSchema, DomainEvent } from "./base-type"
+import { EntityId, AggregateRootSchema, DomainEventSchema,  } from "./base-type"
+import { DomainEvent } from "./events"
+
 
 export abstract class AggregateRoot<T extends EntityId = EntityId> extends Entity<T> {
   private static readonly aggregateValidator = TypeCompiler.Compile(AggregateRootSchema)

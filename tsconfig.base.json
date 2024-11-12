@@ -19,9 +19,9 @@
       "@ce-lab-mgmt/core-utils": ["shared/core-utils/src/index.ts"],
       "@ce-lab-mgmt/domain": ["shared/domain/src/index.ts"],
       "@ce-lab-mgmt/infrastructure": ["shared/infrastructure/src/index.ts"],
+      "@ce-lab-mgmt/services/*": ["apps/services/*/src/index"],
       "@ce-lab-mgmt/shared-ui": ["shared/shared-ui/src/index.ts"],
-      "@ce-lab-mgmt/trpc-api": ["shared/trpc-api/src/index.ts"],
-      "@ce-lab-mgmt/services/*": ["apps/services/*/src/index"]
+      "@ce-lab-mgmt/trpc-api": ["shared/trpc-api/src/index.ts"]
     },
     "types": ["bun-types"]
   },

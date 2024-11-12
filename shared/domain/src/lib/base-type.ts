@@ -19,5 +19,5 @@ export const AggregateRootSchema = Type.Object({
 })
 
 export type EntityId = Static<typeof EntityIdSchema>
-export type DomainEvent = Static<typeof DomainEventSchema>
+// export type DomainEvent = Static<typeof DomainEventSchema>
 export type AggregateRoot = Static<typeof AggregateRootSchema>

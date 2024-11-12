@@ -1,4 +1,4 @@
-import { Result, UnauthorizedError } from '@ce-lab-mgmt/domain';
+import { KafkaTopic, Result, UnauthorizedError } from '@ce-lab-mgmt/domain';
 import { Reservation } from '../../domain/aggregates/reservation.aggregate';
 import { ReservationRepository } from '../../domain/repository/reservation.repository';
 import { KafkaProducer } from '@ce-lab-mgmt/infrastructure';
@@ -166,7 +166,7 @@ export class ReservationService {
 
         // Publish domain events
         for (const event of savedResult.value.events) {
-          await this.kafkaProducer.publishEvent('reservation-events', event);
+          await this.kafkaProducer.publishEvent(KafkaTopic.Reservation, event);
         }
 
         return savedResult
@@ -190,7 +190,7 @@ export class ReservationService {
       
       // Publish events
       for (const event of saved.value.events) {
-        await this.kafkaProducer.publishEvent('reservation-events', event)
+        await this.kafkaProducer.publishEvent(KafkaTopic.Reservation, event)
       }
 
       return saved
@@ -226,7 +226,7 @@ export class ReservationService {
 
         // Publish events
         for (const event of reservation.events) {
-          await this.kafkaProducer.publishEvent('reservation-events', event);
+          await this.kafkaProducer.publishEvent(KafkaTopic.Reservation, event);
         }
 
         return Result.ok();
@@ -246,7 +246,7 @@ export class ReservationService {
       
       // Publish events
       for (const event of saved.value.events) {
-        await this.kafkaProducer.publishEvent('reservation-events', event)
+        await this.kafkaProducer.publishEvent(KafkaTopic.Reservation, event)
       }
 
       return saved
