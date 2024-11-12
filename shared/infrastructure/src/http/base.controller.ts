@@ -208,5 +208,7 @@ export const createAuthMiddleware = (roles: string[] = []) => {
         },
       };
     }
+
+    return;
   };
 };
