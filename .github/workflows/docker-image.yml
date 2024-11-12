@@ -22,11 +22,11 @@ jobs:
       # Build and Push cuce-public-web with SERVICE_NAME argument
       - name: Build and Push cuce-web
         run: |
-          docker build . --file ./docker/Dockerfile.web.template --tag ${{ secrets.DOCKER_USERNAME }}/cuce-web:$(date +%s)
-          docker push ${{ secrets.DOCKER_USERNAME }}/cuce-web:$(date +%s)
+          docker build . --file ./docker/Dockerfile.web.template --tag ${{ secrets.DOCKER_USERNAME }}/cuce-web:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/cuce-web:latest
 
       # Build and Push cuce-experiment-svc with ARG SERVICE_NAME
       - name: Build and Push cuce-experiment-svc
         run: |
-          docker build . --file ./docker/Dockerfile.service.template --build-arg SERVICE_NAME=pricing --tag ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:$(date +%s)
-          docker push ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:$(date +%s)
+          docker build . --file ./docker/Dockerfile.service.template --build-arg SERVICE_NAME=pricing --tag ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/cuce-experiment-svc:latest
