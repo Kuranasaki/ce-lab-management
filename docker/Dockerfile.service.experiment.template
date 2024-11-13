@@ -41,6 +41,6 @@ ENV NODE_ENV=production
 
 # CMD ["./server"]
 
-CMD ["bun","./apps/services/reservation/src/index.ts"]
+CMD ["bun","./apps/services/pricing/src/index.ts"]
 
 EXPOSE 3000

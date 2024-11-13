@@ -1,5 +1,5 @@
 {
-  "name": "reservation_svc",
+  "name": "reservation",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/services/reservation/src",
   "projectType": "application",
@@ -51,7 +51,7 @@
       "executor": "@nx-bun/nx:run",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "reservation_svc:bun-build",
+        "buildTarget": "reservation:bun-build",
         "watch": true,
         "hot": true,
         "bun": true,
