@@ -14,8 +14,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Build and Push cuce-web
-docker build . --file ./docker/Dockerfile.web.template --tag "$DOCKER_USERNAME"/cuce-web:v3
-docker push "$DOCKER_USERNAME"/cuce-web:v3
+docker build . --file ./docker/Dockerfile.web.template --tag "$DOCKER_USERNAME"/cuce-web:v4
+docker push "$DOCKER_USERNAME"/cuce-web:v4
 
 # # Build and Push cuce-experiment-svc with SERVICE_NAME argument
 # docker build . --file ./docker/Dockerfile.service.experiment.template --build-arg SERVICE_NAME=pricing --tag "$DOCKER_USERNAME"/cuce-experiment-svc:latest --no-cache

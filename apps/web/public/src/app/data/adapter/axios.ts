@@ -16,19 +16,25 @@ export const api = axios.create({
   },
 });
 
-export const pricingApi = treaty<PricingServiceType>(endpoint, {
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${AuthClass.getToken()}`,
-    'x-user-id': userId,
-    'x-user-roles': 'customer',
-  },
-});
-export const reservationApi = treaty<ReservationServiceType>(endpoint, {
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${AuthClass.getToken()}`,
-    'x-user-id': 'bL2qciSODSbddrhgCjQvCRnVC4i2',
-    'x-user-roles': 'customer',
-  },
-});
+export const pricingApi = treaty<PricingServiceType>(
+  'http://experiment.' + endpoint,
+  {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${AuthClass.getToken()}`,
+      'x-user-id': userId,
+      'x-user-roles': 'customer',
+    },
+  }
+);
+export const reservationApi = treaty<ReservationServiceType>(
+  'http://reservation.' + endpoint,
+  {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${AuthClass.getToken()}`,
+      'x-user-id': 'bL2qciSODSbddrhgCjQvCRnVC4i2',
+      'x-user-roles': 'customer',
+    },
+  }
+);
