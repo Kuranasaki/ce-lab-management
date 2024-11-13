@@ -6,7 +6,7 @@ import { AuthClass } from '../../hooks/tokenClass';
 
 const userId = AuthClass.getUserId();
 
-const endpoint = process.env.API_ENDPOINT || 'http://localhost:3000';
+const endpoint = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 // To be config later
 export const api = axios.create({
