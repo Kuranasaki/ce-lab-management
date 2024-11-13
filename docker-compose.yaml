@@ -1,0 +1,103 @@
+version: '3'
+
+services:
+  kong-database:
+    extends:
+      file: ./gateway/docker-compose.yaml
+      service: kong-database
+    networks:
+      - kong-net
+
+  kong-migration:
+    extends:
+      file: ./gateway/docker-compose.yaml
+      service: kong-migration
+    networks:
+      - kong-net
+
+  kong:
+    extends:
+      file: ./gateway/docker-compose.yaml
+      service: kong
+    networks:
+      - kong-net
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8443:8443"
+      - "8444:8444"
+  
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.web.template
+      target: web
+    networks:
+      - kong-net
+    environment:
+      - NODE_ENV=production
+
+  # user-service:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/Dockerfile.template
+  #     target: svc
+  #     args:
+  #       - APP_NAME=user-svc
+  #   networks:
+  #     - kong-net
+  #   environment:
+  #     - NODE_ENV=production
+
+  reservation-service:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.service.template
+      args:
+        - SERVICE_NAME=reservation
+    networks:
+      - kong-net
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=production
+  # wage-service:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/Dockerfile.service.template
+  #     args:
+  #       - SERVICE_NAME=wage
+  #   networks:
+  #     - kong-net
+  #   env_file:
+  #     - .env.local
+  #   environment:
+  #     - NODE_ENV=production
+  pricing-service:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.service.template
+      args:
+        - SERVICE_NAME=pricing
+    networks:
+      - kong-net
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=production
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    networks:
+        - kong-net
+
+networks:
+  kong-net:
+    driver: bridge
+
+volumes:
+  kong_data:
+    driver: local

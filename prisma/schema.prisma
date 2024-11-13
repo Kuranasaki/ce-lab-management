@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+  directUrl = env("POSTGRES_DIRECT_URL")
+}
+
+
+model Reservation {
+  id           String      @id @default(uuid())
+  customerId   String
+  orgData      Organization @relation(fields: [orgDataId], references: [id])
+  orgDataId    String
+  testList     TestEntry[]
+  notes        String?
+  status       String      // 'pending' | 'approved' | 'rejected' | 'cancelled'
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("reservations")
+}
+
+model Organization {
+  id              String        @id @default(uuid())
+  orgName         String
+  orgProjectName  String?
+  orgAddress      String
+  orgEmail        String
+  orgPhone        String
+  orgFax          String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  reservations    Reservation[]
+
+  @@index([orgName])
+  @@index([orgEmail])
+  @@map("organizations")
+}
+
+model TestEntry {
+  id                    String      @id @default(uuid())
+  reservation           Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  reservationId         String
+  testType             String      // For grouping tests
+  testID               String      // Original test identifier
+  testItemID           String      // Specific test item identifier
+  testName             String
+  testAmount           Float
+  testPricePerUnit     Float
+  testUnit             String
+  testDetails          String?
+  testNote             String?
+  assignedProfessorId  String?     // Optional link to Professor entity if you have one
+  assignedProfessorName String?
+  markedAsDone         Boolean?
+  certificateUploadedAt DateTime?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  @@index([testType])
+  @@index([testID])
+  @@index([testItemID])
+  @@index([assignedProfessorId])
+  @@index([markedAsDone])
+  @@index([reservationId])
+  @@map("test_entries")
+}
+
+// Optional: Track reservation statistics
+model CustomerReservationStats {
+  id                String    @id @default(uuid())
+  customerId        String    @unique
+  totalReservations Int
+  pendingCount      Int
+  approvedCount     Int
+  rejectedCount     Int
+  cancelledCount    Int
+  lastReservation   DateTime?
+  updatedAt         DateTime  @updatedAt
+
+  @@index([customerId])
+  @@map("customer_reservation_stats")
+}
+
+// Optional: Track commonly used organizations for quick lookup
+model OrganizationStats {
+  id                String   @id @default(uuid())
+  orgName           String   @unique
+  reservationCount  Int
+  lastReservation   DateTime?
+  updatedAt         DateTime @updatedAt
+
+  @@index([orgName])
+  @@index([reservationCount])
+  @@map("organization_stats")
+}
+
+// Optional: Track test usage statistics
+model TestStats {
+  id              String    @id @default(uuid())
+  testID          String    @unique
+  testName        String
+  usageCount      Int
+  lastUsed        DateTime?
+  averageAmount   Float
+  updatedAt       DateTime  @updatedAt
+
+  @@index([testID])
+  @@index([usageCount])
+  @@map("test_stats")
+}
