@@ -16,7 +16,7 @@ spec:
         - name: imp-docker-secret
       containers:
         - name: cuce-web
-          image: saimkrua/cuce-web:v3
+          image: saimkrua/cuce-web:v4
           imagePullPolicy: Always
           ports:
             - containerPort: 80
