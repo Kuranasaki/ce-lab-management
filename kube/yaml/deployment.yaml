@@ -13,10 +13,11 @@ spec:
         app: cuce-app-web
     spec:
       imagePullSecrets:
-      - name: imp-docker-secret
+        - name: imp-docker-secret
       containers:
         - name: cuce-web
-          image: saimkrua/cuce-web:latest
+          image: saimkrua/cuce-web:v3
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
 ---
@@ -35,7 +36,7 @@ spec:
         app: cuce-app-reservation-svc
     spec:
       imagePullSecrets:
-      - name: imp-docker-secret
+        - name: imp-docker-secret
       containers:
         - name: cuce-reservation-svc
           image: saimkrua/cuce-reservation-svc:latest
@@ -68,7 +69,7 @@ spec:
         app: cuce-app-experiment-svc
     spec:
       imagePullSecrets:
-      - name: imp-docker-secret
+        - name: imp-docker-secret
       containers:
         - name: cuce-experiment-svc
           image: saimkrua/cuce-experiment-svc:latest
