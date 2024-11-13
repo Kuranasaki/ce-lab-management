@@ -1,9 +1,8 @@
 {
-  "name": "pricing-svc",
+  "name": "pricing",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/services/pricing/src",
   "projectType": "application",
-  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
@@ -14,8 +13,8 @@
         "outputPath": "dist/apps/services/pricing",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/services/pricing/src/main.ts",
-        "tsConfig": "apps/services/pricing/tsconfig.app.json",
+        "main": "apps/services/pricing/src/index.ts",
+        "tsConfig": "apps/services/pricing/tsconfig.json",
         "assets": ["apps/services/pricing/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
@@ -37,22 +36,28 @@
         }
       }
     },
-    "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "dependsOn": ["build"],
+    "bun-build": {
+      "executor": "@nx-bun/nx:build",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "buildTarget": "pricing-svc:build",
-        "runBuildTargetDependencies": false
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "pricing-svc:build:development"
-        },
-        "production": {
-          "buildTarget": "pricing-svc:build:production"
-        }
+        "entrypoints": ["apps/services/pricing/src/index.ts"],
+        "outputPath": "dist/apps/services/pricing/src/index.ts",
+        "bun": false,
+        "smol": false,
+        "target": "node"
+      }
+    },
+    "serve": {
+      "executor": "@nx-bun/nx:run",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "pricing:bun-build",
+        "watch": true,
+        "hot": true,
+        "bun": true,
+        "smol": false
       }
     }
-  }
+  },
+  "tags": []
 }
