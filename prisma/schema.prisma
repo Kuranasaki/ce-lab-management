@@ -114,3 +114,11 @@ model TestStats {
   @@index([usageCount])
   @@map("test_stats")
 }
+
+model Statement {
+    taskID    String   @id @db.Uuid
+    profID    String   @db.VarChar(256)
+    wage      Decimal  @db.Decimal(15, 2)
+    createdAt DateTime @default(now()) @db.Timestamp(0)
+}
+

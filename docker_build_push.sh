@@ -14,8 +14,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Build and Push cuce-web
-docker build . --file ./docker/Dockerfile.web.template --tag "$DOCKER_USERNAME"/cuce-web:v4
-docker push "$DOCKER_USERNAME"/cuce-web:v4
+# docker build . --file ./docker/Dockerfile.web.template --tag "$DOCKER_USERNAME"/cuce-web:v4
+# docker push "$DOCKER_USERNAME"/cuce-web:v4
 
 # # Build and Push cuce-experiment-svc with SERVICE_NAME argument
 # docker build . --file ./docker/Dockerfile.service.experiment.template --build-arg SERVICE_NAME=pricing --tag "$DOCKER_USERNAME"/cuce-experiment-svc:latest --no-cache
@@ -24,6 +24,9 @@ docker push "$DOCKER_USERNAME"/cuce-web:v4
 # # Build and Push cuce-experiment-svc with SERVICE_NAME argument
 # docker build . --file ./docker/Dockerfile.service.reservation.template --build-arg SERVICE_NAME=reservation --tag "$DOCKER_USERNAME"/cuce-reservation-svc:latest --no-cache
 # docker push "$DOCKER_USERNAME"/cuce-reservation-svc:latest
+
+docker build . --file ./docker/Dockerfile.service.wage.template --build-arg SERVICE_NAME=wage --tag "$DOCKER_USERNAME"/cuce-wage-svc:v3 --no-cache
+docker push "$DOCKER_USERNAME"/cuce-wage-svc:v3
 
 # Logout of Docker Hub
 docker logout

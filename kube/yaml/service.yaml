@@ -44,3 +44,18 @@ spec:
       port: 3000
       targetPort: 3000
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cuce-wage-svc-service
+  labels:
+    app: cuce-app-wage-svc
+spec:
+  selector:
+    app: cuce-app-wage-svc
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP

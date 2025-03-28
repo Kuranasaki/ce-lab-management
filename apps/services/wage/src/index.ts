@@ -4,16 +4,18 @@ import { trpc } from '@elysiajs/trpc';
 import { statementMethod } from './methods/statementMethod';
 import { connectDB } from './config/database';
 import { renderTrpcPanel } from 'trpc-panel';
+import { cors } from '@elysiajs/cors';
 import html from '@elysiajs/html';
 
 // Create the app router
 const appRouter = router(statementMethod);
 
 const app = new Elysia()
+  .use(cors())
   .use(trpc(appRouter))
-  .use(html())  // Ensure HTML handling middleware is used
-  .get("/panel", () => { 
-    return renderTrpcPanel(appRouter, { url: "http://localhost:3000/trpc" });
+  .use(html()) // Ensure HTML handling middleware is used
+  .get('/panel', () => {
+    return renderTrpcPanel(appRouter, { url: 'http://localhost:3000/trpc' });
   })
   .listen(3000, async () => {
     await connectDB(); // Connect to the database when the server starts
